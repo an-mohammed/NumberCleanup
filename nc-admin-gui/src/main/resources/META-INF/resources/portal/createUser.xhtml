@@ -1,0 +1,109 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Profile Cleanup</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="createUserForm">
+			<div class="container-fluid">
+		        <div class="container">
+		        	<div class="row">
+	                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5><h:outputText value="Create User" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+	                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+		                	<div class="shadow-box">
+			                  	<p:panel style="border:0px !important;" id="createUserP">
+			                  		<p:messages id="createUserM" showDetail="true" closable="true" showSummary="false">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-fluid">
+					                    <h:panelGrid columns="4" cellpadding="0" cellspacing="0" 
+					                    style="width:80% !important;margin:auto !important;vertical-align:middle;" 
+					                    border="0" 
+					                    columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4"
+					                    id="createUserDg">
+				               				<p:outputLabel value="Username" for="usernameC" styleClass="lebel"/>
+					                        <p:inputText label="Username" id="usernameC" autocomplete="off" maxlength="20" value="#{um.newUser.uName}" 
+					                        	required="true" requiredMessage="Missing Mandatory Parameter - Username" styleClass="form-control inputTextMedium" />
+					                        	
+				                        	
+				               				<p:outputLabel value="First Name" for="fnameC" styleClass="lebel"/>
+				                        	<p:inputText label="First Name" id="fnameC" autocomplete="off"  maxlength="20" value="#{um.newUser.firstname}"  
+				                        	required="true" requiredMessage="Missing Mandatory Parameter - First Name" styleClass="form-control inputTextMedium" >
+				                        		<p:keyFilter regEx="/[a-zA-Z_]/i" preventPaste="false"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="Last Name" for="lnameC" styleClass="lebel"/>
+				                        	<p:inputText label="Last Name" id="lnameC" autocomplete="off" maxlength="20" value="#{um.newUser.lastname}"  
+				                        	required="true" requiredMessage="Missing Mandatory Parameter - Last Name" styleClass="form-control inputTextMedium" >
+				                        		<p:keyFilter regEx="/[a-zA-Z_]/i" preventPaste="false"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="Contact No." for="mobileC" styleClass="lebel"/>
+				                        	<p:inputText label="Mobile" id="mobileC" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="12" value="#{um.newUser.contactNo}"  
+				                        	required="true" requiredMessage="Missing Mandatory Parameter - Mobile No">
+				                        		<p:keyFilter regEx="/[\d\-]/" preventPaste="false"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="e-Mail" for="mailC" styleClass="lebel"/>
+				                        	<p:inputText label="Mail" id="mailC" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="30" value="#{um.newUser.email}"  
+				                        	required="true" requiredMessage="Missing Mandatory Parameter - E-Mail">
+				                        		<p:keyFilter regEx="/[a-z0-9_\.\-@]/i" preventPaste="false"/>
+				                        	</p:inputText>
+				                        	
+											<p:outputLabel value="Remark" for="remarkC" styleClass="lebel"/>
+				                        	<p:inputText label="Remark" id="remarkC" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{um.newUser.comments}" required="true" requiredMessage="Missing Mandatory Parameter - Remark"/>
+											
+											<p:outputLabel value="Super User" styleClass="lebel" for="isSu" rendered="#{sec:areAnyGranted('SU')}" />
+				                        	<p:selectBooleanCheckbox value="#{um.superUser}" id="isSu" disabled="#{um.disableSuperUser}" rendered="#{sec:areAnyGranted('SU')}">
+				                        		<p:ajax update="rolesC,isAdmin,ldapauthentication" listener="#{um.onSelectingSU}" />
+				                        	</p:selectBooleanCheckbox>
+			
+											<p:outputLabel value="Administrator" styleClass="lebel" for="isAdmin" rendered="#{sec:areAnyGranted('ADMIN,SU')}"/>
+				                        	<p:selectBooleanCheckbox value="#{um.adminUser}" id="isAdmin" disabled="#{um.disableAdminUser}" rendered="#{sec:areAnyGranted('ADMIN,SU')}">
+				                        		<p:ajax update="isSu,rolesC,ldapauthentication" listener="#{um.onSelectingAdmin}" />
+				                        	</p:selectBooleanCheckbox>
+				                        	
+				                        	<p:outputLabel value="Ldap Auth" styleClass="lebel" for="ldapauthentication" />
+				                        	<p:selectBooleanCheckbox value="#{um.newUser.ldapauthentication}" id="ldapauthentication"  disabled="#{um.disableLdapAuth}"/>
+											
+					                       	<p:outputLabel value="Roles" styleClass="lebel" for="rolesC"/>
+					                       	<p:selectCheckboxMenu id="rolesC" value="#{um.newUserRoleList}" label="Roles" filter="true" filterMatchMode="startsWith" 
+												panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+												style="font-size:12px !important;font-family: Poppins-Regular !important;" disabled="#{um.disableRole}" required="true">
+									            <f:selectItems value="#{um.allValidRoleList.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+									        </p:selectCheckboxMenu>
+									        
+									        <p:outputLabel value="Groups" styleClass="lebel" for="grpC"/>
+					                       	<p:selectCheckboxMenu id="grpC" value="#{um.newUserGrpList}" label="Roles" filter="true" filterMatchMode="startsWith" 
+												panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+												style="font-size:12px !important;font-family: Poppins-Regular !important;" required="false">
+									            <f:selectItems value="#{um.allValidGroupList.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+									        </p:selectCheckboxMenu>
+				                        </h:panelGrid>
+			                       </div>
+			                       <div class="ui-fluid" style="padding-top:10px !important;">
+			                       		<h:panelGrid columns="1" cellpadding="0" style="width:30% !important;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+			                      			<p:commandButton value="Save" ajax="true" action="#{um.addNewUser}" styleClass="green-button" 
+			                      			disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('CREATE_USER')}" update="createUserDg"/>
+			                      		</h:panelGrid>
+			                       </div>
+			                  	</p:panel>
+			               	</div>
+			             </div>
+                  	</div>
+		        </div>
+		    </div>
+		</h:form>
+	</ui:define>
+</ui:composition>

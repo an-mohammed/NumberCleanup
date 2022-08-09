@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions" >
+
+<f:loadBundle basename="messages" var="msg" />
+<h:head>
+	<meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title><h:outputText value="#{msg.title_Login}" /></title>
+	<h:outputStylesheet name="/css/bootstrap.min.css" />
+	<h:outputStylesheet name="/css/main.css" />
+	<h:outputStylesheet name="/css/util.css" />
+	<h:outputStylesheet name="/css/style.css" />
+	
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/images/favicon.jpg"/>
+	<f:event type="preRenderView" listener="#{facesContext.externalContext.response.setHeader('Cache-Control', 'no-cache, no-store')}" />
+</h:head>
+
+<h:body>
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-form-title" style="background-image: url(images/bg-01.jpg);">
+					<span class="login100-form-title-1">
+						Profile Clean-Up Console
+					</span>
+				</div>
+
+				<h:form prependId="false" id="loginForm" styleClass="login100-form validate-form">
+					<div class="login100-form-title-subheader" >
+						<span class="login100-form-title-2">
+							Log In
+						</span>
+					</div>
+					<div class="wrap-input100 validate-input m-b-26" style="border-bottom: 0px !important;" id="loginDiv">
+						<p:messages id="msg" showDetail="true" showSummary="false" showIcon="false" closable="true" style="width:95% !important;margin:auto !important;">
+							<p:autoUpdate />
+						</p:messages>
+					</div>
+					<div class="wrap-input100 validate-input m-b-26">
+						<p:inputText label="User Name" value="#{login.username}" id="username" placeholder="Username" required="true" requiredMessage="Missing Username" autocomplete="off" styleClass="input100" />
+						<span class="focus-input100" />
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-18" >
+						<p:password label="Password" id="password" value="#{login.password}" placeholder="Password" required="true" requiredMessage="Missing Password" autocomplete="off" styleClass="input100"  />
+						<span class="focus-input100" />
+					</div>
+
+					<div class="flex-sb-m w-full p-b-30">
+						<div class="contact100-form-checkbox" style="width: 100% !important;">
+						</div>
+					</div>
+					<p:commandButton value="Login" ajax="false" update="msg" action="#{login.validateAndLogin}"  style="font-family: Poppins-Regular !important;" styleClass="green-button"/>
+				</h:form>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>

@@ -1,0 +1,20 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util/spring-util-3.2.xsd"
+	default-autowire="byName">
+	
+	<bean id="externalConfig" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>${application.dynamic.config.location}</value>
+			</list>
+		</property>
+		<property name="cacheSeconds" value="${application.dynamic.config.cacheClean.seconds}" />
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="concurrentRefresh" value="false" />
+	</bean>
+</beans>

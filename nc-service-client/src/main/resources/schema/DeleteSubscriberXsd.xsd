@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.ooredoo.com.kw/delSubscriber/" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ooredoo.com.kw/delSubscriber/" xmlns:gbd="http://www.ooredoo.com.kw/delSubscriber/">
+  
+  <xs:element name="delSubscriberRequest" type="gbd:delSubscriberRequest"/>
+ <xs:element name="delsubscriberResponse" type="gbd:delsubscriberResponse"/>
+ 
+ <xs:complexType name="SAVP">
+                <xs:sequence>
+                    <xs:element name="key" type="xs:string"/>
+                    <xs:element name="value" type="xs:string"/>
+                </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="delSubscriberRequest">
+                <xs:sequence>
+                    <xs:element name="OrderId" type="xs:string"/>
+                    <xs:element name="SourceSystem" type="xs:string"/>
+                    <xs:element name="IsLogRequired" type="xs:string"/>
+                    <xs:element name="attribute" maxOccurs="unbounded" type="tns:SAVP"/>
+                </xs:sequence>
+ </xs:complexType>
+ 
+ <xs:complexType name="delsubscriberResponse">
+                <xs:sequence>
+                    <xs:element name="ResponseCode" type="xs:string"/>
+                    <xs:element name="ResponseMessage" type="xs:string"/>
+                </xs:sequence>
+ </xs:complexType>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</xs:schema>

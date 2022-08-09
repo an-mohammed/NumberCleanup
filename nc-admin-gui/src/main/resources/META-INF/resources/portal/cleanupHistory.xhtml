@@ -1,0 +1,135 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Profile Cleanup</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="createUserForm">
+			<div class="container-fluid">
+		        <div class="container">
+		        	<div class="row">
+	                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5><h:outputText value="Search Profile History" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+	                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+		                	<div class="shadow-box">
+			                  	<p:panel style="border:0px !important;" id="createUserP">
+			                  		<p:messages id="searchProfileHM" showDetail="true" closable="true" showSummary="false">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-g ui-fluid">
+									    <div class="ui-g-12 ui-md-4" style="margin:auto;">
+									        <div class="ui-inputgroup">
+									        	<p:inputText placeholder="MSISDN"  style="font-size:13px !important;font-family:Poppins-Regular !important;letter-spacing: .5px !important;" value="#{pch.msisdn}"/>
+									            <p:commandButton value="Search" styleClass="green-button" actionListener="#{pch.searchHist}" update="dataPanel" disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('SHOW_HIST')}"/> 
+									        </div>
+									    </div>
+								    </div>
+			                  	</p:panel>
+			                  	<div class="ui-g ui-fluid">
+									    <div class="ui-g-12 ui-md-4" style="margin:auto;width:100%;">
+									    	<p:panelGrid id="dataPanel" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1">
+												<p:dataTable value="#{pch.hist}"  style="font:11px;margin-top:10px;"
+													id="userDatatable" 
+													var="e" 
+													rows="5" 
+													paginator="true"
+													paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+													rowsPerPageTemplate="5,10,15"
+													filterDelay="100"
+													paginatorPosition="bottom" 
+													emptyMessage="No data Found with applied filter" 
+													paginatorAlwaysVisible="false" 
+													editable="false"
+													rendered="#{not empty pch.hist}"
+													rowKey="#{rows.id}" 
+													reflow="true"
+													scrollable="true" 
+													scrollHeight="340" 
+													scrollWidth="100%">
+													
+													<f:facet name="header">
+											            <div align="center">
+											                <h:outputText value="Cleanup History"  style="font-size:12px;font-weight:bold"/>
+											            </div>
+											        </f:facet>
+											        											        	
+													<p:column headerText="Date" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.execDate}" styleClass="columnData">
+							    							<f:convertDateTime pattern = "dd-MM-yyyy" />
+							    						</h:outputText>
+													</p:column>
+													
+													<p:column headerText="User" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.execUser}" styleClass="columnData"/>
+													</p:column>
+												
+											        <p:column headerText="MSISDN" styleClass="columnHeader" width="80">
+							    						<h:outputText value="#{e.msisdn}" styleClass="columnData"/>
+													</p:column>
+							    					
+							    					<p:column headerText="SIM No" styleClass="columnHeader" width="150">
+							    						<h:outputText value="#{e.simNo}" styleClass="columnData"/>
+													</p:column>
+													
+													<p:column headerText="IMSI" styleClass="columnHeader" width="150">
+							    						<h:outputText value="#{e.imsi}" styleClass="columnData"/>
+													</p:column>
+							    					
+							    					<p:column headerText="BSCS" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.bscs}" styleClass="columnData"/>
+													</p:column>
+													
+													<p:column headerText="CS" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.cs}" styleClass="columnData"/>
+													</p:column>
+													
+													<p:column headerText="ESM" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.esm}" styleClass="columnData"/>
+													</p:column>
+													
+													<p:column headerText="PCRF" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.pcrf}" styleClass="columnData"/>
+													</p:column>
+													
+													<p:column headerText="SPR" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.spr}" styleClass="columnData"/>
+													</p:column>
+													
+													<p:column headerText="NMS" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.nms}" styleClass="columnData"/>
+													</p:column>
+													
+													<p:column headerText="ERP" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.erp}" styleClass="columnData"/>
+													</p:column>
+													
+													<p:column headerText="HLR" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.hlr}" styleClass="columnData"/>
+													</p:column>
+													
+													<p:column headerText="RAS" styleClass="columnHeader" width="300">
+							    						<h:outputText value="#{e.ras}" styleClass="columnData"/>
+													</p:column>
+													
+												</p:dataTable>
+											</p:panelGrid>
+									    </div>
+									 </div>
+			               	</div>
+			             </div>
+                  	</div>
+		        </div>
+		    </div>
+		</h:form>
+	</ui:define>
+</ui:composition>

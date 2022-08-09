@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="model">
+		<class>com.ooredoo.nc.model.Privilege</class>
+		<class>com.ooredoo.nc.model.Role</class>
+		<class>com.ooredoo.nc.model.CleanupLogMaster</class>
+		<class>com.ooredoo.nc.model.AppUser</class>
+		<class>com.ooredoo.nc.model.NumberAsgnmtHistory</class>
+		<class>com.ooredoo.nc.model.NumberPool</class>
+		<class>com.ooredoo.nc.model.NcAppUserGrp</class>
+		<class>com.ooredoo.nc.model.NcGrpMsisdn</class>
+		<class>com.ooredoo.nc.model.NcGrpMsisdnPK</class>
+		<class>com.ooredoo.nc.model.NcUserGrp</class>
+		<class>com.ooredoo.nc.model.NcUserGrpPK</class>
+		<class>com.ooredoo.nc.model.BulkActivationDetail</class>
+		<class>com.ooredoo.nc.model.NcDigitalOnboarding</class>
+		<class>com.ooredoo.nc.model.DigitalOffer</class>
+	</persistence-unit>
+</persistence>

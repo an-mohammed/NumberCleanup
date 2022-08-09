@@ -1,0 +1,1 @@
+mvn sonar:sonar -Dsonar.projectKey=NumberCleanup -Dsonar.host.url=http://localhost:9000 -Dsonar.login=232168dc1fc55cc76a131d1f7d4b78f26466cca1

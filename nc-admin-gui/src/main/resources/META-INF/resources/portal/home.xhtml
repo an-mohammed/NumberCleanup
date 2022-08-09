@@ -1,0 +1,26 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Number Cleanup</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="homeForm">
+			<div align="center" >
+				<p:graphicImage url="/images/automation.jpg" width="500" height="250" styleClass="homeImageStyle" alt="home"/>
+			</div>
+		</h:form>
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" style="background:white !important;" appendTo="@(body)">
+			<p:graphicImage value="/images/ajax_loader_red.gif" />
+		</p:dialog>
+		<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" oncomplete="PF('statusDialog').hide()" />
+	</ui:define>
+</ui:composition>

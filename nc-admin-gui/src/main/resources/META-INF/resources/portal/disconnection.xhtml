@@ -1,0 +1,92 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Disconnection</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="dcForm">
+			<div class="container-fluid">
+		        <div class="container">
+		        	<div class="row">
+	                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5><h:outputText value="Subscriber Disconnection" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+	                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+		                	<div class="shadow-box">
+			                  	<p:panel style="border:0px !important;" id="disconnectionP">
+			                  		<p:messages id="dcM" showDetail="true" closable="true" showSummary="false">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-g ui-fluid">
+									    <div class="ui-g-12 ui-md-4" style="margin:auto;">
+									        <div class="ui-inputgroup">
+									        	<p:selectCheckboxMenu id="node" value="#{dc.selectedMsisdn}" label="MSISDN" filter="true" filterMatchMode="contains" 
+												panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+												style="font-size:12px !important;font-family: Poppins-Regular !important;" required="true">
+										            <f:selectItems value="#{dc.availableMsisdnForUser}"/>
+										        </p:selectCheckboxMenu>
+									            <p:commandButton value="Submit" styleClass="green-button" actionListener="#{dc.submit}" update="execResult,disconnectionP"/> 
+									        </div>
+									    </div>
+									    
+									    <h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" style="width:100% !important;vertical-align:middle;padding-top:15px !important;" 
+				                  								columnClasses="ui-g-12 ui-md-12" id="execResult">
+				                  			<p:dataTable value="#{dc.discResp.disconnectionOrderDetails}"  style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+												id="dcRespDetails" 
+												var="e" 
+												rows="5" 
+												paginator="true"
+												paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15"
+												filterDelay="100"
+												paginatorPosition="bottom" 
+												paginatorAlwaysVisible="false" 
+												editable="false"
+												emptyMessage="No details found"
+												rendered="#{not empty dc.discResp.disconnectionOrderDetails}"
+												rowKey="#{rows.id}" 
+												reflow="true">
+												
+												<f:facet name="header">
+										            <div align="center">
+										                <h:outputText value="Disconnection Order Details"  style="font-size:12px;font-weight:bold"/>
+										            </div>
+										        </f:facet>
+										        
+										        <p:column headerText="Status" styleClass="columnHeader" width="8%">
+						    						<p:graphicImage url="/images/green.png" height="10" width="10" rendered="#{e.requestStatus == 'true'}"/>
+						        					<p:graphicImage url="/images/red.png" height="10" width="10" rendered="#{e.requestStatus == 'false'}"/>
+												</p:column>
+										        
+										        <p:column headerText="MSISDN" styleClass="columnHeader" width="15%">
+						    						<h:outputText value="#{e.msisdn}" styleClass="columnData"/>
+												</p:column>
+												
+												<p:column headerText="Contract ID" styleClass="columnHeader" width="15%">
+						    						<h:outputText value="#{e.contractId}" styleClass="columnData"/>
+												</p:column>
+												
+												<p:column headerText="Remarks" styleClass="columnHeader" width="62%">
+						    						<h:outputText value="#{e.remarks}" styleClass="columnData"/>
+												</p:column>
+											</p:dataTable>
+				                  		</h:panelGrid>
+								    </div>
+			                  	</p:panel>
+			               	</div>
+			             </div>
+                  	</div>
+		        </div>
+		    </div>
+		</h:form>
+	</ui:define>
+</ui:composition>

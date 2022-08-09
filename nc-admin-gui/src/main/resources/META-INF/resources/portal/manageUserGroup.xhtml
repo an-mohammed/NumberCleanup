@@ -1,0 +1,201 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Profile Cleanup</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="createUserForm">
+			<div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Manage User Groups" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+		                <div class="shadow-box">
+		                	<p:messages id="createUserM" showDetail="true" closable="true" showSummary="false">
+								<p:autoUpdate />
+							</p:messages>
+                  				<div class="ui-fluid">
+		                        	<p:panelGrid id="dataPanel" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:100%;">
+										<p:dataTable value="#{ugm.groupList}" style="font-size:11px;margin-top:10px;font-family:Poppins-Regular !important;"
+											id="userDatatable" 
+											var="rows" 
+											rows="5" 
+											paginator="true"
+											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+											rowsPerPageTemplate="5,10,15"
+											filterDelay="100"
+											paginatorPosition="bottom" 
+											emptyMessage="No Details Found with applied filter" 
+											paginatorAlwaysVisible="false" 
+											editable="false"
+											selection="#{ugm.selectedGroupList}" 
+											rowKey="#{rows.id}" 
+											selectionMode="single"
+											reflow="true">
+											
+											<p:ajax event="rowSelect" listener="#{ugm.onRowSelect}" update="editGroupDetails" process="@this" partialSubmit="true"/>
+											<p:ajax event="rowUnselect" listener="#{ugm.onRowUnselect}" update="editGroupDetails" process="@this" partialSubmit="true" />
+											
+											<f:facet name="header">
+									            <div align="center">
+									                <h:outputText value="All User Groups"  style="font-size:12px;font-weight:bold;font-family: Poppins-Regular !important;"/>
+									            </div>
+									        </f:facet>
+									        
+									        <p:column headerText="Group Code" style="text-align: center;font-weight:bold;font-size:12px;width:20%;">
+					    						<h:outputText value="#{rows.grpName}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+					    					
+					    					<p:column headerText="Group Name" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+					    						<h:outputText value="#{rows.grpDesc}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>	
+											
+											<p:column headerText="Created On" style="text-align: center;font-weight:bold;font-size:12px;width:20%;">
+					    						<h:outputText value="#{rows.createdOn}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;">
+					    							<f:convertDateTime pattern="dd-MM-yyyy"/>
+					    						</h:outputText>
+											</p:column>
+											
+											<f:facet name="footer">
+												<div class="ui-fluid">
+		                        					<h:panelGrid id="footerPanel" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6" columns="2"  style="width:50%;margin:auto !important;border-color: transparent;" border="0">
+		                        						<p:commandButton id="editGroupDetails" value="Edit Group" ajax="true" disabled="#{ugm.disabled}"  action="#{um.initEditD}"
+									                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_GROUP')}" oncomplete="PF('editGrpD').show();"  
+									                	update=":editGrpF:editGrpP"/>
+									                	
+									                	<p:commandButton id="newGroupDetails" value="New Group" ajax="true"  action="#{um.initEditD}"
+									                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('CREATE_GROUP')}" oncomplete="PF('createGrpD').show();"  
+									                	update=":createGrpF:createGrpP"/>
+									                	
+		                        					</h:panelGrid>
+		                        				</div>
+									        </f:facet>
+								     	</p:dataTable>
+									</p:panelGrid>	
+								</div>
+                  			</div>
+                  		</div>
+                  	</div>
+		        </div>
+		    </div>
+		</h:form>
+		<p:dialog widgetVar="editGrpD" modal="true" height="350" width="500" appendTo="@(body)" closeOnEscape="true" resizable="false" closable="false" style="background:white !important;"  responsive="true">
+		    <div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Edit Group" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+					    <h:form id="editGrpF" prependId="false">
+			             	<div class="shadow-box-dialogue">
+			                  	<p:panel style="border:0px !important;" id="editGrpP">
+			                  		<p:messages id="editGrpM" showDetail="true" closable="true">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-fluid">
+					                    <h:panelGrid id="editD" columns="2" cellpadding="0" cellspacing="0" style="width:100% !important;margin:auto !important;vertical-align:middle;padding-top:10px !important;" border="0" columnClasses="ui-g-12 ui-md-5, ui-g-12 ui-md-7">
+				               				<p:outputLabel value="Group Code" for="codeF" styleClass="lebel"/>
+				                        	<h:outputText id="codeF" value="#{ugm.selectedGroupList.grpName}" styleClass="text"/>
+				                        	
+				                        	<p:outputLabel value="Group Name" for="nameF" styleClass="lebel"/>
+				                        	<p:inputText label="Name" id="nameF" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="60" value="#{ugm.selectedGroupList.grpDesc}"/>
+				                        	
+				                        	<p:outputLabel value="Numbers :*" styleClass="lebel" for="npE"/>
+					                       	<p:selectCheckboxMenu id="npE" value="#{ugm.curNumbersToGroup}" label="Roles" filter="true" filterMatchMode="startsWith" 
+												panelStyle="width:250px; background: white !important; font-size:11px !important;" 
+												style="font-size:11.5px !important;font-family: Poppins-Regular !important;">
+									            	<f:selectItems value="#{ugm.allNumbersFromPool}" var="a" itemLabel="#{a.msisdn}" itemValue="#{a.msisdn}"/>
+									        </p:selectCheckboxMenu>
+									        
+									        <p:outputLabel value="Users :*" styleClass="lebel" for="auE"/>
+					                       	<p:selectCheckboxMenu id="auE" value="#{ugm.curUsersToGroup}" label="Roles" filter="true" filterMatchMode="startsWith" 
+												panelStyle="width:250px; background: white !important; font-size:11px !important;" 
+												style="font-size:11.5px !important;font-family: Poppins-Regular !important;">
+									            	<f:selectItems value="#{ugm.allUsers}" var="a" itemLabel="#{''.concat(a.firstname).concat(' ').concat(a.lastname)}" itemValue="#{a.uName}"/>
+									        </p:selectCheckboxMenu>
+				                        </h:panelGrid>
+			                       </div>
+			                       <div class="ui-fluid" style="padding-top:20px !important;padding-bottom:20px !important;width: 60%;margin: auto;">
+			                       		<h:panelGrid columns="2" cellpadding="0" style="width:50% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+			                      			<p:commandButton value="Update" ajax="true"  update="dataPanel" action="#{ugm.updateGroup}" styleClass="green-button" 
+			                      			disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_GROUP')}"/>
+			                      			<p:commandButton value="Close"  oncomplete="PF('editGrpD').hide();" styleClass="green-button" action="#{ugm.closeMug}"/>
+			                      		</h:panelGrid>
+			                       </div>
+			                  	</p:panel>
+			                 </div>
+					    </h:form>
+		    		</div>
+		    	</div>
+		     </div>
+		   </div>
+		</p:dialog>
+		
+		<p:dialog widgetVar="createGrpD" modal="true" height="350" width="500" appendTo="@(body)" closeOnEscape="true" resizable="false" closable="false" style="background:white !important;"  responsive="true">
+		    <div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Create New Group" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+					    <h:form id="createGrpF" prependId="false">
+			             	<div class="shadow-box-dialogue">
+			                  	<p:panel style="border:0px !important;" id="createGrpP">
+			                  		<p:messages id="createGrpM" showDetail="true" closable="true">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-fluid">
+					                    <h:panelGrid id="createGrpD" columns="2" cellpadding="0" cellspacing="0" style="width:100% !important;margin:auto !important;vertical-align:middle;padding-top:10px !important;" border="0" columnClasses="ui-g-12 ui-md-5, ui-g-12 ui-md-7">
+				               				<p:outputLabel value="Group Code :*" for="codeN" styleClass="lebel"/>
+				                        	<p:inputText label="Name" id="codeN" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="20" value="#{ugm.newGroup.grpName}" >
+				                        		<p:keyFilter regEx="/[a-zA-Z_]/i"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="Group Name :*" for="nameN" styleClass="lebel"/>
+				                        	<p:inputText label="Name" id="nameN" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="60" value="#{ugm.newGroup.grpDesc}" />
+				                        	
+				                        	<p:outputLabel value="Numbers :*" styleClass="lebel" for="np"/>
+					                       	<p:selectCheckboxMenu id="np" value="#{ugm.alocatedNumbersToNewGroup}" label="Roles" filter="true" filterMatchMode="startsWith" 
+												panelStyle="width:250px; background: white !important; font-size:11px !important;" 
+												style="font-size:11.5px !important;font-family: Poppins-Regular !important;">
+									            	<f:selectItems value="#{ugm.allNumbersFromPool}" var="a" itemLabel="#{a.msisdn}" itemValue="#{a.msisdn}"/>
+									        </p:selectCheckboxMenu>
+									        
+									        <p:outputLabel value="Users :*" styleClass="lebel" for="au"/>
+					                       	<p:selectCheckboxMenu id="au" value="#{ugm.alocatedUsersToNewGroup}" label="Roles" filter="true" filterMatchMode="startsWith" 
+												panelStyle="width:250px; background: white !important; font-size:11px !important;" 
+												style="font-size:11.5px !important;font-family: Poppins-Regular !important;">
+									            	<f:selectItems value="#{ugm.allUsers}" var="a" itemLabel="#{''.concat(a.firstname).concat(' ').concat(a.lastname)}" itemValue="#{a.uName}"/>
+									        </p:selectCheckboxMenu>
+				                        </h:panelGrid>
+			                       </div>
+			                       <div class="ui-fluid" style="padding-top:20px !important;padding-bottom:20px !important;width: 60%;margin: auto;">
+			                       		<h:panelGrid columns="2" cellpadding="0" style="width:50% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+			                      			<p:commandButton value="Save" ajax="true"  update="createGrpD,dataPanel" action="#{ugm.createNewGroup}" styleClass="green-button" 
+			                      			disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('CREATE_GROUP')}"/>
+			                      			<p:commandButton value="Close"  oncomplete="PF('createGrpD').hide();" styleClass="green-button" />
+			                      		</h:panelGrid>
+			                       </div>
+			                  	</p:panel>
+			                 </div>
+					    </h:form>
+		    		</div>
+		    	</div>
+		     </div>
+		   </div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

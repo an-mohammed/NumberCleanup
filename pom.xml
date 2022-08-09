@@ -1,0 +1,42 @@
+<project 
+    xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">	
+    <modelVersion>4.0.0</modelVersion>
+	<groupId>com.ooredoo</groupId>
+	<artifactId>number-cleanup</artifactId>
+	<version>0.0.1</version>
+	
+	<name>Subscriber Profile Clean-up Project</name>
+	<description>Parent Project to compile all the modules needed to deploy for Profile clean-up at once in the correct order</description>
+	<packaging>pom</packaging>
+    
+    <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.1.RELEASE</version>
+	</parent>
+
+	<properties>
+		<file.encoding>UTF-8</file.encoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+	<modules>
+		<module>nc-boot-admin</module>
+		<module>nc-discovery</module>
+		<module>nc-utility</module>
+		<module>nc-service-client</module>
+		<module>nc-model</module>
+		<module>nc-admin-service</module>
+		<module>nc-erp-service</module>
+		<module>nc-nms-service</module>
+		<module>nc-bscs-service</module>
+		<module>nc-ras-service</module>
+		<module>nc-admin-gui</module>
+		<module>nc-subs-onboarding</module>
+		<module>nc-packager</module>
+	</modules>
+</project>

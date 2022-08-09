@@ -1,0 +1,52 @@
+{"properties": [
+  {
+    "name": "service.baseurl",
+    "type": "java.lang.String",
+    "description": "A description for 'service.baseurl'"
+  },
+  {
+    "name": "service.subscribermanagement.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'service.subscribermanagement.base-url'"
+  },
+  {
+    "name": "service.authority",
+    "type": "java.lang.String",
+    "description": "A description for 'service.authority'"
+  },
+  {
+    "name": "service.usermanagement.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'service.usermanagement.base-url'"
+  },
+  {
+    "name": "service.serviceuser.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'service.serviceuser.base-url'"
+  },
+  {
+    "name": "service.rolemanagement.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'service.rolemanagement.base-url'"
+  },
+  {
+    "name": "service.almanagement.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'service.almanagement.base-url'"
+  },
+  {
+    "name": "service.privmanagement.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'service.privmanagement.base-url'"
+  },
+  {
+    "name": "application.dynamic.config.location",
+    "type": "java.lang.String",
+    "description": "A description for 'application.dynamic.config.location'"
+  },
+  {
+    "name": "application.dynamic.config.cacheClean.seconds",
+    "type": "java.lang.String",
+    "description": "A description for 'application.dynamic.config.cacheClean.seconds'"
+  }
+]}

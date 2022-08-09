@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Oracle JAX-WS 2.1.5. -->
+<xs:schema xmlns:tns="http://osb.wataniya.com/EmailWithAttachmentService" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://osb.wataniya.com/EmailWithAttachmentService">
+
+<xs:element name="emailWithAttachment" type="tns:emailWithAttachment"/>
+
+<xs:element name="emailWithAttachmentResponse" type="tns:emailWithAttachmentResponse"/>
+
+<xs:complexType name="emailWithAttachment">
+<xs:sequence>
+<xs:element name="aFromEmailAddr" type="xs:string" minOccurs="0"/>
+<xs:element name="aToEmailAddr" type="xs:string" minOccurs="0"/>
+<xs:element name="aSubject" type="xs:string" minOccurs="0"/>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+<xs:element xmlns:ns1="http://www.w3.org/2005/05/xmlmime" name="emailAttachment" ns1:expectedContentTypes="application/pdf" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="attachmentName" type="xs:string" minOccurs="0"/>
+<xs:element name="aCcEmailAddr" type="xs:string" minOccurs="0"/>
+<xs:element name="aBccEmailAddr" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="emailWithAttachmentResponse">
+<xs:sequence>
+<xs:element name="emailWithAttachmentResults" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="adapterFaultBean">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

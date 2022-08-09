@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Creation</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/select2.min.css" />
+    <script src="./js/jquery.min.js" />
+    <script src="./js/select2.min.js" />
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="tabs-container">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="tab-b2c-postpaid" data-bs-toggle="tab"
+                        data-bs-target="#b2c-postpaid" type="button" role="tab" aria-controls="nav-b2c-postpaid"
+                        aria-selected="true">B2C Postpaid</button>
+                    <button class="nav-link" id="tab-b2c-prepaid" data-bs-toggle="tab" data-bs-target="#b2c-prepaid"
+                        type="button" role="tab" aria-controls="nav-b2c-prepaid" aria-selected="false">B2C Prepaid</button>
+                    <button class="nav-link" id="tab-ana" data-bs-toggle="tab" data-bs-target="#ana" type="button"
+                        role="tab" aria-controls="nav-ana" aria-selected="false">Ana </button>
+                    <button class="nav-link" id="tab-b2b-epr" data-bs-toggle="tab" data-bs-target="#b2b-epr"
+                        type="button" role="tab" aria-controls="nav-b2b-epr" aria-selected="false">B2B EPR </button>
+                    <button class="nav-link" id="tab-b2b-cpr" data-bs-toggle="tab" data-bs-target="#b2b-cpr"
+                        type="button" role="tab" aria-controls="nav-b2b-cpr" aria-selected="false">B2B CPR </button>
+                </div>
+            </nav>
+        </div>
+        <div class="tabs-content">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-header alert-info">
+                            <h5 class="card-title">B2C Postpaid Subscriber Creation</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">All fields(*) are mandatory..</h6>
+                        </div>
+                        <div class="card-body">
+                            <form action="" id="subscriber-creation-form">
+                                <div class="row">
+                                    <!-- sim type -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="SimType" class="form-label">SIM Type*</label>
+                                            <select id="SimType" class="form-select" required>
+                                                <option selected>eSIM</option>
+                                                <option>Physical</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- dealer id -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="DealerId" class="form-label">Dealer ID*</label>
+                                            <select id="DealerId" class="form-select" required disabled>
+                                                <option selected value="777777">777777</option>
+                                                <option>9999099</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- location -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Location" class="form-label">Location*</label>
+                                            <input type="Location" class="form-control" id="Location"
+                                                placeholder="Location" value="eShop Online" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <!-- check boxes -->
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="">Choose Options</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="N"
+                                                    id="GenerateSAF" checked>
+                                                <label class="form-check-label" for="GenerateSAF">
+                                                    Generate SAF
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="Y"
+                                                    id="DigitalySigned">
+                                                <label class="form-check-label" for="DigitalySigned">
+                                                    Digitaly Signed
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- transaction id -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="TransactionId" class="form-label">Transaction Id</label>
+                                            <input type="TransactionId" class="form-control" id="TransactionId"
+                                                placeholder="TransactionId" />
+                                        </div>
+                                    </div>
+                                    <!-- msisdn -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Msisdn" class="form-label">MSISDN*</label>
+                                            <select class="form-select" id="Msisdn">
+                                            </select>
+                                        </div>
+                                    </div>
+				    <!-- sim no-->
+				    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="SimNo" class="form-label">SIM No</label>
+                                            <input type="text" class="form-control" id="SimNo"
+                                                placeholder="SIM No" required />
+                                        </div>
+                                    </div>
+				     <!-- visa type -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="VisaType" class="form-label">Visa Type*</label>
+                                            <select id="VisaType" class="form-select">
+                                                <option selected>18</option>
+                                                <option>22</option>
+                                            </select>
+                                        </div>
+                                    </div>
+				<!-- id number -->
+                                    <div class="col-md-4">
+                                        <div class="fomr-group">
+                                            <label for="IdNumber" class="form-label">Civil ID*</label>
+                                            <input type="IdNumber" class="form-control" id="IdNumber"
+                                                placeholder="IdNumber" value="283112205273" required />
+                                        </div>
+                                    </div>
+                                    <!-- user title -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Title" class="form-label">Title</label>
+                                            <select id="Title" class="form-select">
+                                                <option selected>Mr.</option>
+                                                <option>Mrs.</option>
+                                            </select>
+                                        </div>
+                                    </div>
+					
+                                    <!-- first name -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="FirstName" class="form-label">First Name*</label>
+                                            <input type="FirstName" class="form-control" id="FirstName"
+                                                placeholder="FirstName" value="Jhon" required />
+                                        </div>
+                                    </div>
+                                    <!-- last name -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="LastName" class="form-label">Last Name*</label>
+                                            <input type="LastName" class="form-control" id="LastName"
+                                                placeholder="LastName" value="Doe" required />
+                                        </div>
+                                    </div>
+                          
+                                    
+                                    <!-- expire date -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="IdExpirationDate" class="form-label">Civil ID Expiration
+                                                Date*</label>
+                                            <input type="date" class="form-control" id="IdExpirationDate" required
+                                                placeholder="IdExpirationDate" value="12/22/2025" />
+                                        </div>
+                                    </div>
+                                    <!-- language -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Language" class="form-label">Language</label>
+                                            <select id="Language" class="form-select">
+                                                <option value="English" selected>English</option>
+                                                <option value="Arabic">Arabic</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- nationality -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Nationality" class="form-label">Nationality*</label>
+                                            <select id="Nationality" class="form-select" required>
+                                                <option selected>India</option>
+                                                <option>Kuwait</option>
+                                                <option>Egypt</option>
+                                                <option>Pakistan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- email -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="EmailAddress" class="form-label">Email Address*</label>
+                                            <input type="EmailAddress" class="form-control" id="EmailAddress"
+                                                value="" required />
+                                        </div>
+                                    </div>
+                                    <!-- address -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="inputAddress" class="form-label">Address</label>
+                                            <input type="text" class="form-control" id="inputAddress"
+                                                placeholder="1234 Main St">
+                                        </div>
+                                    </div>
+
+                                    <!-- rate plan id -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="RatePlanId" class="form-label">Rate Plan Id</label>
+                                            <input type="RatePlanId" class="form-control" id="RatePlanId" value=""
+                                                disabled readonly />
+                                        </div>
+                                    </div>
+                                    <!-- line specific -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <!-- B2C Postpaid Creation - Start -->
+                                            <div class="tab-pane fade show active row" id="b2c-postpaid" role="tabpanel"
+                                                aria-labelledby="nav-b2c-postpaid">
+                                                <!-- promo id -->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="PromoID" class="form-label">Promo ID</label>
+                                                        <select class="form-select" name="" id="PromoID">
+                                                            <optgroup label="Voice">
+                                                                <option value="NULL">---</option>
+                                                                <option value="1-16R8QQZ1">
+                                                                    B2C_N_2019_Shamel10_24M</option>
+                                                                <option value="1-16QRV0NT">
+                                                                    B2C_N_2019_Shamel_20_24M</option>
+                                                                <option value="1-16Z9PCLV">
+                                                                    B2C_N_Eshop_2019_Shamel40_24M</option>
+                                                                <option value="1-1973E83G">
+                                                                    B2C_N_E_shop_2020_Shamel10_24M</option>
+                                                                <option value="1-19QOT4QW">
+                                                                    B2C_N_P40_EShop_2020_Shamel30_24M</option>
+                                                            </optgroup>
+                                                            <optgroup label="Data">
+                                                                <option value="1-16BMIMD9">
+                                                                    B2C_N_IPAD_2019_2TB_24M</option>
+                                                                <option value="1-1AB17VDC">
+                                                                    B2C_LS_N_HomeBundle_1TB_24M</option>
+                                                                <option value="1-1B8IJEZU">
+                                                                    B2C_LS_N_Unlimited_15KD_24M</option>
+                                                                <option value="1-16WYA4CS">
+                                                                    B2C_R_Netgear_2019_2TB_24M</option>
+                                                                <option value="1-17O432O5">
+                                                                    B2C_N_2019_IPAD_1TB_10KD_24M</option>
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 padding-top right">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary submit"
+                                                            id="submit-b2c-postpaid">Create B2C
+                                                            Postpaid</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End -->
+                                            <!-- B2C Prepaid Creation - Start -->
+                                            <div class="tab-pane fade row" id="b2c-prepaid" role="tabpanel"
+                                                aria-labelledby="nav-b2c-prepaid">
+                                                <!-- promo id -->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="PromoID" class="form-label">Promo ID</label>
+                                                        <select class="form-select" name="" id="PromoID">
+                                                            <optgroup label="Voice">
+                                                                <option value="NULL">---</option>
+                                                                <option value="1-3F53S">
+                                                                    OOREDOO PREPAID</option>
+                                                            </optgroup>
+                                                            <optgroup label="Data">
+                                                                <option value="1-4EAS9">
+                                                                    MY NET PREPAID</option>
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 padding-top">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary submit"
+                                                            id="submit-b2c-prepaid">Create B2C
+                                                            Prepaid</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End -->
+                                            <!-- ANA Creation - Start -->
+                                            <div class="tab-pane fade row" id="ana" role="tabpanel"
+                                                aria-labelledby="nav-ana">
+                                                <!-- promo id -->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="PromoID" class="form-label">Promo ID</label>
+                                                        <select class="form-select" name="" id="PromoID">
+                                                            <option value="NULL">---</option>
+                                                            <option value="1-17M5W72X">Special Bundle
+                                                            </option>
+                                                            <option value="1-17M5W73P">
+                                                                Ana Surfer</option>
+                                                            <option value="1-17M5W753">
+                                                                Special Bundle 18</option>
+                                                            <option value="1-17M5YJCR">
+                                                                Bundle Regular</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 padding-top">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary submit" id="submit-ana">Create
+                                                            ANA</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End -->
+                                            <!-- B2B EPR Creation - Start -->
+                                            <div class="tab-pane fade row" id="b2b-epr" role="tabpanel"
+                                                aria-labelledby="nav-b2b-epr">
+                                                <!-- promo id -->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="PromoID" class="form-label">Promo ID</label>
+                                                        <select class="form-select" name="" id="PromoID">
+                                                            <optgroup label="Voice">
+                                                                <option value="NULL">---</option>
+                                                                <option value="1-1A3UH6ZG">
+                                                                    B2B_EPR_BACK_BUSINESS_2020_PRO_40KD_24M</option>
+                                                                <option value="1-15JTM9NA">
+                                                                    B2B_EPR_HALA_FEB_2019_BUNDLE3_PRO_21KD_24M</option>
+                                                                <option value="1-18M6YDH4">
+                                                                    B2B_EPR_HALA_FEB_2020_PRO_40KD_24M</option>
+                                                                <option value="1-184GRGLR">
+                                                                    B2B_EPR_NOTE10_LA_2019_24M</option>
+                                                                <option value="1-11CUHR1S">
+                                                                    B2B_EPR_S9_SHAMEL_PRO_50KD_24M</option>
+                                                            </optgroup>
+                                                            <optgroup label="Data">
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 padding-top">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary submit"
+                                                            id="submit-b2b-epr">Create B2B
+                                                            EPR</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End -->
+                                            <!-- B2B CPR Creation - Start -->
+                                            <div class="tab-pane fade row" id="b2b-cpr" role="tabpanel"
+                                                aria-labelledby="nav-b2b-cpr">
+                                                <!-- promo id -->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="PromoID" class="form-label">Promo ID</label>
+                                                        <select class="form-select" name="" id="PromoID">
+                                                            <optgroup label="Voice">
+                                                                <option value="NULL">---</option>
+                                                                <option value="1-1B0D6TK1">
+                                                                    B2B_CPR_EOY_SHAMEL_10KD_24M</option>
+                                                                <option value="1-1B0D6TKH">
+                                                                    B2B_CPR_EOY_SHAMEL_40KD_24M</option>
+                                                                <option value="1-169VO6P9">
+                                                                    B2B_CPR_MAR_2019_LB_10KD_24M</option>
+                                                                <option value="1-171YCKAG">
+                                                                    TMO_ADEL_HAIDARI_2019_PRO_70KD_24M</option>
+                                                                <option value="1-175XM9LB">
+                                                                    TMO_ALBAREJA_2019_PRO_35KD_24M</option>
+                                                            </optgroup>
+                                                            <optgroup label="Data">
+                                                                <option value="1-182NJYSW">
+                                                                    B2B_CPR_5G_1TB_2019_24M</option>
+                                                                <option value="1-182NJYT4">
+                                                                    B2B_CPR_5G_2TB_2019_24M</option>
+                                                                <option value="1-176Q27CD">B2B_IN_1TB_10KD_24M
+                                                                </option>
+                                                                <option value="1-X7DGG36">
+                                                                    B2B_IN_WBB_3TB_15KD_24M</option>
+                                                                <option value="1-B6B8157">
+                                                                    B2B_IN_4G_PLUS_GAMING_1TB_10KD_24M</option>
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 padding-top">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary submit"
+                                                            id="submit-b2b-cpr">Create B2B
+                                                            CPR</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="border: none;">
+                                            <button type="button" disabled id="modal_close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                        <div class="modal-body">
+                                            <h4 id="request-title">Please wait while request is processing..</h4>
+                                            <div class="success hidden">
+                                                <h3>ID #SPCID = <span class="spcId"></span></h3>
+                                            </div>
+                                            <div class="failed hidden">
+                                                <h4>Unable  to process the request</h4>
+                                                <h6>Error: <span id="request_error">Server Error</span></h6>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                                            </div>                                              
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./js/bootstrap.bundle.min.js"></script>
+<script src="./js/master.js"></script>
+
+</html>

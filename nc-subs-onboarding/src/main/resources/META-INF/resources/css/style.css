@@ -1,0 +1,19 @@
+.tabs-container{
+    padding: 15px;
+}
+.tabs-content{
+    padding: 15px;
+}
+.fade:not(.show) {
+    opacity: 0;
+    display: none;
+}
+.padding-top{
+    padding-top: 15px;
+}
+.submit{
+    width: 100%;
+}
+.hidden{
+    display: none;
+}

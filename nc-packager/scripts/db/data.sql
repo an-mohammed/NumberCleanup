@@ -1,0 +1,76 @@
+--------------------------------------------------------
+--  DML for Table APP_USERS
+--------------------------------------------------------
+SET DEFINE OFF;
+Insert into APP_USERS (ID,U_NAME,U_PWD,FIRSTNAME,LASTNAME,LDAPAUTHENTICATION,COMMENTS,CREATEDBY,MODIFIEDBY,CREATEDDATE,MODIFIEDDATE,SALT,EMAIL,CONTACT_NO,IS_ACC_DEFAULT_PSWD,IS_ACC_LOCKED,IS_ENABLED,IS_SERVICE_USER) values (USER_SEQ.NEXTVAL,'superu','TEh6aendnTMJBcTG37UdnkZS0XP+jdIzJAMYwteAa4Y=','Super','User',0,'This credential will be used by Number Cleanup Super User','su',null,SYSDATE,null,'Uom2rJpf3YRlZzOqmTctOfJed9CFdq','superuser@diyarme.com','90000001',0,0,1,0);
+Insert into APP_USERS (ID,U_NAME,U_PWD,FIRSTNAME,LASTNAME,LDAPAUTHENTICATION,COMMENTS,CREATEDBY,MODIFIEDBY,CREATEDDATE,MODIFIEDDATE,SALT,EMAIL,CONTACT_NO,IS_ACC_DEFAULT_PSWD,IS_ACC_LOCKED,IS_ENABLED,IS_SERVICE_USER) values (USER_SEQ.NEXTVAL,'GUI','$2a$11$yZaaamQz3w9e4s3CRNT0TeRvJifpGA8rIpcAcXk6tzeD1akU2zCem','GUI','GUI',0,'This credential will be used by Number Cleanup Admin UI to invoke microservices','su',null,SYSDATE,null,'none','gui-user@diyarme.com','90000002',0,0,1,1);
+
+--------------------------------------------------------
+--  DML for Table PRIVILEGE
+--------------------------------------------------------
+SET DEFINE OFF;
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'CREATE_USER',SYSDATE,1,null,null,'Privilege to create new user');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'UPDATE_USER',SYSDATE,1,null,null,'Privilege to update an existing user');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'SEARCH_USER',SYSDATE,1,null,null,'Privilege to search existing user');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'RESET_PWD',SYSDATE,1,null,null,'Privilege to reset password');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'CLEANUP_PROFILE',SYSDATE,1,null,null,'Privilege to cleanup profile');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'CREATE_ROLE',SYSDATE,1,null,null,'Privilege to create role');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'UPDATE_ROLE',SYSDATE,1,null,null,'Privilege to update role');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'CREATE_PRIVILEGE',SYSDATE,1,null,null,'Privilege to create privilege');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'UPDATE_NUMBER',SYSDATE,1,null,null,'Privilege to update number details');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'ADD_NUMBER',SYSDATE,1,null,null,'Privilege to add new number to number pool');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'UPDATE_ASSIGNMENT',SYSDATE,1,null,null,'Privilege to update assignment');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'ADD_ASMT',SYSDATE,1,null,null,'Privilege to create new assignment');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'UPDATE_ASMT',SYSDATE,1,null,null,'Privilege to update assignment');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'SEARCH_SERVICE_USER',SYSDATE,1,null,null,'Privilege to search service user');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'UPDATE_GROUP',SYSDATE,1,null,null,'Privilege to Update group information');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'CREATE_GROUP',SYSDATE,1,null,null,'Privilege to create new user group');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'CREATE_SERVICE_USER',SYSDATE,1,null,null,'Privilege to create service user');
+Insert into PRIVILEGE (ID,P_NAME,CREATEDDATE,CREATEDBY,MODDATE,MODIFIEDBY,DESCRIPTION) values (PRIVILEGE_SEQ.NEXTVAL,'SHOW_SUSER_DETAIL',SYSDATE,1,null,null,'Privilege to show service user details');
+
+--------------------------------------------------------
+--  DML for Table ROLES
+--------------------------------------------------------
+SET DEFINE OFF;
+Insert into ROLES (ID,R_NAME,DESCRIPTION,CREATEDBY,MODIFIEDBY,CREATEDDATE,MODIFIEDDATE,IS_SERVICE_ROLE,ADMIN_ROLE,SU_ROLE) values (ROLE_SEQ.NEXTVAL,'ROLE_SU','Super Administrative Role','1',null,SYSDATE,null,0,0,1);
+Insert into ROLES (ID,R_NAME,DESCRIPTION,CREATEDBY,MODIFIEDBY,CREATEDDATE,MODIFIEDDATE,IS_SERVICE_ROLE,ADMIN_ROLE,SU_ROLE) values (ROLE_SEQ.NEXTVAL,'ROLE_ADMIN','Administrative Role','1',null,SYSDATE,null,0,1,0);
+Insert into ROLES (ID,R_NAME,DESCRIPTION,CREATEDBY,MODIFIEDBY,CREATEDDATE,MODIFIEDDATE,IS_SERVICE_ROLE,ADMIN_ROLE,SU_ROLE) values (ROLE_SEQ.NEXTVAL,'ROLE_CAS','Cleanup Service Role','1',null,SYSDATE,null,1,0,0);
+Insert into ROLES (ID,R_NAME,DESCRIPTION,CREATEDBY,MODIFIEDBY,CREATEDDATE,MODIFIEDDATE,IS_SERVICE_ROLE,ADMIN_ROLE,SU_ROLE) values (ROLE_SEQ.NEXTVAL,'ROLE_CLS','Profile Cleanup Role','1',null,SYSDATE,null,0,0,0);
+Insert into ROLES (ID,R_NAME,DESCRIPTION,CREATEDBY,MODIFIEDBY,CREATEDDATE,MODIFIEDDATE,IS_SERVICE_ROLE,ADMIN_ROLE,SU_ROLE) values (ROLE_SEQ.NEXTVAL,'ROLE_PS','Profile Search Role','1',null,SYSDATE,null,0,0,0);
+Insert into ROLES (ID,R_NAME,DESCRIPTION,CREATEDBY,MODIFIEDBY,CREATEDDATE,MODIFIEDDATE,IS_SERVICE_ROLE,ADMIN_ROLE,SU_ROLE) values (ROLE_SEQ.NEXTVAL,'ROLE_PCH','Profile Cleanup History Role','1',SYSDATE,null,null,0,0,0);
+
+--------------------------------------------------------
+--  DML for Table ROLE_PRIVILEGE
+--------------------------------------------------------
+SET DEFINE OFF;
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,1);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,2);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,3);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,4);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,5);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,6);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,7);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,8);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,9);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,10);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,11);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,12);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,13);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,14);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,15);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,16);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,17);
+Insert into ROLE_PRIVILEGE (ROLE_ID,PRIVILEGE_ID) values (1,18);
+
+--------------------------------------------------------
+--  DML for Table USER_ROLES
+--------------------------------------------------------
+SET DEFINE OFF;
+Insert into USER_ROLES (USER_ID,ROLE_ID) values (1,1);
+
+--------------------------------------------------------
+--  DML for Table DIGITAL_OFFERS
+--------------------------------------------------------
+Insert into DIGITAL_OFFERS (OFFER_ID,OFFER_NAME,OFFER_DESC,ACC_GROUP,ENABLED) values (71111116,'Bundle Regular','Bundle Regular','1006',1);
+Insert into DIGITAL_OFFERS (OFFER_ID,OFFER_NAME,OFFER_DESC,ACC_GROUP,ENABLED) values (71111158,'WANNA All in One','WANNA All in One','1048',1);
+Insert into DIGITAL_OFFERS (OFFER_ID,OFFER_NAME,OFFER_DESC,ACC_GROUP,ENABLED) values (71111171,'ANA Cyber offer','ANA Cyber offer','1060',1);

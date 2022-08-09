@@ -1,0 +1,57 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util/spring-util-3.2.xsd"
+	default-autowire="byName">
+	
+	<bean id="rasJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<util:map id="rasCleanupQueries" key-type="java.lang.Integer" value-type="java.lang.String" map-class="java.util.HashMap">
+		<entry>
+			<key><value>1</value></key>
+    		<value><![CDATA[update siebel.s_asset set status_cd = 'Inactive' where row_id in (select row_ID from siebel.s_asset where serial_num = ?)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>2</value></key>
+    		<value><![CDATA[update siebel.s_asset set status_cd = 'Inactive' where root_asset_id in (select root_asset_id from siebel.s_asset where serial_num = ?)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>3</value></key>
+    		<value><![CDATA[update siebel.s_order set status_cd = 'Cancelled' where row_id in (select order_id from siebel.s_order_item where service_num=? and status_cd in ('Pending','Open','Failed','Submitted','In Progress','Submission-Pending','Submitted-Pending','Validation Failed','Validation InProgress','Validated'))]]></value>
+    	</entry>
+    	<entry>
+			<key><value>4</value></key>
+    		<value><![CDATA[update siebel.s_order_item set status_cd = 'Cancelled' where order_id in (select order_id from siebel.s_order_item where service_num=? and status_cd in ('Pending','Open','Failed','Submitted','In Progress','Submission-Pending','Submitted-Pending','Validation Failed','Validation InProgress','Validated'))]]></value>
+    	</entry>
+    	<entry>
+			<key><value>5</value></key>
+    		<value><![CDATA[update siebel.s_evt_act set evt_stat_cd = 'Cancelled' where order_id in (select order_id from siebel.s_order_item where service_num=? and status_cd in ('Pending','Open','Failed','Submitted','In Progress','Submission-Pending','Submitted-Pending','Validation Failed','Validation InProgress','Validated'))]]></value>
+    	</entry>
+    	
+    	<entry>
+			<key><value>6</value></key>
+    		<value><![CDATA[update siebel.s_asset set status_cd = 'Inactive' where row_id in (select row_ID from siebel.s_asset where X_SIM_NUM = ?)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>7</value></key>
+    		<value><![CDATA[update siebel.s_asset set status_cd = 'Inactive' where root_asset_id in (select root_asset_id from siebel.s_asset where X_SIM_NUM = ?)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>8</value></key>
+    		<value><![CDATA[update siebel.s_order set status_cd = 'Cancelled' where row_id in (select order_id from siebel.s_order_item where X_SIM_NUM=? and status_cd in ('Pending','Open','Failed','Submitted','In Progress','Submission-Pending','Submitted-Pending','Validation Failed','Validation InProgress','Validated'))]]></value>
+    	</entry>
+    	<entry>
+			<key><value>9</value></key>
+    		<value><![CDATA[update siebel.s_order_item set status_cd = 'Cancelled' where order_id in (select order_id from siebel.s_order_item where X_SIM_NUM=? and status_cd in ('Pending','Open','Failed','Submitted','In Progress','Submission-Pending','Submitted-Pending','Validation Failed','Validation InProgress','Validated'))]]></value>
+    	</entry>
+    	<entry>
+			<key><value>10</value></key>
+    		<value><![CDATA[update siebel.s_evt_act set evt_stat_cd = 'Cancelled' where order_id in (select order_id from siebel.s_order_item where X_SIM_NUM=? and status_cd in ('Pending','Open','Failed','Submitted','In Progress','Submission-Pending','Submitted-Pending','Validation Failed','Validation InProgress','Validated'))]]></value>
+    	</entry>
+	</util:map>
+</beans>

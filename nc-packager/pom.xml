@@ -1,0 +1,210 @@
+<project 
+xmlns="http://maven.apache.org/POM/4.0.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<artifactId>nc-packager</artifactId>
+	<modelVersion>4.0.0</modelVersion>
+	<name>nc-packager</name>
+	<description>This project is responsible to create the shipment package</description>
+	<packaging>pom</packaging>
+	
+	<parent>
+		<groupId>com.ooredoo</groupId>
+		<artifactId>number-cleanup</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+	<properties>
+		<file.encoding>UTF-8</file.encoding>
+		<nc.build.dirname>NumberCleanup</nc.build.dirname>
+		<nc.buildpath>${project.basedir}\..\build\dist</nc.buildpath>
+		<nc.builddir.path>${nc.buildpath}\${nc.build.dirname}</nc.builddir.path>
+		<maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
+		<maven.antrun.plugin.version>1.7</maven.antrun.plugin.version>
+		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+		<build.version>1.0</build.version>
+	</properties>
+	
+	<build>
+		<plugins>
+			<!-- Clean the build directory -->
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${nc.buildpath}</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- Copy spring-boot-admin jar and application.properties from spring-boot-admin/targer folder folder -->
+                                <copy todir="${nc.builddir.path}\lib">
+									<fileset dir="${project.basedir}\..\nc-boot-admin\target">
+                                        <include name="*.jar" />
+									</fileset>
+								</copy>
+								
+								<copy todir="${nc.builddir.path}\config\nc-boot-admin">
+									<fileset dir="${project.basedir}\..\nc-boot-admin\src\main\resources">
+                                        <include name="application.properties" />
+									</fileset>
+								</copy>
+								
+								<!-- Copy discovery jar and application.properties from discovery/targer folder folder -->
+                                <copy todir="${nc.builddir.path}\lib">
+									<fileset dir="${project.basedir}\..\nc-discovery\target">
+                                        <include name="*.jar" />
+									</fileset>
+								</copy>
+								
+								<copy todir="${nc.builddir.path}\config\nc-discovery">
+									<fileset dir="${project.basedir}\..\nc-discovery\src\main\resources">
+                                        <include name="application.properties" />
+									</fileset>
+								</copy>
+								
+								 <!-- Copy the BSCS service jar and application.properties-->
+                                <copy todir="${nc.builddir.path}\lib">
+									<fileset dir="${project.basedir}\..\nc-bscs-service\target">
+										<include name="*.jar" />
+									</fileset>
+								</copy>
+								
+								<copy todir="${nc.builddir.path}\config\nc-bscs-service">
+									<fileset dir="${project.basedir}\..\nc-bscs-service\src\main\resources">
+										<include name="application.properties" />
+									</fileset>
+								</copy>
+								
+								<!-- Copy the ERP service jar and application.properties-->
+                                <copy todir="${nc.builddir.path}\lib">
+									<fileset dir="${project.basedir}\..\nc-erp-service\target">
+										<include name="*.jar" />
+									</fileset>
+								</copy>
+								
+								<copy todir="${nc.builddir.path}\config\nc-erp-service">
+									<fileset dir="${project.basedir}\..\nc-erp-service\src\main\resources">
+										<include name="application.properties" />
+									</fileset>
+								</copy>
+								
+								<!-- Copy the RAS service jar and application.properties-->
+                                <copy todir="${nc.builddir.path}\lib">
+									<fileset dir="${project.basedir}\..\nc-ras-service\target">
+										<include name="*.jar" />
+									</fileset>
+								</copy>
+								
+								<copy todir="${nc.builddir.path}\config\nc-ras-service">
+									<fileset dir="${project.basedir}\..\nc-ras-service\src\main\resources">
+										<include name="application.properties" />
+									</fileset>
+								</copy>
+								
+								<!-- Copy the NMS service jar and application.properties-->
+                                <copy todir="${nc.builddir.path}\lib">
+									<fileset dir="${project.basedir}\..\nc-nms-service\target">
+										<include name="*.jar" />
+									</fileset>
+								</copy>
+								
+								<copy todir="${nc.builddir.path}\config\nc-nms-service">
+									<fileset dir="${project.basedir}\..\nc-nms-service\src\main\resources">
+										<include name="application.properties" />
+									</fileset>
+								</copy>
+                                
+                                <!-- Copy the Admin GUI jar and application.properties-->
+                                <copy todir="${nc.builddir.path}\lib">
+									<fileset dir="${project.basedir}\..\nc-admin-gui\target">
+										<include name="*.jar" />
+									</fileset>
+								</copy>
+								
+								<copy todir="${nc.builddir.path}\config\nc-admin-gui">
+									<fileset dir="${project.basedir}\..\nc-admin-gui\src\main\resources">
+										<include name="application.properties" />
+									</fileset>
+								</copy>
+								
+								 <!-- Copy the Admin Service jar and application.properties-->
+                                <copy todir="${nc.builddir.path}\lib">
+									<fileset dir="${project.basedir}\..\nc-admin-service\target">
+										<include name="*.jar" />
+									</fileset>
+								</copy>
+								
+								<copy todir="${nc.builddir.path}\config\nc-admin-service">
+									<fileset dir="${project.basedir}\..\nc-admin-service\src\main\resources">
+										<include name="application.properties" />
+									</fileset>
+								</copy>
+								
+								<!-- Copy the Scripts -->
+                                <copy todir="${nc.builddir.path}\scripts">
+									<fileset dir="${project.basedir}\..\nc-packager\scripts">
+										<include name="*.sh" />
+										<exclude name="*.bat" />
+										<exclude name="*installer.sh" />
+									</fileset>
+								</copy>
+								
+								<!-- Copy the Dynamic config -->
+                                <copy todir="${nc.builddir.path}\config">
+									<fileset dir="${project.basedir}\..\nc-packager\dynamic_config">
+										<include name="nc_dynamic_config_en.properties" />
+										<include name="known_hosts" />
+									</fileset>
+								</copy>
+								
+								<!-- Copy the database scripts -->
+                                <copy todir="${nc.builddir.path}\scripts\db">
+									<fileset dir="${project.basedir}\..\nc-packager\scripts\db">
+										<include name="*.sql" />
+									</fileset>
+								</copy>
+								
+								
+								<!-- Copy the Jasypt Jar for  password encryption -->
+                                <copy todir="${nc.builddir.path}\lib">
+									<fileset dir="${project.basedir}\..\nc-packager\lib">
+										<include name="*.jar" />
+									</fileset>
+								</copy>
+                                
+                                <!-- Generates the build package and clean unnecessary files -->
+                                <propertyfile file="${nc.builddir.path}\Number_Cleanup_Shipment.info" comment="Number-Cleanup Shipment Build Information">
+									<entry key="shipment.name" value="Number-Cleanup" />
+									<entry key="shipment.version" value="${project.version}" />
+									<entry key="shipment.date" type="date" value="now" pattern="dd/MM/yyyy HH-mm-ss Z" />
+									<entry key="shipment.created.by" value="${user.name}" />
+								</propertyfile>
+								
+								<zip destfile="${nc.buildpath}\NumberCleanup-${build.version}.zip" basedir="${nc.buildpath}" />
+								<delete dir="${nc.buildpath}\${nc.build.dirname}" failonerror="false"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+		</plugins>
+	</build>
+</project>

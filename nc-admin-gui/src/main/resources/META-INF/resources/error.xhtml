@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions" >
+
+<f:loadBundle basename="messages" var="msg" />
+<h:head>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title><h:outputText value="#{msg.title_Login}" /></title>
+	<h:outputStylesheet name="/css/bootstrap.min.css" />
+	<h:outputStylesheet name="/css/style.css" />
+	<h:outputStylesheet name="/css/main.css" />
+	<h:outputStylesheet name="/css/util.css" />
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/images/favicon.jpg"/>
+	<f:event type="preRenderView" listener="#{facesContext.externalContext.response.setHeader('Cache-Control', 'no-cache, no-store')}" />
+</h:head>
+
+<h:body>
+	<p:layout fullPage="true" >
+		<p:layoutUnit position="north" resizable="false" closable="false" collapsible="false" gutter="0" 
+		    style="border:0px !important;background-color: #fff !important;height:60px !important;" styleClass="container-fluid bg-white hdr-shadow headerPanel" id="northUnit">
+					<div style="padding-left:12px; padding-right:0px;">
+						<h:form id="headerForm" prependId="false">
+							<h:panelGrid columns="2" width="100%" cellpadding="0" cellspacing="0" border="0" >
+					    		<h:graphicImage url="/images/ooredoologo.svg" width="130" height="30" styleClass="brandStyle" alt="Ooredoo"/>
+					    		<p:panel styleClass="headerPanel" style="border:-moz-border-radius: 0px; -webkit-border-radius: 0px;padding-top:0px !important;padding-bottom:0px !important;">
+									<table style="width:100%;" cellpadding="1px" cellspacing="0px" border="0px">
+										<tr>
+											<td valign="middle" align="left" style="width: fit-content;min-width: 175px !important;max-width: 240px !important;text-align: center;">
+												<h:outputText value="#{msg.welcomeUser} #{index.userFullName}" styleClass="commandLinkStyle" style="padding-left:5px;"/>
+											</td>
+											<td valign="middle" align="center" width="1%" style="color:black;font-size:15px;"><b>|</b></td>
+											<td valign="middle" align="left" style="width: fit-content;text-align: center;">
+												<p:commandLink id="home" action="#{index.routeHome}" ajax="false" >
+													<h:outputText value="Home" styleClass="commandLinkStyle"/>
+												</p:commandLink>
+								   			</td>
+								   			<td valign="middle" align="center" width="1%" style="color:black;font-size:15px;"><b>|</b></td>
+											<td valign="middle" align="left"  style="width: fit-content;text-align: center;min-width: 50px !important;">
+												<p:commandLink id="logOut" actionListener="#{index.logout}">
+											        <h:outputText value="Log Off" styleClass="commandLinkStyle"/>
+											    </p:commandLink>
+											</td>
+											<td>
+												<div id="header-trans"><h:graphicImage url="/images/gradient-white-none.png" /></div>
+											</td>
+										</tr>
+									</table>
+						        </p:panel>
+					    	</h:panelGrid>
+						</h:form>
+					</div>
+			</p:layoutUnit>
+
+		<p:layoutUnit position="center" gutter="0" style="background: #f3f4f8 !important;border:0px !important;">
+    		<p:growl id="growl" showDetail="true" showSummary="true" sticky="false" />
+    		<div class="limiter">
+				<div class="container-login100">
+					<div class="wrap-login100">
+						<div class="login100-form-title" style="background-image: url(images/bg-01.jpg);">
+							<span class="login100-form-title-1">
+								Profile Clean-Up Console
+							</span>
+						</div>
+		
+						<h:form prependId="false" id="loginForm" styleClass="login100-form validate-form">
+							<div align="center" style="padding-top: 30px;padding-bottom: 50px;">
+								<h:panelGrid columns="1" styleClass="ui-fluid center top-alignment" style="text-align:center !important;">
+									<h:graphicImage url="/images/error.png" alt="error" width="80" height="80" styleClass="loginImageStyle" style="margin: auto;"/>
+									<h:outputText value="#{msg.errorMessage}" styleClass="errorMsg"/>
+									<h:outputText value="#{msg.errorSubMessage}" styleClass="errorMsg1" />
+								</h:panelGrid>
+							</div>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</p:layoutUnit>
+	
+		<p:layoutUnit position="south" resizable="false" closable="false" collapsible="false" gutter="0" 
+		   style="border:0px !important;background: #ED1C24 !important;border-radius: 0px !important;height:15px !important;" id="southUnit" styleClass="footerPanel" >
+				<h:outputText value="© #{index.year} - All Rights Reserved with Ooredoo Kuwait" style="color:white; font-size:10.5px !important;font-family: Poppins-Regular !important;"/>
+		   </p:layoutUnit>
+	</p:layout>
+</h:body>
+</html>

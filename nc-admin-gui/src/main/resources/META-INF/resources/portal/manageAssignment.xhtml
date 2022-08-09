@@ -1,0 +1,470 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Manage Assignment</ui:define>
+	 
+	<ui:define name="pageContent">
+			<div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Cleanup Subscriber Profile" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+		                <div class="shadow-box">
+		                	 <div class="card">
+						        <p:tabView dynamic="true" cache="false" id="nc" onTabChange="#{am.onTabChange()}">
+						            <p:tab title="Numbers From Assignments" titleStyle="font-size:12px; font-family:ooredoo !important;" id="an">
+						            	<h:form prependId="false" id="manageAssignmentForm">
+					                	<p:panel style="border:0px !important;padding-top:20px !important;" id="numberCleanupP">
+					                  		<p:messages id="numberCleanupM" showDetail="true" closable="true" showSummary="false">
+												<p:autoUpdate />
+											</p:messages>
+					                  		<div class="ui-fluid">
+										        <div class="ui-g-12 ui-md-5" >
+													<div class="ui-inputgroup">
+								                       	<p:selectOneMenu id="activeAsmt" value="#{am.selectedAssignmentId}" label="Select Active Assignments" filter="true" filterMatchMode="startsWith" 
+															panelStyle="width:350px; background: white !important; font-size:12px !important;" 
+															style="font-size:12px !important;font-family: Poppins-Regular !important;width:80% !important;">
+															<p:ajax listener="#{am.onAssignmentChange}" update="dataPanel,asmtDetails" />
+															<f:selectItem itemLabel="Select Assignment" itemValue="#{null}" noSelectionOption="true" />
+												            <f:selectItems value="#{am.allAssignmentChoice}"/>
+												        </p:selectOneMenu>
+												        
+												        <p:commandButton id="refA" value="Refresh" ajax="true"
+											                	styleClass="green-button mx-auto"
+											                	update="activeAsmt" action="#{am.refreshA}"/>
+													</div>
+												</div>
+										        <p:separator />
+										        
+										        <h:panelGrid id="asmtDetails" style="width:100%;" columns="2" columnClasses="ui-g-12 ui-md-9,ui-g-12 ui-md-3" >
+											        <p:panelGrid id="asmtDetailsP" layout="grid" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-2" columns="4"  style="width:100%;" rendered="#{not empty am.selectedAssignment}">
+											        	<p:outputLabel value="CR Details" for="cr" styleClass="lebel"/>
+											        	<h:outputText id="cr" value="#{am.selectedAssignment.description}"  style="font-size:12px;font-family: Poppins-Regular !important;vertical-align: top;"/>
+											        	
+											        	<p:outputLabel value="Phase" for="phase" styleClass="lebel"/>
+											        	<h:outputText id="phase" value="#{am.selectedAssignment.reason}"  style="font-size:12px;font-family: Poppins-Regular !important;vertical-align: top;"/>
+											        	
+											        	<p:outputLabel value="Start Date" for="sDate" styleClass="lebel"/>
+											        	<h:outputText id="sDate" value="#{am.selectedAssignment.startDate}"  style="font-size:12px;font-family: Poppins-Regular !important;vertical-align: top;">
+											        		<f:convertDateTime pattern = "dd-MM-yyyy" />
+											        	</h:outputText>
+											        	
+											        	<p:outputLabel value="End Date" for="eDate" styleClass="lebel"/>
+											        	<h:outputText id="eDate" value="#{am.selectedAssignment.endDate}"  style="font-size:12px;font-family: Poppins-Regular !important;vertical-align: top;">
+											        		<f:convertDateTime pattern = "dd-MM-yyyy" />
+											        	</h:outputText>
+											        </p:panelGrid>
+											        <p:panelGrid id="finishAP" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:16%;" rendered="#{not empty am.selectedAssignment}">
+											        	<p:commandButton id="finishA" value="Finish Assignment" ajax="true"
+											                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_ASSIGNMENT')}"	
+											                	update="activeAsmt,asmtDetails,dataPanel,cleanupResult" action="#{am.finishAssignment}"/>
+											        </p:panelGrid>
+										        </h:panelGrid>
+										        <p:panelGrid id="dataPanel" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:100%;">
+													<p:dataTable value="#{am.subscriberProfiles}"  
+														style="font-size: 12px;margin-top:10px;"
+														styleClass="myStyle"
+														id="numberDatatable" 
+														var="rows" 
+														rows="8" 
+														paginator="true"
+														paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+														rowsPerPageTemplate="10,20,50"
+														filterDelay="100"
+														paginatorPosition="bottom" 
+														emptyMessage="No Number Profile found" 
+														paginatorAlwaysVisible="false" 
+														rendered="#{not empty am.selectedAssignment}"
+														selection="#{am.selectedProfilesForCleanup}" 
+														rowKey="#{rows.msisdn}" 
+														selectionPageOnly="false"
+														editable="true"
+			                     						editMode="cell"
+														reflow="true">
+														
+														<f:facet name="header">
+												            <div align="center">
+												                <h:outputText value="Assigned Numbers"  style="font-size:12px;font-weight:bold;font-family: Poppins-Regular !important;"/>
+												            </div>
+												        </f:facet>
+												        
+												        <p:column selectionMode="multiple" 
+												        style="width:3%;text-align:center;vertical-align: middle  !important;padding-left: 1px !important;padding-right:1px !important;"/>
+												        
+												        <p:column headerText="MSISDN" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+								    						<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.msisdn}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:inputText id="msisdnIA" value="#{rows.msisdn}" styleClass="inputTextMediumNoBord" style="width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;" readonly="true"/>
+												                     </f:facet>
+												                  </p:cellEditor>
+														</p:column>
+														
+														<p:column headerText="IMSI" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+								    						<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.imsi}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:inputText id="imsiIA" value="#{rows.imsi}" styleClass="inputTextMediumNoBord" style="width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;" readonly="true"/>
+												                     </f:facet>
+												                  </p:cellEditor>
+														</p:column>
+														
+														<p:column headerText="SIM No" style="text-align: center;font-weight:bold;font-size:12px;width:15%;">
+								    						<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.simNo}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:inputText id="simIA" value="#{rows.simNo}" styleClass="inputTextMediumNoBord" style="width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;" readonly="true"/>
+												                     </f:facet>
+												                  </p:cellEditor>
+														</p:column>
+														
+														<p:column headerText="Type" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+															<p:cellEditor>
+																<f:facet name="output">
+											                        <h:outputText value="#{rows.subscriberType}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											                    </f:facet>
+											                     <f:facet name="input">
+											                     	<p:selectOneMenu id="subsType" value="#{rows.subscriberType}" label="Subscriber Type" filter="false"
+																		panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																		style="font-size:12px !important;font-family: Poppins-Regular !important;width:100% !important;">
+															            <f:selectItem itemLabel="--Select--" itemValue="#{null}" noSelectionOption="true" />
+															            <f:selectItems value="#{am.subscriberTypes.entrySet()}" var="a" itemLabel="#{a.key}" itemValue="#{a.value}"/>
+															        </p:selectOneMenu>
+											                     </f:facet>
+															</p:cellEditor>
+														</p:column>
+														
+														<p:column headerText="NMS Pool" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+															<p:cellEditor>
+																<f:facet name="output">
+											                        <h:outputText value="#{rows.selecedNmsPool}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											                    </f:facet>
+											                     <f:facet name="input">
+											                     	<p:selectOneMenu id="nmsPool" value="#{rows.selecedNmsPool}" label="NMS Pool" filter="true" filterMatchMode="startsWith" 
+																		panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																		style="font-size:12px !important;font-family: Poppins-Regular !important;width:100% !important;">
+																		<f:selectItem itemLabel="--Select--" itemValue="#{null}" noSelectionOption="true" />
+															            <f:selectItems value="#{am.allNmsPools.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+															        </p:selectOneMenu>
+											                     </f:facet>
+											                 </p:cellEditor>
+														</p:column>
+														
+														<p:column headerText="NMS Price" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+															<p:cellEditor>
+																<f:facet name="output">
+											                        <h:outputText value="#{rows.price}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											                    </f:facet>
+											                     <f:facet name="input">
+											                     	<p:inputText id="price" value="#{rows.price}" styleClass="form-control inputTextMedium" style="width:100% !important;"/>
+											                     </f:facet>
+											                  </p:cellEditor>
+														</p:column>
+														
+														<p:column headerText="Location" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+															<p:cellEditor>
+																<f:facet name="output">
+											                        <h:outputText value="#{rows.selectedErpLocation}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											                    </f:facet>
+											                     <f:facet name="input">
+											                     	<p:selectOneMenu id="erpLoc" value="#{rows.selectedErpLocation}" label="ERP Location" filter="true" filterMatchMode="startsWith" 
+																		panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																		style="font-size:12px !important;font-family: Poppins-Regular !important;width:100% !important;">
+															            <f:selectItem itemLabel="--Select--" itemValue="#{null}" noSelectionOption="true" />
+															            <f:selectItems value="#{am.allErpLocations}" />
+															        </p:selectOneMenu>
+											                     </f:facet>
+											                 </p:cellEditor>
+														</p:column>
+														
+														<p:column headerText="Dealer" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+															<p:cellEditor>
+																<f:facet name="output">
+											                        <h:outputText value="#{rows.selectedDealer}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											                    </f:facet>
+											                     <f:facet name="input">
+											                     	<p:selectOneMenu id="dealer" value="#{rows.selectedDealer}" label="Dealer" filter="true" filterMatchMode="startsWith" 
+																		panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																		style="font-size:12px !important;font-family: Poppins-Regular !important;width:100% !important;">
+															            <f:selectItem itemLabel="--Select--" itemValue="#{null}" noSelectionOption="true" />
+															            <f:selectItems value="#{am.allDealer}" />
+															        </p:selectOneMenu>
+											                     </f:facet>
+											                 </p:cellEditor>
+														</p:column>
+														
+														<f:facet name="footer">
+															<div class="ui-g ui-fluid" style="padding-top:10px !important;">
+															    <div class="ui-g-12 ui-md-4" >
+															        <div class="ui-inputgroup">
+															        	<p:commandButton value="Reset" ajax="true" actionListener="#{am.reset}" 
+															            styleClass="green-button" update=":nc:cleanupResult" 
+															            rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('CLEANUP_PROFILE')}"/>
+															            
+															        	<p:selectCheckboxMenu id="node" value="#{am.cleanReq.nodes}" label="Systems" filter="true" filterMatchMode="startsWith" 
+																		panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																		style="font-size:12px !important;font-family: Poppins-Regular !important;" required="true">
+																            <f:selectItems value="#{am.allNodes.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+																        </p:selectCheckboxMenu>
+																        
+															            <p:commandButton value="Cleanup" ajax="true" actionListener="#{am.cleanupProfile}" 
+															            styleClass="green-button" update=":nc:cleanupResult" 
+															            rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('CLEANUP_PROFILE')}"/>
+															        </div>
+															    </div>
+														    </div>
+														</f:facet>
+													</p:dataTable>
+													
+													<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" style="width:100% !important;vertical-align:middle;padding-top:15ox !important;" 
+							                  		columnClasses="ui-g-12 ui-md-12" id="cleanupResult">
+								                    	<p:accordionPanel value="#{am.cleanRes.cleanupDetails.keySet().toArray()}" var="key" styleClass="#{am.cleanRes.cleanupDetails[key].styleClass}">
+							                    			<p:tab title="MSISDN : #{key}" id="detTab" titleStyleClass="#{am.cleanRes.cleanupDetails[key].styleClass}">
+							                    				<p:dataTable var="e" value="#{am.cleanRes.cleanupDetails[key].cleanupDetails}">
+																    <p:column headerText="System" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+																        <h:outputText value="#{e.node}" styleClass="text" style="font-weight:normal !important;"/>
+																    </p:column>
+																    <p:column headerText="Execution" style="text-align: center;font-weight:bold;font-size:12px;width:15%;">
+																        <h:outputText value="#{e.execEnd}"  styleClass="text" style="font-weight:normal !important;">
+																        	<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+																        </h:outputText>
+																    </p:column>
+																    <p:column headerText="Status" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+																		<h:outputText value="#{e.status}" styleClass="text" style="font-weight:normal !important;"/>
+																    </p:column>
+																     <p:column headerText="Details" style="text-align: center;font-weight:bold;font-size:12px;width:65%;">
+																		<h:outputText value="#{e.response}" styleClass="text" style="font-weight:normal !important;"/>
+																    </p:column>
+															   </p:dataTable>
+							                    		</p:tab>
+								                   	</p:accordionPanel>
+										        </h:panelGrid>
+											</p:panelGrid>
+										  </div>
+										</p:panel>
+									  </h:form>
+									</p:tab>
+									<p:tab title="Numbers From User Group">
+										<h:form prependId="false" id="manageAssignmentGForm">
+											<p:panel style="border:0px !important;padding-top:20px !important;" id="numberCleanupUg">
+						                  		<p:messages id="numberCleanupUM" showDetail="true" closable="true" showSummary="false">
+													<p:autoUpdate />
+												</p:messages>
+						                  		<div class="ui-fluid">
+							                  		<div class="ui-fluid" style="padding-left:20px !important; float:left;">
+							                  			<p:commandButton id="refG" value="Refresh" ajax="true" 	styleClass="green-button mx-auto" 	update="dataPanelG" action="#{am.refreshG}"/>
+							                  		</div>
+													<p:panelGrid id="dataPanelG" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:100%;">
+														<p:dataTable value="#{am.subscriberProfilesUg}"  
+															style="font-size: 12px;margin-top:10px;"
+															id="numberDatatableG" 
+															var="rows" 
+															rows="8" 
+															paginator="true"
+															paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="10,20,50"
+															filterDelay="100"
+															paginatorPosition="bottom" 
+															emptyMessage="No number assigned to groups you belong" 
+															paginatorAlwaysVisible="false" 
+															rendered="#{not empty am.subscriberProfilesUg}"
+															selection="#{am.selectedProfilesForCleanupUg}" 
+															rowKey="#{rows.msisdn}" 
+															selectionPageOnly="false"
+															editable="true"
+				                     						editMode="cell"
+															reflow="true">
+															
+															<f:facet name="header">
+													            <div align="center">
+													                <h:outputText value="Allocated Numbers to Group"  style="font-size:12px;font-weight:bold;font-family: Poppins-Regular !important;"/>
+													            </div>
+													        </f:facet>
+													        
+													        <p:column selectionMode="multiple" 
+													        style="width:3%;text-align:center;vertical-align: middle  !important;padding-left: 1px !important;padding-right:1px !important;"/>
+													        
+													        <p:column headerText="MSISDN" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+									    						<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.msisdn}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:inputText id="msisdnI" value="#{rows.msisdn}" styleClass="inputTextMediumNoBord" style="width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;" readonly="true"/>
+												                     </f:facet>
+												                  </p:cellEditor>
+															</p:column>
+															
+															<p:column headerText="IMSI" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+									    						<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.imsi}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:inputText id="imsiI" value="#{rows.imsi}" styleClass="inputTextMediumNoBord" style="width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;" readonly="true"/>
+												                     </f:facet>
+												                  </p:cellEditor>
+															</p:column>
+															
+															<p:column headerText="SIM No" style="text-align: center;font-weight:bold;font-size:12px;width:15%;">
+									    						<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.simNo}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:inputText id="simI" value="#{rows.simNo}" styleClass="inputTextMediumNoBord" style="width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;" readonly="true"/>
+												                     </f:facet>
+												                  </p:cellEditor>
+															</p:column>
+															
+															<p:column headerText="Type" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+																<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.subscriberType}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:selectOneMenu id="subsTypeG" value="#{rows.subscriberType}" label="Subscriber Type" filter="false"
+																			panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																			style="font-size:12px !important;font-family: Poppins-Regular !important;width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;">
+																            <f:selectItem itemLabel="--Select--" itemValue="#{null}" noSelectionOption="true" />
+																            <f:selectItems value="#{am.subscriberTypes.entrySet()}" var="a" itemLabel="#{a.key}" itemValue="#{a.value}"/>
+																        </p:selectOneMenu>
+												                     </f:facet>
+																</p:cellEditor>
+															</p:column>
+															
+															<p:column headerText="NMS Pool" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+																<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.selecedNmsPool}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:selectOneMenu id="nmsPoolG" value="#{rows.selecedNmsPool}" label="NMS Pool" filter="true" filterMatchMode="startsWith" 
+																			panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																			style="font-size:12px !important;font-family: Poppins-Regular !important;width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;">
+																			<f:selectItem itemLabel="--Select--" itemValue="#{null}" noSelectionOption="true" />
+																            <f:selectItems value="#{am.allNmsPools.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+																        </p:selectOneMenu>
+												                     </f:facet>
+												                 </p:cellEditor>
+															</p:column>
+															
+															<p:column headerText="NMS Price" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+																<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.price}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:inputText id="priceG" value="#{rows.price}" styleClass="inputTextMediumNoBord" style="width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;"/>
+												                     </f:facet>
+												                  </p:cellEditor>
+															</p:column>
+															
+															<p:column headerText="Location" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+																<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.selectedErpLocation}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:selectOneMenu id="erpLocG" value="#{rows.selectedErpLocation}" label="ERP Location" filter="true" filterMatchMode="startsWith" 
+																			panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																			style="font-size:12px !important;font-family: Poppins-Regular !important;width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;">
+																            <f:selectItem itemLabel="--Select--" itemValue="#{null}" noSelectionOption="true" />
+																            <f:selectItems value="#{am.allErpLocations}" />
+																        </p:selectOneMenu>
+												                     </f:facet>
+												                 </p:cellEditor>
+															</p:column>
+															
+															<p:column headerText="Dealer" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+																<p:cellEditor>
+																	<f:facet name="output">
+												                        <h:outputText value="#{rows.selectedDealer}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+												                    </f:facet>
+												                     <f:facet name="input">
+												                     	<p:selectOneMenu id="dealerG" value="#{rows.selectedDealer}" label="Dealer" filter="true" filterMatchMode="startsWith" 
+																			panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																			style="font-size:12px !important;font-family: Poppins-Regular !important;width:100% !important;border-top:0px !important;border-bottom:0px !important;border-left:0px !important;border-right:0px !important;">
+																            <f:selectItem itemLabel="--Select--" itemValue="#{null}" noSelectionOption="true" />
+																            <f:selectItems value="#{am.allDealer}" />
+																        </p:selectOneMenu>
+												                     </f:facet>
+												                 </p:cellEditor>
+															</p:column>
+															
+															<f:facet name="footer">
+																<div class="ui-g ui-fluid" style="padding-top:10px !important;">
+																    <div class="ui-g-12 ui-md-4" >
+																        <div class="ui-inputgroup">
+																        	<p:commandButton value="Reset" ajax="true" actionListener="#{am.resetG}" 
+																            styleClass="green-button" update=":nc:cleanupResultG" 
+																            rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('CLEANUP_PROFILE')}"/>
+																            
+																        	<p:selectCheckboxMenu id="nodeG" value="#{am.cleanReq.nodes}" label="Systems" filter="true" filterMatchMode="startsWith" 
+																			panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																			style="font-size:12px !important;font-family: Poppins-Regular !important;" required="true">
+																	            <f:selectItems value="#{am.allNodes.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+																	        </p:selectCheckboxMenu>
+																	        
+																            <p:commandButton value="Cleanup" ajax="true" actionListener="#{am.cleanupProfileUg}" 
+																            styleClass="green-button" update=":nc:cleanupResultG" 
+																            rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('CLEANUP_PROFILE')}"/>
+																        </div>
+																    </div>
+															    </div>
+															</f:facet>
+														</p:dataTable>
+														
+														<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" style="width:100% !important;vertical-align:middle;padding-top:15ox !important;" 
+								                  		columnClasses="ui-g-12 ui-md-12" id="cleanupResultG">
+									                    	<p:accordionPanel value="#{am.cleanRes.cleanupDetails.keySet().toArray()}" var="key" styleClass="#{am.cleanRes.cleanupDetails[key].styleClass}">
+								                    			<p:tab title="MSISDN : #{key}" id="detTabG" titleStyleClass="#{am.cleanRes.cleanupDetails[key].styleClass}">
+								                    				<p:dataTable var="e" value="#{am.cleanRes.cleanupDetails[key].cleanupDetails}">
+																	    <p:column headerText="System" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+																	        <h:outputText value="#{e.node}" styleClass="text" style="font-weight:normal !important;"/>
+																	    </p:column>
+																	    <p:column headerText="Execution" style="text-align: center;font-weight:bold;font-size:12px;width:15%;">
+																	        <h:outputText value="#{e.execEnd}"  styleClass="text" style="font-weight:normal !important;">
+																	        	<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+																	        </h:outputText>
+																	    </p:column>
+																	    <p:column headerText="Status" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+																			<h:outputText value="#{e.status}" styleClass="text" style="font-weight:normal !important;"/>
+																	    </p:column>
+																	     <p:column headerText="Details" style="text-align: center;font-weight:bold;font-size:12px;width:65%;">
+																			<h:outputText value="#{e.response}" styleClass="text" style="font-weight:normal !important;"/>
+																	    </p:column>
+																   </p:dataTable>
+								                    		</p:tab>
+									                   	</p:accordionPanel>
+											        </h:panelGrid>
+												</p:panelGrid>
+											</div>
+										</p:panel>
+									</h:form>
+								</p:tab>
+							 </p:tabView>
+						  </div>
+		                </div>
+		             </div>
+		          </div>
+		         </div>
+		      </div>
+		</ui:define>
+	</ui:composition>

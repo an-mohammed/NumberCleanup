@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Oracle JAX-WS 2.1.5. --><xs:schema xmlns:ns1="http://osb.wataniya.com/EmailWithAttachmentService" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://osb.wataniya.com/AdapterFault">
+
+<xs:import namespace="http://osb.wataniya.com/EmailWithAttachmentService" schemaLocation="EmailWithAttachmentServiceXSD1.xsd"/>
+
+<xs:element name="AdapterFault" nillable="true" type="ns1:adapterFaultBean"/>
+</xs:schema>

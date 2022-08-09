@@ -1,0 +1,69 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util/spring-util-3.2.xsd"
+	default-autowire="byName">
+
+	<bean id="nmsJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<util:map id="nmsCleanupQueriesPO" key-type="java.lang.Integer" value-type="java.lang.String" map-class="java.util.HashMap">
+		<entry>
+			<key><value>1</value></key>
+    		<value><![CDATA[update NMS.mobile_number set status = 'A', user_category = 'PO' where mobile_number = ?]]></value>
+    	</entry>
+    	<entry>
+			<key><value>2</value></key>
+    		<value><![CDATA[delete from NMS.sim_mobile_map where mobile_number = ?]]></value>
+    	</entry>
+	</util:map>
+	
+	<util:map id="nmsCleanupQueriesPP" key-type="java.lang.Integer" value-type="java.lang.String" map-class="java.util.HashMap">
+		<entry>
+			<key><value>1</value></key>
+    		<value><![CDATA[update NMS.mobile_number set status = 'A', user_category = 'PP' where mobile_number = ?]]></value>
+    	</entry>
+    	<entry>
+			<key><value>2</value></key>
+    		<value><![CDATA[delete from NMS.sim_mobile_map where mobile_number = ?]]></value>
+    	</entry>
+    	<entry>
+			<key><value>3</value></key>
+    		<value><![CDATA[delete from NMS.sim_mobile_map_history where sim_iccid = ? and operation = 'D']]></value>
+    	</entry>
+		<entry>
+			<key><value>4</value></key>
+    		<value><![CDATA[delete from NMS.sim_mobile_map where sim_iccid = ?]]></value>
+    	</entry>
+    	<entry>
+			<key><value>5</value></key>
+    		<value><![CDATA[insert into NMS.sim_mobile_map values(NMS.WAT_RAS_SIM_JOIN.NEXTVAL, ?,?,SYSDATE,NULL,'Y','NMSDB',sysdate)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>6</value></key>
+    		<value><![CDATA[update NMS.mobile_number set product_type = '11-Silver 5 for 5' where mobile_number = ?]]></value>
+    	</entry>
+	</util:map>
+	<util:map id="nmsPriceUpdate" key-type="java.lang.Integer" value-type="java.lang.String" map-class="java.util.HashMap">
+		<entry>
+			<key><value>1</value></key>
+    		<value><![CDATA[update NMS.mobile_number set price = ? where mobile_number = ?]]></value>
+    	</entry>
+	</util:map>
+	<util:map id="nmsPoolUpdate" key-type="java.lang.Integer" value-type="java.lang.String" map-class="java.util.HashMap">
+		<entry>
+			<key><value>1</value></key>
+    		<value><![CDATA[update NMS.mobile_number set pool_type = ? where mobile_number = ?]]></value>
+    	</entry>
+	</util:map>
+	<util:map id="nmsDealerUpdate" key-type="java.lang.Integer" value-type="java.lang.String" map-class="java.util.HashMap">
+		<entry>
+			<key><value>1</value></key>
+    		<value><![CDATA[update NMS.mobile_number set dealer_id = ? where mobile_number = ?]]></value>
+    	</entry>
+	</util:map>
+</beans>

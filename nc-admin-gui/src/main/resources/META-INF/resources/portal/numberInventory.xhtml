@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Manage Inventory</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="manageNumberForm">
+			<div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Manage Numbers" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+		                <div class="shadow-box">
+	                		<p:panel style="border:0px !important;" id="manageNumberP">
+                  				<p:messages id="ManageNumberM" showDetail="true" closable="true" showSummary="false">
+									<p:autoUpdate />
+								</p:messages>
+                  				<div class="ui-fluid">
+                  					<p:panelGrid id="dataPanel" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:100%;">
+										<p:dataTable value="#{nm.allNumbers}"  style="font-size:11px;margin-top:10px;font-family:Poppins-Regular !important;"
+											id="numberDatatable" 
+											var="rows" 
+											rows="15" 
+											paginator="true"
+											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+											rowsPerPageTemplate="10,20,50"
+											filterDelay="100"
+											paginatorPosition="bottom" 
+											emptyMessage="No Subscriber Profile Defined" 
+											paginatorAlwaysVisible="false" 
+											editable="false"
+											selection="#{nm.selectedNumber}" 
+											rowKey="#{rows.id}" 
+											selectionMode="single"
+											reflow="true">
+											
+											<p:ajax event="rowSelect" listener="#{nm.onRowSelect}" update="editNumber,releaseNumber" process="@this" partialSubmit="true"/>
+											<p:ajax event="rowUnselect" listener="#{nm.onRowUnselect}" update="editNumber,releaseNumber" process="@this" partialSubmit="true" />
+											
+											<f:facet name="header">
+									            <div align="center">
+									                <h:outputText value="Number Inventory"  style="font-size:12px;font-weight:bold;font-family: Poppins-Regular !important;"/>
+									            </div>
+									        </f:facet>
+									        
+									        <p:column headerText="MSISDN" filterBy="#{rows.msisdn}" filterMatchMode="contains" style="text-align: center;font-weight:bold;font-size:12px;width:15%;">
+					    						<h:outputText value="#{rows.msisdn}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											
+											<p:column headerText="IMSI" filterBy="#{rows.imsi}" filterMatchMode="exact" style="text-align: center;font-weight:bold;font-size:12px;width:15%;">
+					    						<h:outputText value="#{rows.imsi}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											
+											<p:column headerText="SIM No" filterBy="#{rows.simNo}" filterMatchMode="exact" style="text-align: center;font-weight:bold;font-size:12px;width:25%;">
+					    						<h:outputText value="#{rows.simNo}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											
+											<p:column headerText="ERP Location" filterBy="#{rows.curErpLoc}" filterMatchMode="exact" style="text-align: center;font-weight:bold;font-size:12px;width:15%;">
+					    						<h:outputText value="#{rows.curErpLoc}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											
+											<p:column headerText="NMS Pool" filterBy="#{rows.curNmsPool}" filterMatchMode="exact" style="text-align: center;font-weight:bold;font-size:12px;width:15%;">
+					    						<h:outputText value="#{rows.curNmsPool}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											
+											<p:column headerText="Physical SIM" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+					    						<p:graphicImage url="/images/phy_sim.png" height="20" width="20" rendered="#{rows.phSim}"/>
+						        				<h:outputText value="--" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"  rendered="#{!rows.phSim}"/>
+											</p:column>
+											
+											<p:column headerText="Created On" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+					    						<h:outputText value="#{rows.createdDate}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;">
+					    							<f:convertDateTime pattern = "dd-MM-yyyy" />
+					    						</h:outputText>
+											</p:column>
+											
+											<p:column headerText="Enabled" style="text-align: center;font-weight:bold;font-size:12px;width:8%;">
+												<p:graphicImage url="/images/green.png" height="10" width="10" rendered="#{rows.enabled == 'true'}"/>
+						        				<p:graphicImage url="/images/red.png" height="10" width="10" rendered="#{rows.enabled == 'false'}"/>
+											</p:column>
+											
+											<f:facet name="footer">
+												<p:panelGrid id="buttonPanel" layout="grid" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4,ui-g-12 ui-md-4" columns="3"  style="width:50%;margin:auto;">
+								                	<p:commandButton id="addNumber" value="Add Number" ajax="true"
+								                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('ADD_NUMBER')}" oncomplete="PF('addNumberD').show();"
+								                	update="addD"/>
+								                	
+								                	<p:commandButton id="editNumber" value="Edit Number" ajax="true" disabled="#{nm.disabled}"
+								                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_NUMBER')}" oncomplete="PF('editNumberD').show();"
+								                	update="editD"/>
+								                	
+								                	<p:commandButton id="releaseNumber" value="Release Number" ajax="true" disabled="#{nm.disabled}" action="#{nm.releaseNumberFromAssignment}"
+								                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_NUMBER')}" 
+								                	update="editD"/>
+									             </p:panelGrid>
+									        </f:facet>
+										</p:dataTable>
+									</p:panelGrid>
+                  				</div>
+                  			</p:panel>
+		                </div>
+		             </div>
+		          </div>
+		         </div>
+		      </div>
+		   </h:form>
+		   <p:dialog widgetVar="editNumberD" modal="true" height="250" width="750" appendTo="@(body)" 
+		   		closeOnEscape="true" resizable="false" closable="false" style="background:white !important;"  responsive="true">
+		    <div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Edit Number" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+					    <h:form id="editNumberF" prependId="false">
+			             	<div class="shadow-box-dialogue">
+			                  	<p:panel style="border:0px !important;" id="editNumberP">
+			                  		<p:messages id="editNumberM" showDetail="true" closable="true">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-fluid">
+					                    <h:panelGrid id="editD" columns="4" cellpadding="0" cellspacing="0" style="width:100% !important;margin:auto !important;vertical-align:middle;padding-top:20px !important;" border="0" columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4">
+				               				<p:outputLabel value="MSISDN" for="msisdn" styleClass="lebel"/>
+				                        	<h:outputText value="#{nm.selectedNumber.msisdn}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;" id="msisdn"/>
+				                        	
+				                        	<p:outputLabel value="IMSI" for="imsi" styleClass="lebel"/>
+				                        	<p:inputText label="IMSI" id="imsi" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{nm.selectedNumber.imsi}" required="true" requiredMessage="Missing Mandatory Parameter - IMSI">
+				                        		<p:keyFilter regEx="/[\d\-]/" preventPaste="false"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="SIM No" for="sim" styleClass="lebel"/>
+				                        	<p:inputText label="SIM No" id="sim" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="20" value="#{nm.selectedNumber.simNo}" required="true" requiredMessage="Missing Mandatory Parameter - SIM No">
+				                        		<p:keyFilter regEx="/[\d\-]/" preventPaste="false"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="Enabled" styleClass="lebel" for="noStatus"/>
+					                       	<p:selectBooleanCheckbox value="#{nm.selectedNumber.enabled}" id="noStatus" required="true" requiredMessage="Missing Mandatory Parameter - Status"/>
+					                       	
+					                       	<p:outputLabel value="Physical SIM" styleClass="lebel" for="phSIM"/>
+					                       	<p:selectBooleanCheckbox value="#{nm.selectedNumber.phSim}" id="phSIM"/>
+				                        </h:panelGrid>
+			                       </div>
+			                       <div class="ui-fluid" style="padding-top:10px !important;">
+			                       		<h:panelGrid columns="2" cellpadding="0" style="width:60% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+			                      			<p:commandButton value="Update" ajax="true"  update="dataPanel" action="#{nm.updateNumber}" styleClass="green-button" 
+			                      			disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_NUMBER')}"/>
+			                      			<p:commandButton value="Close"  oncomplete="PF('editNumberD').hide();" styleClass="green-button" process="@this"/>
+			                      		</h:panelGrid>
+			                       </div>
+			                  	</p:panel>
+			                 </div>
+					    </h:form>
+		    		</div>
+		    	</div>
+		     </div>
+		   </div>
+		</p:dialog>
+		   <p:dialog widgetVar="addNumberD" modal="true" height="280" width="430" appendTo="@(body)" 
+		   		closeOnEscape="true" resizable="false" closable="false" style="background:white !important;"  responsive="true">
+		    <div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Add New Number" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+					    <h:form id="addNumberF" prependId="false">
+			             	<div class="shadow-box-dialogue">
+			                  	<p:panel style="border:0px !important;" id="addNumberP">
+			                  		<p:messages id="addNumberM" showDetail="true" closable="true">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-fluid">
+					                    <h:panelGrid id="addD" columns="2" cellpadding="0" cellspacing="0" style="width:100% !important;margin:auto !important;vertical-align:middle;padding-top:20px !important;" border="0" columnClasses="ui-g-12 ui-md-3, ui-g-12 ui-md-9">
+				               				<p:outputLabel value="MSISDN" for="msisdnA" styleClass="lebel"/>
+				                        	 <p:inputText label="MSISDN" id="msisdnA" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{nm.newNumber.msisdn}" required="true" requiredMessage="Missing Mandatory Parameter - MSISDN">
+				                        		<p:keyFilter regEx="/[\d\-]/" preventPaste="false"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="IMSI" for="imsiA" styleClass="lebel"/>
+				                        	<p:inputText label="IMSI" id="imsiA" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{nm.newNumber.imsi}" required="true" requiredMessage="Missing Mandatory Parameter - IMSI">
+				                        		<p:keyFilter regEx="/[\d\-]/" preventPaste="false"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="SIM No" for="simA" styleClass="lebel"/>
+				                        	<p:inputText label="SIM No" id="simA" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="20" value="#{nm.newNumber.simNo}" required="true" requiredMessage="Missing Mandatory Parameter - SIM No">
+				                        		<p:keyFilter regEx="/[\d\-]/" preventPaste="false"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="Physical SIM" styleClass="lebel" for="phSIMA"/>
+					                       	<p:selectBooleanCheckbox value="#{nm.newNumber.phSim}" id="phSIMA"/>
+				                        </h:panelGrid>
+			                       </div>
+			                       <div class="ui-fluid" style="padding-top:10px !important;">
+			                       		<h:panelGrid columns="2" cellpadding="0" style="width:60% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+			                      			<p:commandButton value="Save" ajax="true"  update="dataPanel,addD" action="#{nm.addNumber}" styleClass="green-button" 
+			                      			disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('ADD_NUMBER')}"/>
+			                      			<p:commandButton value="Close"  oncomplete="PF('addNumberD').hide();" styleClass="green-button" process="@this"/>
+			                      		</h:panelGrid>
+			                       </div>
+			                  	</p:panel>
+			                 </div>
+					    </h:form>
+		    		</div>
+		    	</div>
+		     </div>
+		   </div>
+		</p:dialog>
+		</ui:define>
+	</ui:composition>

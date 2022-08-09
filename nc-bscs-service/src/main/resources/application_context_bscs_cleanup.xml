@@ -1,0 +1,204 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util/spring-util-3.2.xsd"
+	default-autowire="byName">
+	
+	<bean id="bscsJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<bean id="bscsNJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<util:map id="bscsCleanupQueries" key-type="java.lang.Integer" value-type="java.lang.String" map-class="java.util.HashMap">
+		<entry>
+			<key><value>1</value></key>
+    		<value><![CDATA[UPDATE DIRECTORY_NUMBER SET DN_STATUS = 'r' WHERE DN_NUM = ? AND DN_STATUS <> 'r']]></value>
+    	</entry>
+    	<entry>
+			<key><value>2</value></key>
+    		<value><![CDATA[UPDATE STORAGE_MEDIUM SET SM_STATUS = 'r' WHERE SM_SERIALNUM = ? AND SM_STATUS <> 'r']]></value>
+    	</entry>
+    	<entry>
+			<key><value>3</value></key>
+    		<value><![CDATA[UPDATE PORT SET PORT_STATUS= 'r' WHERE SM_ID IN (SELECT SM_ID FROM STORAGE_MEDIUM WHERE SM_SERIALNUM = ?) AND PORT_STATUS <> 'r']]></value>
+    	</entry>
+    	<entry>
+			<key><value>4</value></key>
+    		<value><![CDATA[DELETE FROM SYSADM.RATEPLAN_HIST WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>5</value></key>
+    		<value><![CDATA[DELETE FROM SYSADM.CONTR_TARIFF_OPTIONS WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>6</value></key>
+    		<value><![CDATA[DELETE FROM SYSADM.CONTRACT_CARRY_OVER_HIST WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>7</value></key>
+    		<value><![CDATA[DELETE FROM SYSADM.CONTRACT_DATA_EXCHANGE_RECTYPE WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>8</value></key>
+    		<value><![CDATA[DELETE FROM SYSADM.CONTRACT_DATA_EXCHANGE WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>9</value></key>
+    		<value><![CDATA[DELETE FROM URH_CMS_LOCK WHERE CONTRACT_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>10</value></key>
+    		<value><![CDATA[DELETE FROM MPUFDTAB WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>11</value></key>
+    		<value><![CDATA[DELETE FROM CONTRACT_HISTORY WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>12</value></key>
+    		<value><![CDATA[DELETE FROM CONTRACT_INVOICE WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>13</value></key>
+    		<value><![CDATA[DELETE FROM PR_SERV_STATUS_HIST WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>14</value></key>
+    		<value><![CDATA[DELETE FROM PR_SERV_SPCODE_HIST WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>15</value></key>
+    		<value><![CDATA[DELETE FROM CONTR_SERVICES_CAP WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>16</value></key>
+    		<value><![CDATA[DELETE FROM PR_SERV_ATTRIB_HIST_NNP WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>17</value></key>
+    		<value><![CDATA[DELETE FROM CONTR_VAS WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>18</value></key>
+    		<value><![CDATA[DELETE FROM PARAMETER_VALUE WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>19</value></key>
+    		<value><![CDATA[DELETE FROM FUP_ACCOUNT_EXP WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>20</value></key>
+    		<value><![CDATA[DELETE FROM PR_SERV_ATTRIB_HIST WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>21</value></key>
+    		<value><![CDATA[DELETE FROM PR_SERV_ATTRIB_HIST_NNP WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>22</value></key>
+    		<value><![CDATA[DELETE FROM SYSADM.CONTR_BASIC_SERVICES_CUG WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>23</value></key>
+    		<value><![CDATA[DELETE FROM SYSADM.CONTR_SERVICES_BSG WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>24</value></key>
+    		<value><![CDATA[DELETE FROM SYSADM.CONTR_SERVICES_CUG WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>25</value></key>
+    		<value><![CDATA[DELETE FROM PROFILE_SERVICE WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>26</value></key>
+    		<value><![CDATA[DELETE FROM CONTRACT_SERVICE WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>27</value></key>
+    		<value><![CDATA[DELETE FROM CONTR_DEVICES WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>28</value></key>
+    		<value><![CDATA[DELETE FROM TICKLER_RECORDS WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>29</value></key>
+    		<value><![CDATA[DELETE FROM INFO_CONTR_TEXT WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>30</value></key>
+    		<value><![CDATA[DELETE FROM INFO_CONTR_CHECK WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>31</value></key>
+    		<value><![CDATA[DELETE FROM INFO_CONTR_COMBO WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>32</value></key>
+    		<value><![CDATA[DELETE FROM BILLING_ACCOUNT_ASSIGNMENT WHERE CONTRACT_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>33</value></key>
+    		<value><![CDATA[DELETE FROM CONTRACT_RISK WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>34</value></key>
+    		<value><![CDATA[DELETE FROM PORTING_REQUEST WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>35</value></key>
+    		<value><![CDATA[DELETE FROM FUP_ACCOUNTS_IMP WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>36</value></key>
+    		<value><![CDATA[DELETE FROM FUP_ACCOUNTS_HIST WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>37</value></key>
+    		<value><![CDATA[DELETE FROM FUP_ACCOUNTS_HEAD WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>38</value></key>
+    		<value><![CDATA[DELETE FROM FEES WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>39</value></key>
+    		<value><![CDATA[DELETE FROM CONTR_TURNOVER WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>40</value></key>
+    		<value><![CDATA[DELETE FROM CONCURRENT_REQUEST_HISTORY WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>41</value></key>
+    		<value><![CDATA[DELETE FROM PORTING_REQUEST_HISTORY WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<!--<entry>
+			<key><value>42</value></key>
+    		<value><![CDATA[DELETE FROM TAKEOVER_HISTORY WHERE NEW_CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>43</value></key>
+    		<value><![CDATA[DELETE FROM TAKEOVER_HISTORY WHERE OLD_CO_ID IN (:CO_IDS)]]></value>
+    	</entry>-->
+    	<entry>
+			<key><value>44</value></key>
+    		<value><![CDATA[DELETE FROM MDSRRTAB WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>45</value></key>
+    		<value><![CDATA[DELETE FROM PROMO_QUAL_RESTRICT WHERE CONTRACT_ID IN (:CO_IDS)]]></value>
+    	</entry>
+    	<entry>
+			<key><value>46</value></key>
+    		<value><![CDATA[DELETE FROM CONTRACT_ALL WHERE CO_ID IN (:CO_IDS)]]></value>
+    	</entry>
+	</util:map>
+</beans>

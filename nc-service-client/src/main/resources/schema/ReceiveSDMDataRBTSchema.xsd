@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:umb="http://www.wataniya.com/ReceiveSDMDataRBT" elementFormDefault="qualified" targetNamespace="http://www.wataniya.com/ReceiveSDMDataRBT">
+
+	<xs:element name="ReceiveSDMDataRBTRequest" type="umb:ReceiveSDMDataRBTRequest"/>
+	<xs:element name="ReceiveSDMDataRBTResponse" type="umb:ReceiveSDMDataRBTResponse"/>
+	
+    
+    <xs:complexType name="ReceiveSDMDataRBTRequest">
+    	<xs:sequence>
+    		<xs:element minOccurs="0" name="channel" type="xs:string"/>
+    		<xs:element minOccurs="0" name="msisdn" type="xs:string"/>
+    		<xs:element maxOccurs="1" minOccurs="0" name="RequestMetas" type="umb:RequestMetas"/>
+    	</xs:sequence>
+    </xs:complexType>
+ 
+    
+    <xs:complexType name="ReceiveSDMDataRBTResponse">
+    	<xs:sequence>
+    		<xs:element minOccurs="0" name="responseCode" type="xs:string"/>
+    		<xs:element minOccurs="0" name="responseMessage" type="xs:string"/>
+    		<xs:element minOccurs="0" name="msisdn" type="xs:string"/>
+    		<xs:element minOccurs="0" name="IMSI" type="xs:string"/>
+    		<xs:element minOccurs="0" name="SubscriberType" type="xs:string"/>
+    		<xs:element minOccurs="0" name="SubscriberStatus" type="xs:string"/>
+    		<xs:element minOccurs="0" name="DigglyFlag" type="xs:string"/>
+    		<xs:element minOccurs="0" name="MyDigglyFlag" type="xs:string"/>
+    		<xs:element maxOccurs="1" minOccurs="0" name="RatePlan" type="xs:string">
+    		</xs:element>
+    		<xs:element maxOccurs="1" minOccurs="0" name="AllowedPurchase" type="xs:string">
+    		</xs:element>
+    		<xs:element maxOccurs="1" minOccurs="0" name="Language" type="xs:string">
+    		</xs:element>
+    		<xs:element maxOccurs="1" minOccurs="0" name="CustomerType" type="xs:string">
+    		</xs:element>
+    		<xs:element maxOccurs="1" minOccurs="0" name="BillCycle" type="xs:string">
+    		</xs:element>
+    		<xs:element maxOccurs="1" minOccurs="0" name="VIPStatus" type="xs:string">
+    		</xs:element>
+    		<xs:element maxOccurs="1" minOccurs="0" name="ActivationDate" type="xs:string">
+    		</xs:element>
+    		<xs:element maxOccurs="1" minOccurs="0" name="PaymentResponsible" type="xs:string">
+    		</xs:element>
+    		<xs:element maxOccurs="1" minOccurs="0" name="ResponseMetas" type="umb:ResponseMetas"/>
+    	</xs:sequence>
+    </xs:complexType>
+    
+
+
+
+
+
+    <xs:complexType name="ResponseMetas">
+    	<xs:sequence>
+    		<xs:element maxOccurs="unbounded" minOccurs="0" name="Meta" type="umb:Meta"/>
+    	</xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Meta">
+    	<xs:sequence>
+    		<xs:element maxOccurs="1" minOccurs="0" name="Key" type="xs:string">
+    		</xs:element>
+    		<xs:element maxOccurs="1" minOccurs="0" name="Value" type="xs:string"/>
+    	</xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RequestMetas">
+    	<xs:sequence>
+    		<xs:element maxOccurs="unbounded" minOccurs="0" name="Meta" type="umb:Meta"/>
+    	</xs:sequence>
+    </xs:complexType>
+</xs:schema>

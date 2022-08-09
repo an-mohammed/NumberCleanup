@@ -1,0 +1,637 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.drutt.com/msdp/userprofile" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="UserProfileServiceImplService" targetNamespace="http://ws.drutt.com/msdp/userprofile">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.drutt.com/msdp/userprofile" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ws.drutt.com/msdp/userprofile">
+  <xs:element name="createUserProfile" type="tns:createUserProfile"/>
+  <xs:element name="createUserProfileResponse" type="tns:createUserProfileResponse"/>
+  <xs:element name="createUserProfiles" type="tns:createUserProfiles"/>
+  <xs:element name="createUserProfilesResponse" type="tns:createUserProfilesResponse"/>
+  <xs:element name="deleteUserProfile" type="tns:deleteUserProfile"/>
+  <xs:element name="deleteUserProfileResponse" type="tns:deleteUserProfileResponse"/>
+  <xs:element name="getMeta" type="tns:getMeta"/>
+  <xs:element name="getMetaAsString" type="tns:getMetaAsString"/>
+  <xs:element name="getMetaAsStringResponse" type="tns:getMetaAsStringResponse"/>
+  <xs:element name="getMetaAsStrings" type="tns:getMetaAsStrings"/>
+  <xs:element name="getMetaAsStringsResponse" type="tns:getMetaAsStringsResponse"/>
+  <xs:element name="getMetaResponse" type="tns:getMetaResponse"/>
+  <xs:element name="getMsisdn" type="tns:getMsisdn"/>
+  <xs:element name="getMsisdnResponse" type="tns:getMsisdnResponse"/>
+  <xs:element name="getUserId" type="tns:getUserId"/>
+  <xs:element name="getUserIdResponse" type="tns:getUserIdResponse"/>
+  <xs:element name="getUserProfileInformation" type="tns:getUserProfileInformation"/>
+  <xs:element name="getUserProfileInformationResponse" type="tns:getUserProfileInformationResponse"/>
+  <xs:element name="setMeta_String" type="tns:setMeta_String"/>
+  <xs:element name="setMeta_StringResponse" type="tns:setMeta_StringResponse"/>
+  <xs:element name="setMeta_Strings" type="tns:setMeta_Strings"/>
+  <xs:element name="setMeta_StringsResponse" type="tns:setMeta_StringsResponse"/>
+  <xs:element name="setMetas" type="tns:setMetas"/>
+  <xs:element name="setMetasResponse" type="tns:setMetasResponse"/>
+  <xs:element name="setMsisdn" type="tns:setMsisdn"/>
+  <xs:element name="setMsisdnResponse" type="tns:setMsisdnResponse"/>
+  <xs:element name="setPincode" type="tns:setPincode"/>
+  <xs:element name="setPincodeResponse" type="tns:setPincodeResponse"/>
+  <xs:element name="userProfileExist" type="tns:userProfileExist"/>
+  <xs:element name="userProfileExistResponse" type="tns:userProfileExistResponse"/>
+  <xs:complexType name="createUserProfiles">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="userProfileInformation" type="tns:userProfileInformation"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="userProfileInformation">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="meta" nillable="true" type="tns:metaWs"/>
+      <xs:element minOccurs="0" name="msisdn" type="xs:string"/>
+      <xs:element minOccurs="0" name="pincode" type="xs:string"/>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="metaWs">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="key" type="xs:string"/>
+      <xs:element minOccurs="0" name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="createUserProfilesResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="WSException">
+    <xs:sequence>
+      <xs:element name="message" nillable="true" type="xs:string"/>
+      <xs:element name="errorCode" nillable="true" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMetaAsStrings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+      <xs:element minOccurs="0" name="key" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMetaAsStringsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMeta">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="keys" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMetaResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:metaWs"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setMeta_Strings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+      <xs:element minOccurs="0" name="key" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setMeta_StringsResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="createUserProfile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+      <xs:element minOccurs="0" name="msisdn" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="createUserProfileResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getMsisdn">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="useriD" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMsisdnResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="userProfileExist">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="userProfileExistResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setMsisdn">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+      <xs:element minOccurs="0" name="msisdn" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setMsisdnResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getMetaAsString">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+      <xs:element minOccurs="0" name="key" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMetaAsStringResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteUserProfile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteUserProfileResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="setPincode">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+      <xs:element minOccurs="0" name="pincode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setPincodeResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="setMetas">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="meta" type="tns:metaWs"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setMetasResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="setMeta_String">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+      <xs:element minOccurs="0" name="key" type="xs:string"/>
+      <xs:element minOccurs="0" name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setMeta_StringResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getUserProfileInformation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userURI" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="key" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getUserProfileInformationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:userProfileInformation"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getUserId">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="msisdn" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getUserIdResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="WSException" nillable="true" type="tns:WSException"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="setMetasResponse">
+    <wsdl:part element="tns:setMetasResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserId">
+    <wsdl:part element="tns:getUserId" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteUserProfileResponse">
+    <wsdl:part element="tns:deleteUserProfileResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserProfileInformationResponse">
+    <wsdl:part element="tns:getUserProfileInformationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMsisdnResponse">
+    <wsdl:part element="tns:getMsisdnResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserIdResponse">
+    <wsdl:part element="tns:getUserIdResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="userProfileExistResponse">
+    <wsdl:part element="tns:userProfileExistResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMetas">
+    <wsdl:part element="tns:setMetas" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="userProfileExist">
+    <wsdl:part element="tns:userProfileExist" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setPincode">
+    <wsdl:part element="tns:setPincode" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMsisdn">
+    <wsdl:part element="tns:getMsisdn" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMsisdn">
+    <wsdl:part element="tns:setMsisdn" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMetaAsStringResponse">
+    <wsdl:part element="tns:getMetaAsStringResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMeta_String">
+    <wsdl:part element="tns:setMeta_String" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserProfileInformation">
+    <wsdl:part element="tns:getUserProfileInformation" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMeta_StringsResponse">
+    <wsdl:part element="tns:setMeta_StringsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMsisdnResponse">
+    <wsdl:part element="tns:setMsisdnResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMetaAsStringsResponse">
+    <wsdl:part element="tns:getMetaAsStringsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMetaAsString">
+    <wsdl:part element="tns:getMetaAsString" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setPincodeResponse">
+    <wsdl:part element="tns:setPincodeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMeta">
+    <wsdl:part element="tns:getMeta" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createUserProfilesResponse">
+    <wsdl:part element="tns:createUserProfilesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMetaAsStrings">
+    <wsdl:part element="tns:getMetaAsStrings" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMeta_StringResponse">
+    <wsdl:part element="tns:setMeta_StringResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMeta_Strings">
+    <wsdl:part element="tns:setMeta_Strings" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteUserProfile">
+    <wsdl:part element="tns:deleteUserProfile" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createUserProfileResponse">
+    <wsdl:part element="tns:createUserProfileResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WSException">
+    <wsdl:part element="tns:WSException" name="WSException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMetaResponse">
+    <wsdl:part element="tns:getMetaResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createUserProfiles">
+    <wsdl:part element="tns:createUserProfiles" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createUserProfile">
+    <wsdl:part element="tns:createUserProfile" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UserProfileService">
+    <wsdl:operation name="createUserProfiles">
+      <wsdl:input message="tns:createUserProfiles" name="createUserProfiles">
+    </wsdl:input>
+      <wsdl:output message="tns:createUserProfilesResponse" name="createUserProfilesResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMetaAsStrings">
+      <wsdl:input message="tns:getMetaAsStrings" name="getMetaAsStrings">
+    </wsdl:input>
+      <wsdl:output message="tns:getMetaAsStringsResponse" name="getMetaAsStringsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMeta">
+      <wsdl:input message="tns:getMeta" name="getMeta">
+    </wsdl:input>
+      <wsdl:output message="tns:getMetaResponse" name="getMetaResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setMeta_Strings">
+      <wsdl:input message="tns:setMeta_Strings" name="setMeta_Strings">
+    </wsdl:input>
+      <wsdl:output message="tns:setMeta_StringsResponse" name="setMeta_StringsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createUserProfile">
+      <wsdl:input message="tns:createUserProfile" name="createUserProfile">
+    </wsdl:input>
+      <wsdl:output message="tns:createUserProfileResponse" name="createUserProfileResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMsisdn">
+      <wsdl:input message="tns:getMsisdn" name="getMsisdn">
+    </wsdl:input>
+      <wsdl:output message="tns:getMsisdnResponse" name="getMsisdnResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="userProfileExist">
+      <wsdl:input message="tns:userProfileExist" name="userProfileExist">
+    </wsdl:input>
+      <wsdl:output message="tns:userProfileExistResponse" name="userProfileExistResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setMsisdn">
+      <wsdl:input message="tns:setMsisdn" name="setMsisdn">
+    </wsdl:input>
+      <wsdl:output message="tns:setMsisdnResponse" name="setMsisdnResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMetaAsString">
+      <wsdl:input message="tns:getMetaAsString" name="getMetaAsString">
+    </wsdl:input>
+      <wsdl:output message="tns:getMetaAsStringResponse" name="getMetaAsStringResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteUserProfile">
+      <wsdl:input message="tns:deleteUserProfile" name="deleteUserProfile">
+    </wsdl:input>
+      <wsdl:output message="tns:deleteUserProfileResponse" name="deleteUserProfileResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setPincode">
+      <wsdl:input message="tns:setPincode" name="setPincode">
+    </wsdl:input>
+      <wsdl:output message="tns:setPincodeResponse" name="setPincodeResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setMetas">
+      <wsdl:input message="tns:setMetas" name="setMetas">
+    </wsdl:input>
+      <wsdl:output message="tns:setMetasResponse" name="setMetasResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setMeta_String">
+      <wsdl:input message="tns:setMeta_String" name="setMeta_String">
+    </wsdl:input>
+      <wsdl:output message="tns:setMeta_StringResponse" name="setMeta_StringResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getUserProfileInformation">
+      <wsdl:input message="tns:getUserProfileInformation" name="getUserProfileInformation">
+    </wsdl:input>
+      <wsdl:output message="tns:getUserProfileInformationResponse" name="getUserProfileInformationResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getUserId">
+      <wsdl:input message="tns:getUserId" name="getUserId">
+    </wsdl:input>
+      <wsdl:output message="tns:getUserIdResponse" name="getUserIdResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:WSException" name="WSException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UserProfileServiceImplServiceSoapBinding" type="tns:UserProfileService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createUserProfiles">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="createUserProfiles">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createUserProfilesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMetaAsStrings">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getMetaAsStrings">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getMetaAsStringsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMeta">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getMeta">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getMetaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setMeta_Strings">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setMeta_Strings">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setMeta_StringsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createUserProfile">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="createUserProfile">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createUserProfileResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMsisdn">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getMsisdn">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getMsisdnResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="userProfileExist">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="userProfileExist">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="userProfileExistResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setMsisdn">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setMsisdn">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setMsisdnResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteUserProfile">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="deleteUserProfile">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteUserProfileResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMetaAsString">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getMetaAsString">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getMetaAsStringResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setMetas">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setMetas">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setMetasResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setPincode">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setPincode">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setPincodeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getUserProfileInformation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getUserProfileInformation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getUserProfileInformationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setMeta_String">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setMeta_String">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setMeta_StringResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getUserId">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getUserId">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getUserIdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap:fault name="WSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UserProfileServiceImplService">
+    <wsdl:port binding="tns:UserProfileServiceImplServiceSoapBinding" name="UserProfileServiceImplPort">
+      <soap:address location="http://10.192.224.169:8081/cxf/services/userprofile"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

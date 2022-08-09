@@ -1,0 +1,340 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Profile Search</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="createUserForm">
+			<div class="container-fluid">
+		        <div class="container">
+		        	<div class="row">
+	                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5><h:outputText value="Manage Subscriber Profile" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+	                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+		                	<div class="shadow-box">
+			                  	<p:panel style="border:0px !important;" id="createUserP">
+			                  		<p:messages id="manageProfileM" showDetail="true" closable="true" showSummary="false">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-g ui-fluid">
+									    <div class="ui-g-12 ui-md-4" style="margin:auto;">
+									        <div class="ui-inputgroup">
+									        	<p:inputText placeholder="MSISDN"  style="font-size:12px !important;font-family:Poppins-Regular !important;" value="#{msp.msisdn}"/>
+									            <p:commandButton value="Search" styleClass="green-button" actionListener="#{msp.searchProfile}" update="createUserP,searchResult,searchResultP"/> 
+									        </div>
+									    </div>
+								    </div>
+								    
+								    <h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" style="width:100% !important;vertical-align:middle;padding-top:15px !important;" 
+				                  		columnClasses="ui-g-12 ui-md-12" id="searchResult" rendered="#{msp.searchComplete}">
+					                    <p:accordionPanel id="searchResultP">
+				                    		<p:tab title="Customer Profile" id="custProfile" titleStyleClass="green">
+				                    			<h:panelGrid columns="4" cellpadding="0" cellspacing="0" border="0" style="width:100% !important;vertical-align:middle;padding-top:15px !important;" 
+				                  					columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4" id="custProfileGrid" rendered="#{msp.profile.customerProfileFound}">
+				                  						<p:outputLabel value="MSISDN" for="msisdn" styleClass="lebel"/>
+						                        		<h:outputText id="msisdn" value="#{msp.msisdn}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Customer Id" for="custId" styleClass="lebel"/>
+						                        		<h:outputText id="custId" value="#{msp.profile.customerProfile.customerId}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Cust Code" for="custCode" styleClass="lebel"/>
+						                        		<h:outputText id="custCode" value="#{msp.profile.customerProfile.custCode}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Contract Id" for="coId" styleClass="lebel"/>
+						                        		<h:outputText id="coId" value="#{msp.profile.customerProfile.contractId}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Contract Status" for="coStatus" styleClass="lebel"/>
+						                        		<h:outputText id="coStatus" value="#{msp.profile.customerProfile.contractStatus}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Cust Type" for="custType" styleClass="lebel"/>
+						                        		<h:outputText id="custType" value="#{msp.profile.customerProfile.customerType}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Rateplan" for="rp" styleClass="lebel"/>
+						                        		<h:outputText id="rp" value="#{msp.profile.customerProfile.customerType}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Language" for="lang" styleClass="lebel"/>
+						                        		<h:outputText id="lang" value="#{msp.profile.customerProfile.language}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Barring" for="barring" styleClass="lebel"/>
+						                        		<h:outputText id="barring" value="#{msp.profile.customerProfile.barringStatus}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Pmt. Resp" for="pr" styleClass="lebel"/>
+						                        		<h:outputText id="pr" value="#{msp.profile.customerProfile.paymentResp}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Hybrid" for="hbd" styleClass="lebel"/>
+						                        		<h:outputText id="hbd" value="#{msp.profile.customerProfile.isHybrid}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Digital" for="digital" styleClass="lebel"/>
+						                        		<h:outputText id="digital" value="#{msp.profile.customerProfile.isDigital}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Core Offer" for="co" styleClass="lebel"/>
+						                        		<h:outputText id="co" value="#{msp.profile.customerProfile.coreOffer}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="Act. Date" for="ad" styleClass="lebel"/>
+						                        		<h:outputText id="ad" value="#{msp.profile.customerProfile.activationDate}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        		<p:outputLabel value="NJ Member" for="njm" styleClass="lebel"/>
+						                        		<h:outputText id="njm" value="#{msp.profile.customerProfile.nojoomMemberId}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+				                  				</h:panelGrid>
+				                  				<h:outputText value="Customer Profile NOT found" style="font-family: 'Poppins-Regular';font-size: 14px;vertical-align: middle;line-height: 0px !important;" rendered="#{!msp.profile.customerProfileFound}"/>
+				                    		</p:tab>
+				                    		<p:tab title="BSCS Profile" id="bscsProfile" titleStyleClass="green">
+				                    			<h:outputText value="BSCS Profile NOT found" style="font-family: 'Poppins-Regular';font-size: 14px;vertical-align: middle;line-height: 0px !important;" rendered="#{!msp.profile.bscsProfileFound}"/>
+			                    				
+			                    				<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" style="width:100% !important;vertical-align:middle;padding-bottom:5px !important;" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-10" rendered="#{msp.profile.bscsProfileFound}">
+				                  					<p:outputLabel value="SIM No" for="sim" styleClass="lebel"/>
+						                        	<h:outputText id="sim" value="#{msp.profile.bscsProfile.simNo}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        		
+						                        	<p:outputLabel value="IMSI" for="imsi" styleClass="lebel"/>
+						                        	<h:outputText id="imsi" value="#{msp.profile.bscsProfile.imsi}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+				                  				</h:panelGrid>
+			                    				
+			                    				<p:dataTable value="#{msp.profile.bscsProfile.activeSubs}"  style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+														id="bscsActivSubs" 
+														var="e" 
+														rows="5" 
+														paginator="true"
+														paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+														rowsPerPageTemplate="5,10,15"
+														filterDelay="100"
+														paginatorPosition="bottom" 
+														paginatorAlwaysVisible="false" 
+														editable="false"
+														emptyMessage="No active subscription found"
+														rendered="#{msp.profile.bscsProfileFound}"
+														rowKey="#{rows.id}" 
+														reflow="true">
+														
+														<f:facet name="header">
+												            <div align="center">
+												                <h:outputText value="BSCS Active Services"  style="font-size:12px;font-weight:bold"/>
+												            </div>
+												        </f:facet>
+												        
+												        <p:column headerText="SNCODE" styleClass="columnHeader" width="20">
+								    						<h:outputText value="#{e.snCode}" styleClass="columnData"/>
+														</p:column>
+														<p:column headerText="Description" styleClass="columnHeader" width="60">
+								    						<h:outputText value="#{e.desc}" styleClass="columnData"/>
+														</p:column>
+														<p:column headerText="Access Fee" styleClass="columnHeader" width="20">
+								    						<h:outputText value="#{e.accessFee}" styleClass="columnData"/>
+														</p:column>
+												</p:dataTable>
+												<p:dataTable value="#{msp.profile.bscsProfile.occs}"  style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+														id="bscsOcc" 
+														var="e" 
+														rows="5" 
+														paginator="true"
+														paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+														rowsPerPageTemplate="5,10,15"
+														filterDelay="100"
+														paginatorPosition="bottom" 
+														paginatorAlwaysVisible="false" 
+														editable="false"
+														emptyMessage="No OCC found"
+														rendered="#{msp.profile.bscsProfileFound}"
+														rowKey="#{rows.id}" 
+														reflow="true">
+														
+														<f:facet name="header">
+												            <div align="center">
+												                <h:outputText value="BSCS Other Credit and Charges"  style="font-size:12px;font-weight:bold"/>
+												            </div>
+												        </f:facet>
+												        
+												        <p:column headerText="SNCODE" styleClass="columnHeader" width="10">
+								    						<h:outputText value="#{e.snCode}" styleClass="columnData"/>
+														</p:column>
+														<p:column headerText="Description" styleClass="columnHeader" width="60">
+								    						<h:outputText value="#{e.description}" styleClass="columnData"/>
+														</p:column>
+														<p:column headerText="Amount" styleClass="columnHeader" width="10">
+								    						<h:outputText value="#{e.amount}" styleClass="columnData"/>
+														</p:column>
+														<p:column headerText="Fee Type" styleClass="columnHeader" width="20">
+								    						<h:outputText value="#{e.feeType}" styleClass="columnData"/>
+														</p:column>
+												</p:dataTable>
+												<p:dataTable value="#{msp.profile.bscsProfile.pRequests}"  style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+														id="bscsPreq" 
+														var="e" 
+														rows="5" 
+														paginator="true"
+														paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+														rowsPerPageTemplate="5,10,15"
+														filterDelay="100"
+														paginatorPosition="bottom" 
+														paginatorAlwaysVisible="false" 
+														editable="false"
+														emptyMessage="No pending request found"
+														rendered="#{msp.profile.bscsProfileFound}"
+														rowKey="#{rows.id}" 
+														reflow="true">
+														
+														<f:facet name="header">
+												            <div align="center">
+												                <h:outputText value="BSCS Pending Requests"  style="font-size:12px;font-weight:bold"/>
+												            </div>
+												        </f:facet>
+												        
+												        <p:column headerText="Request Id" styleClass="columnHeader" width="10">
+								    						<h:outputText value="#{e.requestId}" styleClass="columnData"/>
+														</p:column>
+														<p:column headerText="Action Id" styleClass="columnHeader" width="10">
+								    						<h:outputText value="#{e.actionId}" styleClass="columnData"/>
+														</p:column>
+														<p:column headerText="Action Desc" styleClass="columnHeader" width="60">
+								    						<h:outputText value="#{e.actionDesc}" styleClass="columnData"/>
+														</p:column>
+														<p:column headerText="Status" styleClass="columnHeader" width="20">
+								    						<h:outputText value="#{e.status}" styleClass="columnData"/>
+														</p:column>
+												</p:dataTable>
+				                    		</p:tab>
+				                    		<p:tab title="ESM Profile" id="esmProfile" titleStyleClass="green">
+				                    			<h:panelGrid columns="4" cellpadding="0" cellspacing="0" border="0" style="width:100% !important;vertical-align:middle;padding-top:15px !important;" 
+				                  					columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4" id="esmProfileGrid" rendered="#{msp.profile.esmProfileFound}">
+			                  						<p:outputLabel value="Subs. type" for="sType" styleClass="lebel"/>
+					                        		<h:outputText id="sType" value="#{msp.profile.esmProfile.subscriberType}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+					                        		
+					                        		<p:outputLabel value="User Seg" for="usg" styleClass="lebel"/>
+					                        		<h:outputText id="usg" value="#{msp.profile.esmProfile.userSegment}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+					                        		
+					                        		<p:outputLabel value="Parent" for="parent" styleClass="lebel"/>
+					                        		<h:outputText id="parent" value="#{msp.profile.esmProfile.isParent}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+					                        		
+					                        		<p:outputLabel value="FMC" for="fmc" styleClass="lebel"/>
+					                        		<h:outputText id="fmc" value="#{msp.profile.esmProfile.isFmc}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        </h:panelGrid>
+						                        <p:dataTable value="#{msp.profile.esmProfile.activeOffers}"  style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+															id="esmOffers" 
+															var="e" 
+															rows="5" 
+															paginator="true"
+															paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15"
+															filterDelay="100"
+															paginatorPosition="bottom" 
+															paginatorAlwaysVisible="false" 
+															editable="false"
+															emptyMessage="No pending request found"
+															rendered="#{msp.profile.esmProfileFound}"
+															rowKey="#{rows.id}" 
+															reflow="true">
+															
+															<f:facet name="header">
+													            <div align="center">
+													                <h:outputText value="ESM Active Offers"  style="font-size:12px;font-weight:bold"/>
+													            </div>
+													        </f:facet>
+													        
+													        <p:column headerText="Offer Id" styleClass="columnHeader" width="10">
+									    						<h:outputText value="#{e.offerId}" styleClass="columnData"/>
+															</p:column>
+															<p:column headerText="Offer Name" styleClass="columnHeader" width="10">
+									    						<h:outputText value="#{e.offerName}" styleClass="columnData"/>
+															</p:column>
+															<p:column headerText="Type" styleClass="columnHeader" width="60">
+									    						<h:outputText value="#{e.offerType}" styleClass="columnData"/>
+															</p:column>
+															<p:column headerText="Category" styleClass="columnHeader" width="20">
+									    						<h:outputText value="#{e.offerCategory}" styleClass="columnData"/>
+															</p:column>
+													</p:dataTable>
+				                    		</p:tab>
+				                    		  
+				                    		<p:tab title="HLR Profile" id="hlrProfile" titleStyleClass="green">
+				                    			<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" style="width:100% !important;vertical-align:middle;padding-top:15px !important;" 
+				                  					columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-10" id="hlrProfileGrid">
+			                  						<p:outputLabel value="Status" for="hlrSt" styleClass="lebel"/>
+					                        		<h:outputText id="hlrSt" value="#{msp.profile.hlrProfile.status}" style="vertical-align: middle;line-height: 0px !important;font-family: 'Poppins-Regular';font-size: 13px;"/>
+						                        </h:panelGrid>
+						                    </p:tab>
+						                    <p:tab title="RAS Profile" id="rasProfile" titleStyleClass="green">
+						                        <p:dataTable border="1" value="#{msp.profile.rasProfile.entrySet()}" var="e" 
+						                        style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+						                        emptyMessage="No RAS profile found"
+												rendered="#{!msp.profile.rasProfile.isEmpty()}">
+													<p:column headerText="Attribute" styleClass="columnHeader">
+													    <h:outputText value="#{e.key}" styleClass="columnData" />
+													</p:column>
+													<p:column headerText="Value" styleClass="columnHeader">
+													     <h:outputText value="#{e.value}" styleClass="columnData"/>
+													</p:column>
+												</p:dataTable>
+						                    </p:tab>
+						                    <p:tab title="CS Profile" id="csProfile" titleStyleClass="green">
+						                        <p:dataTable border="1" value="#{msp.profile.csProfile.entrySet()}" var="e" 
+						                        style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+						                        emptyMessage="No CS profile found"
+												rendered="#{!msp.profile.csProfile.isEmpty()}">
+													<p:column headerText="Attribute" styleClass="columnHeader">
+													    <h:outputText value="#{e.key}" styleClass="columnData" />
+													</p:column>
+													<p:column headerText="Value" styleClass="columnHeader">
+													     <h:outputText value="#{e.value}" styleClass="columnData"/>
+													</p:column>
+												</p:dataTable>
+						                    </p:tab>
+						                    <p:tab title="ERP Profile" id="erpProfile" titleStyleClass="green">
+						                        <p:dataTable border="1" value="#{msp.profile.erpProfile.entrySet()}" var="e" 
+						                        style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+						                        emptyMessage="No ERP profile found"
+												rendered="#{!msp.profile.erpProfile.isEmpty()}">
+													<p:column headerText="Attribute" styleClass="columnHeader">
+													    <h:outputText value="#{e.key}" styleClass="columnData" />
+													</p:column>
+													<p:column headerText="Value" styleClass="columnHeader">
+													     <h:outputText value="#{e.value}" styleClass="columnData"/>
+													</p:column>
+												</p:dataTable>
+						                    </p:tab>
+						                    <p:tab title="NMS Profile" id="nmsProfile" titleStyleClass="green">
+						                        <p:dataTable border="1" value="#{msp.profile.nmsProfile.entrySet()}" var="e" 
+						                        style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+						                        emptyMessage="No NMS profile found"
+												rendered="#{!msp.profile.nmsProfile.isEmpty()}">
+													<p:column headerText="Attribute" styleClass="columnHeader">
+													    <h:outputText value="#{e.key}" styleClass="columnData" />
+													</p:column>
+													<p:column headerText="Value" styleClass="columnHeader">
+													     <h:outputText value="#{e.value}" styleClass="columnData"/>
+													</p:column>
+												</p:dataTable>
+						                    </p:tab>
+						                    <p:tab title="PCRF Profile" id="pcrfProfile" titleStyleClass="green">
+						                        <p:dataTable border="1" value="#{msp.profile.pcrfProfile.entrySet()}" var="e" 
+						                        style="font-size:11px;margin-top:10px;font-family: 'Poppins-Regular';"
+						                        emptyMessage="No PCRF profile found"
+												rendered="#{!msp.profile.pcrfProfile.isEmpty()}">
+													<p:column headerText="Attribute" styleClass="columnHeader">
+													    <h:outputText value="#{e.key}" styleClass="columnData" />
+													</p:column>
+													<p:column headerText="Value" styleClass="columnHeader">
+													     <h:outputText value="#{e.value}" styleClass="columnData"/>
+													</p:column>
+												</p:dataTable>
+						                    </p:tab>
+					                   	</p:accordionPanel>					                   	
+					                   	<p:link href="#{msp.dashboardUrl}" value="For more information go to Dashboard" styleClass="commandLinkStyle" target="_blank"/>
+							        </h:panelGrid>
+			                  	</p:panel>
+			               	</div>
+			             </div>
+                  	</div>
+		        </div>
+		    </div>
+		</h:form>
+	</ui:define>
+</ui:composition>

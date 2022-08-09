@@ -1,0 +1,313 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Assignment Inventory</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="assignmentInvForm">
+			<div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Assignment Inventory" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+		                <div class="shadow-box">
+		                	<p:panel style="border:0px !important;" id="assignmentInvP">
+		                		<div class="ui-g ui-fluid">
+								    <div class="ui-g-12 ui-md-4" style="margin:auto;">
+								        <div class="ui-inputgroup">
+								        	<p:inputText placeholder="MSISDN"  style="font-size:13px !important;font-family:Poppins-Regular !important;letter-spacing: .5px !important;" value="#{ai.msisdn}"/>
+								            <p:commandButton value="Search" styleClass="green-button" actionListener="#{ai.searchAssignment}" update="dataPanel" disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('SEARCH_ASMT')}"/> 
+								        </div>
+								    </div>
+							    </div>
+		                  		<p:messages id="assignmentInvM" showDetail="true" closable="true" showSummary="false">
+									<p:autoUpdate />
+								</p:messages>
+		                  		<div class="ui-fluid">
+		                  			<p:panelGrid id="dataPanel" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:100%;">
+										<p:dataTable value="#{ai.allAssignments}" style="font-size:11px;margin-top:10px;font-family:Poppins-Regular !important;"
+											id="asmtDatatable" 
+											var="rows" 
+											rows="15" 
+											paginator="true"
+											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+											rowsPerPageTemplate="10,20,50"
+											filterDelay="100"
+											paginatorPosition="bottom" 
+											emptyMessage="No assignment Defined" 
+											paginatorAlwaysVisible="false" 
+											selection="#{ai.selectedAsmt}" 
+											rowKey="#{rows.id}" 
+											editable="false"
+                     						selectionMode="single"
+											reflow="true">
+											
+											<f:facet name="header">
+									            <div align="center">
+									                <h:outputText value="Assignment Inventory"  style="font-size:12px;font-weight:bold;font-family: Poppins-Regular !important;"/>
+									            </div>
+									        </f:facet>
+									        
+									        <p:ajax event="rowSelect" listener="#{ai.onRowSelect}" update="editAsmt,finishA" process="@this" partialSubmit="true"/>
+											<p:ajax event="rowUnselect" listener="#{ai.onRowUnselect}" update="editAsmt,finishA" process="@this" partialSubmit="true" />
+											
+									        <p:column headerText="CR No / Assignment Name" style="text-align: center;font-weight:bold;font-size:12px;width:30%;">
+					    						<h:outputText value="#{rows.description}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											
+											<p:column headerText="Assigned To" style="text-align: center;font-weight:bold;font-size:12px;width:20%;">
+					    						<h:outputText value="#{rows.assignedToUser}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											
+											<p:column headerText="Purpose" style="text-align: center;font-weight:bold;font-size:12px;width:9%;">
+					    						<h:outputText value="#{rows.reason}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											
+											<p:column headerText="Start Date" style="text-align: center;font-weight:bold;font-size:12px;width:6%;">
+					    						<h:outputText value="#{rows.startDate}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;">
+					    							<f:convertDateTime pattern = "dd-MM-yyyy" />
+					    						</h:outputText>
+											</p:column>
+											
+											<p:column headerText="End Date" style="text-align: center;font-weight:bold;font-size:12px;width:6%;">
+					    						<h:outputText value="#{rows.endDate}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;">
+					    							<f:convertDateTime pattern = "dd-MM-yyyy" />
+					    						</h:outputText>
+											</p:column>
+											
+											<p:column headerText="Status" style="text-align: center;font-weight:bold;font-size:12px;width:5%;">
+					    						<p:graphicImage url="/images/green.png" height="10" width="10" rendered="#{rows.status == 'A'}"/>
+						        				<p:graphicImage url="/images/red.png" height="10" width="10" rendered="#{rows.status == 'C'}"/>
+											</p:column>
+											
+											<f:facet name="footer">
+												<p:panelGrid id="buttonPanel" layout="grid" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4,ui-g-12 ui-md-4" columns="3"  style="width:50%;margin:auto;">
+								                	<p:commandButton id="addAsmt" value="New Assignment" ajax="true"
+								                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('ADD_ASMT')}" oncomplete="PF('addAsmtD').show();"
+								                	update="addD"/>
+								                	
+								                	<p:commandButton id="editAsmt" value="Edit Assignment" ajax="true" disabled="#{ai.disabled}" action="#{ai.initEditD}"
+								                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_ASMT')}" oncomplete="PF('editAsmtD').show();"
+								                	update="editAsmtP,#{p:component('currentNumbers')}"/>
+								                	
+								                	<p:commandButton id="finishA" value="Finish Assignment" ajax="true" disabled="#{ai.disabled}"
+								                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_ASMT')}"	
+								                	update="dataPanel" action="#{ai.finishAssignment}"/>
+									             </p:panelGrid>
+									        </f:facet>
+										</p:dataTable>
+									</p:panelGrid>
+		                  		</div>
+		                  	</p:panel>
+		                  </div>
+		                </div>
+		             </div>
+		           </div>
+		         </div>
+		       </h:form>
+		       
+		       <p:dialog widgetVar="editAsmtD" modal="true" height="450" width="800" appendTo="@(body)" 
+		   		closeOnEscape="true" resizable="false" closable="false" style="background:white !important;"  responsive="true">
+				    <div class="container-fluid">
+				        <div class="container">
+				        <div class="row">
+		                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+		                    	<h5><h:outputText value="Edit Assignment" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+		                    </p:outputPanel>
+				            <div class="col-12 mb-3">
+							    <h:form id="editAsmtF" prependId="false">
+					             	<div class="shadow-box-dialogue">
+					                  	<p:panel style="border:0px !important;" id="editAsmtP">
+					                  		<p:messages id="editAsmtM" showDetail="true" closable="true">
+												<p:autoUpdate />
+											</p:messages>
+					                  		<div class="ui-fluid">
+							                    <h:panelGrid id="editD" columns="2" cellpadding="0" cellspacing="0" 
+							                    style="width:100% !important;margin:auto !important;vertical-align:middle;padding-top:20px !important;" border="0" 
+							                    columnClasses="ui-g-12 ui-md-3, ui-g-12 ui-md-6">
+						               				<p:outputLabel value="Assignment Name" for="aName" styleClass="lebel"/>
+						                        	<p:inputText label="Assignment Name" id="aName" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="60" value="#{ai.selectedAsmt.description}" required="true" requiredMessage="Missing Mandatory Parameter - CR No" />
+						                        	
+						                        	<p:outputLabel value="Purpose" for="purpose" styleClass="lebel"/>
+						                        	<p:selectOneMenu id="purpose" value="#{ai.selectedAsmt.reason}" label="Purpose" filter="false"
+														panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+														style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;" required="true">
+														<f:selectItem itemLabel="Select Purpose" itemValue="#{null}" noSelectionOption="true" />
+											            <f:selectItem itemLabel="Development" itemValue="Development" noSelectionOption="false" />
+											            <f:selectItem itemLabel="UAT" itemValue="UAT" noSelectionOption="false" />
+											            <f:selectItem itemLabel="System Test" itemValue="System Test" noSelectionOption="false" />
+											            <f:selectItem itemLabel="Unit Test" itemValue="Unit Test" noSelectionOption="false" />
+											            <f:selectItem itemLabel="Business Test" itemValue="Business Test" noSelectionOption="false" />
+											            <f:selectItem itemLabel="Regression Test" itemValue="Regression Test" noSelectionOption="false" />
+											        </p:selectOneMenu>
+											        
+											        <p:outputLabel value="Start Date" for="sDate" styleClass="lebel"/>
+											        <p:calendar label="FromDate" id="sDate" autocomplete="off" styleClass="form-control inputTextMedium" pattern="dd-MM-yyyy" value="#{ai.selectedAsmt.startDate}" 
+											        style="width:100% !important;border-bottom:0px !important;"  placeholder="Start Date" mindate="01-01-2019"/>
+											        
+											        <p:outputLabel value="End Date" for="eDate" styleClass="lebel"/>
+											        <p:calendar label="EndDate" id="eDate" autocomplete="off" styleClass="form-control inputTextMedium" pattern="dd-MM-yyyy" value="#{ai.selectedAsmt.endDate}" 
+											        style="width:100% !important;border-bottom:0px !important;"  placeholder="End Date" mindate="01-01-2019"/>
+											        
+											        <p:outputLabel value="Assigned To" for="at" styleClass="lebel"/>
+											        <p:selectOneMenu id="at" value="#{ai.selectedUsername}" label="Active Assignments" filter="true" filterMatchMode="startsWith" 
+														panelStyle="width:350px; background: white !important; font-size:12px !important;" 
+														style="font-size:12px !important;font-family: Poppins-Regular !important;width:80% !important;">
+														<p:ajax listener="#{ai.onUserChange}" update="dataPanel" />
+														<f:selectItem itemLabel="Select User" itemValue="#{null}" noSelectionOption="true" />
+											            <f:selectItems value="#{ai.allUserMap.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+											        </p:selectOneMenu>
+											        
+											        <p:outputLabel value="Assign Numbers" for="currentNumbers" styleClass="lebel"/>
+										        	<p:selectCheckboxMenu id="currentNumbers" value="#{ai.currentMsisdn}" label="Assigned Numbers" filter="true" filterMatchMode="startsWith" 
+														panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+														style="font-size:12px !important;font-family: Poppins-Regular !important;width:80% !important;" required="true">
+											            <f:selectItems value="#{ai.allAvailableNumbersForAsmt.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+											        </p:selectCheckboxMenu>
+						                        </h:panelGrid>
+						                        
+						                        <div class="ui-fluid">
+						                       	 <h:panelGrid id="showAssgnedNo" >
+						                       		<p:dataTable value="#{ai.selectedAsmt.numberPools}"  
+						                       			style="font:10.5px;padding-top:15px !important;"
+														id="noDetailsTable" 
+														var="rows" 
+														rows="5" 
+														paginator="true"
+														paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+														rowsPerPageTemplate="5,10,15"
+														filterDelay="100"
+														paginatorPosition="bottom" 
+														emptyMessage="No MSISDN Assigned" 
+														paginatorAlwaysVisible="false" 
+														styleClass="fixed-size"
+														editable="false"
+														rendered="#{not empty ai.selectedAsmt.numberPools}"
+														rowKey="#{rows.id}" 
+														reflow="true">
+														
+														<f:facet name="header">
+												            <div align="center">
+												                <h:outputText value="Assigned Numbers"  style="font-size:12px;font-weight:bold"/>
+												            </div>
+												        </f:facet>
+														
+														<p:column headerText="MSISDN" style="text-align: center;font-weight:bold;font-size:11px;width:auto;">
+								    						<h:outputText value="#{rows.msisdn}" style="font-size:11px;font-weight:normal;"/>
+														</p:column>
+														
+														<p:column headerText="IMSI" style="text-align: center;font-weight:bold;font-size:11px;width:auto;">
+								    						<h:outputText value="#{rows.imsi}" style="font-size:11px;font-weight:normal;"/>
+														</p:column>
+														
+														<p:column headerText="SIM No" style="text-align: center;font-weight:bold;font-size:11px;width:auto;">
+								    						<h:outputText value="#{rows.simNo}" style="font-size:11px;font-weight:normal;"/>
+														</p:column>
+													</p:dataTable>
+													</h:panelGrid>
+						                       </div>
+					                       </div>
+					                       <div class="ui-fluid" style="padding-top:10px !important;">
+					                       		<h:panelGrid columns="2" cellpadding="0" style="margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+					                      			<p:commandButton value="Update" ajax="true"  update="showAssgnedNo,dataPanel" action="#{ai.updateAssignment}" styleClass="green-button" 
+					                      			disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_ASMT')}"/>
+					                      			<p:commandButton value="Close"  oncomplete="PF('editAsmtD').hide();" styleClass="green-button" process="@this"/>
+					                      		</h:panelGrid>
+					                       </div>
+					                  	</p:panel>
+					                 </div>
+							    </h:form>
+				    		</div>
+				    	</div>
+				     </div>
+				   </div>
+				</p:dialog>
+				
+				<p:dialog widgetVar="addAsmtD" modal="true" height="400" width="800" appendTo="@(body)" 
+		   		closeOnEscape="true" resizable="false" closable="false" style="background:white !important;"  responsive="true">
+				    <div class="container-fluid">
+				        <div class="container">
+				        <div class="row">
+		                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+		                    	<h5><h:outputText value="Create New Assignment" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+		                    </p:outputPanel>
+				            <div class="col-12 mb-3">
+							    <h:form id="addAsmtF" prependId="false">
+					             	<div class="shadow-box-dialogue">
+					                  	<p:panel style="border:0px !important;" id="addAsmtP">
+					                  		<p:messages id="addAsmtM" showDetail="true" closable="true">
+												<p:autoUpdate />
+											</p:messages>
+					                  		<div class="ui-fluid">
+							                    <h:panelGrid id="addD" columns="2" cellpadding="0" cellspacing="0" 
+							                    style="width:100% !important;margin:auto !important;vertical-align:middle;padding-top:20px !important;" border="0" 
+							                    columnClasses="ui-g-12 ui-md-3, ui-g-12 ui-md-6">
+						               				<p:outputLabel value="Assignment Name" for="aNameA" styleClass="lebel"/>
+						                        	<p:inputText label="CR No / Assignment Name" id="aNameA" autocomplete="off" styleClass="form-control inputTextMedium"  
+						                        	maxlength="60" value="#{ai.newAsmt.description}" required="true" requiredMessage="Missing Mandatory Parameter - CR No" />
+						                        	
+						                        	<p:outputLabel value="Purpose" for="purposeA" styleClass="lebel"/>
+						                        	<p:selectOneMenu id="purposeA" value="#{ai.newAsmt.reason}" label="Purpose" filter="false"
+														panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+														style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;" required="true">
+														<f:selectItem itemLabel="Select Purpose" itemValue="#{null}" noSelectionOption="true" />
+											            <f:selectItem itemLabel="Development" itemValue="Development" noSelectionOption="false" />
+											            <f:selectItem itemLabel="UAT" itemValue="User Acceptance Testing" noSelectionOption="false" />
+											            <f:selectItem itemLabel="System Test" itemValue="System Testing" noSelectionOption="false" />
+											            <f:selectItem itemLabel="Unit Test" itemValue="Unit Testing" noSelectionOption="false" />
+											            <f:selectItem itemLabel="Business Test" itemValue="Business Testing" noSelectionOption="false" />
+											            <f:selectItem itemLabel="Regression Test" itemValue="Regression Testing" noSelectionOption="false" />
+											        </p:selectOneMenu>
+											        
+											        <p:outputLabel value="Start Date" for="sDateA" styleClass="lebel"/>
+											        <p:calendar label="FromDate" id="sDateA" autocomplete="off" styleClass="form-control inputTextMedium" pattern="dd-MM-yyyy" value="#{ai.newAsmt.startDate}" 
+											        style="width:100% !important;border-bottom:0px !important;"  placeholder="Start Date" mindate="01-01-2019"/>
+											        
+											        <p:outputLabel value="End Date" for="eDateA" styleClass="lebel"/>
+											        <p:calendar label="EndDate" id="eDateA" autocomplete="off" styleClass="form-control inputTextMedium" pattern="dd-MM-yyyy" value="#{ai.newAsmt.endDate}" 
+											        style="width:100% !important;border-bottom:0px !important;"  placeholder="End Date" mindate="01-01-2019"/>
+											        
+											        <p:outputLabel value="Assigned To" for="atA" styleClass="lebel"/>
+											        <p:selectOneMenu id="atA" value="#{ai.selectedUsername}" label="Active Assignments" filter="true" filterMatchMode="startsWith" 
+														panelStyle="width:350px; background: white !important; font-size:12px !important;" 
+														style="font-size:12px !important;font-family: Poppins-Regular !important;width:80% !important;">
+														<f:selectItem itemLabel="Select User" itemValue="#{null}" noSelectionOption="true" />
+											            <f:selectItems value="#{ai.allUserMap.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+											        </p:selectOneMenu>
+											        
+											        <p:outputLabel value="Available Numbers" for="anA" styleClass="lebel"/>
+										        	<p:selectCheckboxMenu id="anA" value="#{ai.selectedMsisdn}" label="Numbers" filter="true" filterMatchMode="startsWith" 
+														panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+														style="font-size:12px !important;font-family: Poppins-Regular !important;" required="true">
+											            <f:selectItems value="#{ai.allAvailableNumbers.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+											        </p:selectCheckboxMenu>
+						                        </h:panelGrid>
+					                       </div>
+					                       <div class="ui-fluid" style="padding-top:10px !important;">
+					                       		<h:panelGrid columns="2" cellpadding="0" style="width:60% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+					                      			<p:commandButton value="Save" ajax="true"  update="dataPanel,addD" action="#{ai.createAssignment}" styleClass="green-button" 
+					                      			disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('ADD_ASMT')}"/>
+					                      			<p:commandButton value="Close" oncomplete="PF('addAsmtD').hide();" styleClass="green-button" process="@this"/>
+					                      		</h:panelGrid>
+					                       </div>
+					                  	</p:panel>
+					                 </div>
+							    </h:form>
+				    		</div>
+				    	</div>
+				     </div>
+				   </div>
+				</p:dialog>
+		     </ui:define>
+		   </ui:composition>

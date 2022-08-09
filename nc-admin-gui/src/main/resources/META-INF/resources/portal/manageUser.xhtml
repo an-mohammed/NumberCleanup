@@ -1,0 +1,216 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Profile Cleanup</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="createUserForm">
+			<div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Search User" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+		                <div class="shadow-box">
+                  			<p:panel style="border:0px !important;" id="createUserP">
+                  				<p:messages id="createUserM" showDetail="true" closable="true" showSummary="false">
+									<p:autoUpdate />
+								</p:messages>
+                  				<div class="ui-fluid">
+		                    		<h:panelGrid columns="4" cellpadding="1" style="margin-top:2%;width:60% !important;margin:auto;text-align:left;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+		                				<p:outputLabel value="Username" for="username" styleClass="lebel"/>
+			                        	<p:inputText label="User Name" id="username" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="20" value="#{um.username}"/>
+			                        	
+			                        	<p:outputLabel value="Mobile" for="mobile" styleClass="lebel"/>
+			                        	<p:inputText label="Mobile" id="mobile" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="20" value="#{um.mobile}">
+			                        		<p:keyFilter regEx="/[\d\-]/" preventPaste="false"/>
+			                        	</p:inputText>
+			                        	
+			                        	<p:outputLabel value="Name" for="name" styleClass="lebel"/>
+			                        	<p:inputText label="Name" id="name" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{um.name}">
+			                        		<p:keyFilter regEx="/[a-zA-Z_]/i" preventPaste="false"/>
+			                        	</p:inputText>
+			                        	
+			                        	<p:outputLabel value="E-Mail" for="mail" styleClass="lebel"/>
+			                        	<p:inputText label="Mail" id="mail" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="40" value="#{um.email}">
+			                        		<p:keyFilter regEx="/[a-z0-9_\.\-@]/i" preventPaste="false"/>
+			                        	</p:inputText>
+			                        </h:panelGrid>
+                       			</div>
+                       			<div class="ui-fluid" style="padding-top:10px !important;">
+                       				<h:panelGrid columns="2" cellpadding="0" style="width:50% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+			                       		<p:selectBooleanCheckbox value="#{um.includeInvalid}" itemLabel="#{msg.includeDisabled}" styleClass="lebel"/>
+			                       		<p:commandButton value="Search" ajax="true" update="dataPanel" action="#{um.searchUser}" styleClass="green-button" 
+			                       			rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('SEARCH_USER')}"/>
+                      				</h:panelGrid>
+                      			 </div>
+                  				</p:panel>
+                  				<div class="ui-fluid">
+		                        	<p:panelGrid id="dataPanel" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:100%;">
+										<p:dataTable value="#{um.userList}"  style="font:11px;margin-top:10px;"
+											id="userDatatable" 
+											var="rows" 
+											rows="5" 
+											paginator="true"
+											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+											rowsPerPageTemplate="5,10,15"
+											filterDelay="100"
+											paginatorPosition="bottom" 
+											emptyMessage="No Details Found with applied filter" 
+											paginatorAlwaysVisible="false" 
+											editable="false"
+											rendered="#{not empty um.userList}"
+											selection="#{um.selectedUser}" 
+											rowKey="#{rows.id}" 
+											selectionMode="single"
+											reflow="true">
+											
+											<p:ajax event="rowSelect" listener="#{um.onRowSelect}" update="editCustomerDetails" process="@this" partialSubmit="true"/>
+											<p:ajax event="rowUnselect" listener="#{um.onRowUnselect}" update="editCustomerDetails" process="@this" partialSubmit="true" />
+											
+											<f:facet name="header">
+									            <div align="center">
+									                <h:outputText value="User Details"  style="font-size:12px;font-weight:bold;font-family: Poppins-Regular !important;"/>
+									            </div>
+									        </f:facet>
+									        
+									        <p:column headerText="Username" style="text-align: center;font-weight:bold;font-size:12px;width:12%;">
+					    						<h:outputText value="#{rows.uName}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+					    					
+					    					<p:column headerText="First Name" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+					    						<h:outputText value="#{rows.firstname}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>	
+											
+											<p:column headerText="Last Name" style="text-align: center;font-weight:bold;font-size:12px;width:auto;">
+					    						<h:outputText value="#{rows.lastname}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>	
+											
+											<p:column headerText="E-Mail" style="text-align: center;font-weight:bold;font-size:12px;width:22%;">
+												<h:outputText value="#{rows.email}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											       
+											<p:column headerText="Contact No" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+												<h:outputText value="#{rows.contactNo}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+											</p:column>
+											
+											<p:column headerText="Status" style="text-align: center;font-weight:bold;font-size:12px;width:8%;">
+												<p:graphicImage url="/images/green.png" height="10" width="10" rendered="#{rows.isEnabled == 'true'}"/>
+						        				<p:graphicImage url="/images/red.png" height="10" width="10" rendered="#{rows.isEnabled == 'false'}"/>
+											</p:column>
+											
+											<f:facet name="footer">
+												<p:row>
+									                <p:column colspan="3">
+									                	<p:commandButton id="editCustomerDetails" value="Edit Details" ajax="true" disabled="#{um.disabled}"  action="#{um.initEditD}"
+									                	styleClass="green-button mx-auto" rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_USER')}" oncomplete="PF('editUserD').show();"  
+									                	update=":editUserF:editUserP,:editUserF:roles"/>
+									                </p:column>
+									            </p:row>
+									        </f:facet>
+								     	</p:dataTable>
+									</p:panelGrid>	
+								</div>
+                  			</div>
+                  		</div>
+                  	</div>
+		        </div>
+		    </div>
+		</h:form>
+		<p:dialog widgetVar="editUserD" modal="true" height="380" width="800" appendTo="@(body)" closeOnEscape="true" resizable="false" closable="false" style="background:white !important;"  responsive="true">
+		    <div class="container-fluid">
+		        <div class="container">
+		        <div class="row">
+                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Edit User" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+					    <h:form id="editUserF" prependId="false">
+			             	<div class="shadow-box-dialogue">
+			                  	<p:panel style="border:0px !important;" id="editUserP">
+			                  		<p:messages id="editUserM" showDetail="true" closable="true">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-fluid">
+					                    <h:panelGrid id="editD" columns="4" cellpadding="0" cellspacing="0" style="width:100% !important;margin:auto !important;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4">
+				               				<p:outputLabel value="First Name" for="nameF" styleClass="lebel"/>
+				                        	<p:inputText label="Name" id="nameF" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{um.selectedUser.firstname}" required="true" requiredMessage="Missing Mandatory Parameter - First Name">
+				                        		<p:keyFilter regEx="/[a-zA-Z_]/i"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="Last Name" for="nameL" styleClass="lebel"/>
+				                        	<p:inputText label="Name" id="nameL" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{um.selectedUser.lastname}" required="true" requiredMessage="Missing Mandatory Parameter - Last Name">
+				                        		<p:keyFilter regEx="/[a-zA-Z_]/i"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="Mobile" for="mobileE" styleClass="lebel"/>
+				                        	<p:inputText label="Mobile" id="mobileE" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="20" value="#{um.selectedUser.contactNo}" required="true" requiredMessage="Missing Mandatory Parameter - Mobile">
+				                        		<p:keyFilter regEx="/[\d\-]/"/>
+				                        	</p:inputText>
+				                        	
+				                        	<p:outputLabel value="E-Mail" for="mailE" styleClass="lebel"/>
+				                        	<p:inputText label="Mail" id="mailE" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="40" value="#{um.selectedUser.email}" required="true" requiredMessage="Missing Mandatory Parameter - eMail">
+				                        		<p:keyFilter regEx="/[a-z0-9_\.\-@]/i"/>
+				                        	</p:inputText>
+					                       	
+											<p:outputLabel value="Remark" for="remarkE" styleClass="lebel"/>
+					                        <p:inputText label="Remark" id="remarkE" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{um.selectedUser.comments}" required="true" requiredMessage="Missing Mandatory Parameter - Remark"/>
+												
+					                       	<p:outputLabel value="Enabled" styleClass="lebel" for="accStatus"/>
+					                       	<p:selectBooleanCheckbox value="#{um.selectedUser.isEnabled}" id="accStatus" required="true" requiredMessage="Missing Mandatory Parameter - Status"/>
+					                       	
+					                       	<p:outputLabel value="Super User" styleClass="lebel" for="isSu" rendered="#{sec:areAnyGranted('SU')}" />
+				                        	<p:selectBooleanCheckbox value="#{um.superUser}" id="isSu" rendered="#{sec:areAnyGranted('SU')}">
+				                        		<p:ajax update="roles,isAdmin,ldapauthentication" listener="#{um.onSelectingSU}" />
+				                        	</p:selectBooleanCheckbox>
+				
+											<p:outputLabel value="Administrator" styleClass="lebel" for="isAdmin" rendered="#{sec:areAnyGranted('ADMIN,SU')}"/>
+				                        	<p:selectBooleanCheckbox value="#{um.adminUser}" id="isAdmin" rendered="#{sec:areAnyGranted('ADMIN,SU')}">
+				                        		<p:ajax update="isSu,roles,ldapauthentication" listener="#{um.onSelectingAdmin}" />
+				                        	</p:selectBooleanCheckbox>
+				                        	
+				                        	<p:outputLabel value="Ldap Auth" styleClass="lebel" for="ldapauthentication" />
+				                        	<p:selectBooleanCheckbox value="#{um.selectedUser.ldapauthentication}" id="ldapauthentication"  disabled="#{um.disableLdapAuth}"/>
+				
+					                       	<p:outputLabel value="Roles" styleClass="lebel" for="roles"/>
+					                       	<p:selectCheckboxMenu id="roles" value="#{um.currentRoleList}" label="Roles" filter="true" filterMatchMode="startsWith" 
+												panelStyle="width:250px; background: white !important; font-size:11px !important;" 
+												style="font-size:11.5px !important;font-family: Poppins-Regular !important;" disabled="#{um.disableRole}">
+									            	<f:selectItems value="#{um.allValidRoleList.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+									        </p:selectCheckboxMenu>
+									        
+									        <p:outputLabel value="Groups" styleClass="lebel" for="grpC"/>
+					                       	<p:selectCheckboxMenu id="grpC" value="#{um.currentGrpList}" label="Roles" filter="true" filterMatchMode="startsWith" 
+												panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+												style="font-size:12px !important;font-family: Poppins-Regular !important;" required="true">
+									            <f:selectItems value="#{um.allValidGroupList.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+									        </p:selectCheckboxMenu>
+				                        </h:panelGrid>
+			                       </div>
+			                       <div class="ui-fluid" style="padding-top:10px !important;">
+			                       		<h:panelGrid columns="2" cellpadding="0" style="width:60% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+			                      			<p:commandButton value="Update" ajax="true"  update="dataPanel" action="#{um.updateUser}" styleClass="green-button" 
+			                      			disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_USER')}"/>
+			                      			<p:commandButton value="Close"  oncomplete="PF('editUserD').hide();" styleClass="green-button" />
+			                      		</h:panelGrid>
+			                       </div>
+			                  	</p:panel>
+			                 </div>
+					    </h:form>
+		    		</div>
+		    	</div>
+		     </div>
+		   </div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

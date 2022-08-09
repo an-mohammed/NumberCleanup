@@ -1,0 +1,248 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://www.springframework.org/security/tags">
+
+<f:loadBundle basename="messages" var="msg" />
+<f:view locale="#{index.locale}" encoding="utf-8">
+	<h:head>
+		<meta charset="utf-8" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title><ui:insert name="title" /></title>
+		<h:outputStylesheet name="/css/bootstrap.min.css" />
+		<h:outputStylesheet name="/css/main.css" />
+		<h:outputStylesheet name="/css/util.css" />
+		<h:outputStylesheet name="/css/style.css" />
+		<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/images/favicon.jpg"/>
+		<f:event type="preRenderView" listener="#{facesContext.externalContext.response.setHeader('Cache-Control', 'no-cache, no-store')}" />
+		<style>
+			.ui-layout-north {
+				max-height: 60px !important;
+			}
+		</style>
+	</h:head>
+	
+	<h:body>
+		<p:layout fullPage="true" >
+		    <p:layoutUnit position="north" resizable="false" closable="false" collapsible="false" gutter="0" 
+		    style="border:0px !important;background-color: #fff !important;height:60px !important;" 
+		    styleClass="container-fluid bg-white hdr-shadow headerPanel" id="northUnit">
+					<div style="padding-left:12px; padding-right:0px;">
+						<h:form id="headerForm" prependId="false">
+							<p:idleMonitor timeout="1000000">
+						        <p:ajax event="idle" listener="#{index.onIdle}" oncomplete="PF('idleDialog').show();" />
+						        <p:ajax event="active" listener="#{index.onActive}"/>
+						    </p:idleMonitor>
+						    
+							<h:panelGrid columns="2" width="100%" cellpadding="0" cellspacing="0" border="0" >
+					    		<h:graphicImage url="/images/diyarlogo.png" width="130" height="30" styleClass="brandStyle" alt="Ooredoo"/>
+					    		<p:panel styleClass="headerPanel" style="border:-moz-border-radius: 0px; -webkit-border-radius: 0px;padding-top:0px !important;padding-bottom:0px !important;">
+									<table style="width:100%;" cellpadding="1px" cellspacing="0px" border="0px">
+										<tr>
+											<td valign="middle" align="left" style="width: fit-content;min-width: 215px !important;max-width: 240px !important;text-align: center;">
+												<i class="fa fa-fw fa-user"></i>
+												<h:outputText value="#{msg.welcomeUser} #{index.userFullName}" styleClass="commandLinkStyle" style="padding-left:5px;"/>
+											</td>
+											<td valign="middle" align="center" width="1%" style="color:black;font-size:15px;"><b>|</b></td>
+											<td valign="middle" align="left" style="width: fit-content;text-align: center;">
+												<p:commandLink id="home" action="#{index.routeHome}" ajax="false" >
+													<h:outputText value="Home" styleClass="commandLinkStyle"/>
+												</p:commandLink>
+								   			</td>
+								   			<td valign="middle" align="center" width="1%" style="color:black;font-size:15px;"><b>|</b></td>
+											<td valign="middle" align="left"  style="width: fit-content;text-align: center;min-width: 50px !important;">
+												<p:commandLink id="config" actionListener="#{index.getSystemConfig}" oncomplete="PF('configDialog').show()" update="dbConfig">
+											        <h:outputText value="Configuration" styleClass="commandLinkStyle"/>
+											    </p:commandLink>
+											</td>
+								   			<td valign="middle" align="center" width="1%" style="color:black;font-size:15px;"><b>|</b></td>
+											<td valign="middle" align="left"  style="width: fit-content;text-align: center;min-width: 50px !important;">
+												<p:commandLink id="logOut" actionListener="#{index.logout}">
+											        <h:outputText value="Log Off" styleClass="commandLinkStyle"/>
+											    </p:commandLink>
+											</td>
+											<td>
+												<div id="header-trans"><h:graphicImage url="/images/gradient-white-none.png" /></div>
+											</td>
+										</tr>
+									</table>
+						        </p:panel>
+					    	</h:panelGrid>
+						</h:form>
+						<p:dialog widgetVar="idleDialog" modal="true" height="150" width="350" appendTo="@(body)" resizable="false" closable="false" 
+	    					style="background:white !important;"  responsive="true">
+   							<div align="center" style="padding-bottom: 20px;">
+								<h:panelGrid columns="1" styleClass="ui-fluid center top-alignment" style="text-align:center !important;">
+									<h:graphicImage url="/images/error.png" alt="error" width="30" height="30" styleClass="loginImageStyle" style="margin: auto;"/>
+									<h:outputText value="Session Expired...!!!" styleClass="errorMsg"/>
+									<h:outputText value="Your session has expired. Please re-login to system" styleClass="errorMsg1" />
+								</h:panelGrid>
+							</div>
+	    				</p:dialog>
+	    				<p:dialog widgetVar="configDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" 
+						style="background:white !important;" appendTo="@(body)" height="500" width="700" closeOnEscape="true">
+							<h:panelGrid columns="1" styleClass="ui-fluid center top-alignment" style="text-align:center !important;width:100%" id="dbConfig">
+								<p:dataTable value="#{index.sc.dbConfigs.entrySet()}"  style="font:11px;margin-top:10px;" id="bscsConfig" 	var="e" >
+									<f:facet name="header">
+							            <div align="center">
+							                <h:outputText value="Database Configuration"  style="font-size:12px;font-weight:bold"/>
+							            </div>
+							        </f:facet>
+							        <p:column headerText="System" styleClass="columnHeader" width="5">
+			    						<h:outputText value="#{e.key}" styleClass="columnData"/>
+									</p:column>
+									
+							        <p:column headerText="Host Name/IP" styleClass="columnHeader" width="33">
+			    						<h:outputText value="#{e.value.dbHost}" styleClass="columnData"/>
+									</p:column>
+									
+									<p:column headerText="Port" styleClass="columnHeader" width="8">
+			    						<h:outputText value="#{e.value.dbPort}" styleClass="columnData"/>
+									</p:column>
+									
+									<p:column headerText="Service Name" styleClass="columnHeader" width="30">
+			    						<h:outputText value="#{e.value.dbServicename}" styleClass="columnData"/>
+									</p:column>
+									
+									<p:column headerText="User" styleClass="columnHeader" width="24">
+			    						<h:outputText value="#{e.value.user}" styleClass="columnData"/>
+									</p:column>
+								</p:dataTable>
+								
+								<p:dataTable value="#{index.sc.esmServiceUrl}"  style="font:11px;margin-top:10px;" id="esmConfig" var="e" >
+									<f:facet name="header">
+							            <div align="center">
+							                <h:outputText value="ESM"  style="font-size:12px;font-weight:bold"/>
+							            </div>
+							        </f:facet>
+							        
+							        <p:column headerText="Service URLs" styleClass="columnHeader" width="40">
+			    						<h:outputText value="#{e}" styleClass="columnData"/>
+									</p:column>
+								</p:dataTable>
+								
+								<p:dataTable value="#{index.sc.pcrfServiceUrl}"  style="font:11px;margin-top:10px;" id="pcrfConfig" var="e" >
+									<f:facet name="header">
+							            <div align="center">
+							                <h:outputText value="PCRF"  style="font-size:12px;font-weight:bold"/>
+							            </div>
+							        </f:facet>
+							        
+							        <p:column headerText="Service URLs" styleClass="columnHeader" width="40">
+			    						<h:outputText value="#{e}" styleClass="columnData"/>
+									</p:column>
+								</p:dataTable>
+								
+								<p:dataTable value="#{index.sc.hlrServiceUrl}"  style="font:11px;margin-top:10px;" id="hlrConfig" var="e" >
+									<f:facet name="header">
+							            <div align="center">
+							                <h:outputText value="HLR"  style="font-size:12px;font-weight:bold"/>
+							            </div>
+							        </f:facet>
+							        
+							        <p:column headerText="Service URLs" styleClass="columnHeader" width="40">
+			    						<h:outputText value="#{e}" styleClass="columnData"/>
+									</p:column>
+								</p:dataTable>
+								
+								<p:dataTable value="#{index.sc.csServiceUrl}"  style="font:11px;margin-top:10px;" id="csConfig" var="e" >
+									<f:facet name="header">
+							            <div align="center">
+							                <h:outputText value="Charging System"  style="font-size:12px;font-weight:bold"/>
+							            </div>
+							        </f:facet>
+							        
+							        <p:column headerText="Service URLs" styleClass="columnHeader" width="40">
+			    						<h:outputText value="#{e}" styleClass="columnData"/>
+									</p:column>
+								</p:dataTable>
+								
+								<p:dataTable value="#{index.sc.sprServiceUrl}"  style="font:11px;margin-top:10px;" id="sprConfig" var="e" >
+									<f:facet name="header">
+							            <div align="center">
+							                <h:outputText value="SPR"  style="font-size:12px;font-weight:bold"/>
+							            </div>
+							        </f:facet>
+							        
+							        <p:column headerText="Service URLs" styleClass="columnHeader" width="40">
+			    						<h:outputText value="#{e}" styleClass="columnData"/>
+									</p:column>
+									
+									<f:facet name="footer">
+							            <div align="center">
+							                <p:commandButton value="Close"  oncomplete="PF('configDialog').hide();" styleClass="red-button"/>
+							            </div>
+							        </f:facet>
+								</p:dataTable>
+							</h:panelGrid>
+						</p:dialog>
+					</div>
+					<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" style="background:white !important;" appendTo="@(body)">
+						<p:graphicImage value="/images/ajax_loader_red.gif" />
+					</p:dialog>
+					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" oncomplete="PF('statusDialog').hide()" />
+			</p:layoutUnit>
+			<p:layoutUnit position="west" resizable="false" closable="false" collapsible="false" gutter="0" styleClass="container-fluid menu-shadow leftUnit"  id="westUnit">
+				<h:form>
+					<p:panelMenu  id="pMenu" style="width:200px !important;padding-top:20px;" stateful="true" widgetVar="pMenuwv" >
+					<p:submenu id="sMenu1" label="Profile Management" styleClass="subMenuStyle submenuIcon" multiple="false" expanded="false" rendered="#{s:areAnyGranted('SU,ADMIN,PS,CLS')}" style="font-family: ooredoo !important;">
+						<p:menuitem id="mi14" value="Cleanup Profile" outcome="/portal/manageAssignment" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN,CLS')}"/>
+						<p:menuitem id="mi16" value="Manage SIM Location" outcome="/portal/manageSimLocation" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN,CLS')}"/>
+						<p:menuitem id="mi11" value="Cleanup Profile (Admin)" outcome="/portal/cleanupProfile" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN')}"/>
+						<p:menuitem id="mi12" value="Manage Subscriber Profile" outcome="/portal/manageProfile" styleClass="menuStyle"  style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN,PS')}"/>						
+						<p:menuitem id="mi13" value="Cleanup History" outcome="/portal/cleanupHistory" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN,CLS')}"/>
+						<p:menuitem id="mi15" value="Disconnection" outcome="/portal/disconnection" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN,CLS')}"/>
+						<p:menuitem id="mi17" value="Profile Status" outcome="/portal/profileStatus" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN,CLS')}"/>
+					</p:submenu>
+					<p:submenu id="sMenu5" label="Onboarding" styleClass="subMenuStyle" multiple="false" expanded="false" rendered="#{s:areAnyGranted('SU,ADMIN,CLS')}">
+						<p:menuitem id="mi51" value="Onboard Subscriber Profile" outcome="/portal/createSubscriberProfile" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN,CLS')}"/>
+					</p:submenu>
+					<p:submenu id="sMenu2" label="Administration" styleClass="subMenuStyle" multiple="false" expanded="false" rendered="#{s:areAnyGranted('SU,ADMIN')}">
+						<p:menuitem id="mi22" value="Create User" outcome="/portal/createUser" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN')}"/>
+						<p:menuitem id="mi21" value="Manage Users" outcome="/portal/manageUser" styleClass="menuStyle"  style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN')}"/>
+						<p:menuitem id="mi25" value="Manage Groups" outcome="/portal/manageUserGroup" styleClass="menuStyle"  style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN')}"/>
+						<p:menuitem id="mi23" value="Number Inventory" outcome="/portal/numberInventory" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN')}"/>
+						<p:menuitem id="mi24" value="Assignment Inventory" outcome="/portal/assignmentInventory" styleClass="menuStyle" style="color:white !important" ajax="true" rendered="#{s:areAnyGranted('SU,ADMIN')}"/>
+					</p:submenu>
+					<p:submenu id="sMenu3" label="Back Office Task" styleClass="subMenuStyle" multiple="false" rendered="#{s:areAnyGranted('SU')}">
+						<p:menuitem id="mi31" value="Manage Service User" outcome="/portal/serviceUserManagement" styleClass="menuStyle" style="color:white !important" rendered="#{s:areAnyGranted('SU')}"/>
+						<p:menuitem id="mi32" value="Manage Authorization" outcome="/portal/manageAuthorization" styleClass="menuStyle" style="color:white !important" rendered="#{s:areAnyGranted('SU')}" actionListener="#{bo.init()}"/>
+					</p:submenu>
+					<p:submenu id="sMenu4" label="Settings" styleClass="subMenuStyle" multiple="false">
+						<p:menuitem id="mi41" value="Change Password" outcome="/portal/changePassword" styleClass="menuStyle" style="color:white !important"/>
+					</p:submenu>
+				</p:panelMenu>
+				<h:outputScript>
+						PF('pMenuwv').headers.click(function() {
+						    var currHeader = $(this);
+						    PF('pMenuwv').headers.each(function() {
+						        var header = $(this);
+						        if (header.text() !== currHeader.text()) {
+						            PF('pMenuwv').collapseRootSubmenu(header);
+						            header.removeClass('ui-state-hover');
+						        }
+						    });
+						});
+				</h:outputScript>
+			</h:form>
+		</p:layoutUnit>
+	
+		    <p:layoutUnit position="center" gutter="0" style="border:0px !important;" id="centerUnit">
+		        <ui:insert name="pageContent"/>
+		    </p:layoutUnit>
+	    
+		   <p:layoutUnit position="south" resizable="false" closable="false" collapsible="false" gutter="0" 
+		   style="border:0px !important;background: #ED1C24 !important;border-radius: 0px !important;height:15px !important;" id="southUnit" styleClass="footerPanel" >
+				<h:outputText value="© #{index.year} - All Rights Reserved with Diyar United Company" style="color:white; font-size:10.5px !important;font-family: Poppins-Regular !important;"/>
+		   </p:layoutUnit>
+		</p:layout>
+	</h:body>
+</f:view>
+</html>

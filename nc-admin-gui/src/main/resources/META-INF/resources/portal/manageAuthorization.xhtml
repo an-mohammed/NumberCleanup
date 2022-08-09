@@ -1,0 +1,122 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Profile Cleanup</ui:define>
+	<ui:define name="pageContent">
+			<div class="container-fluid">
+		        <div class="container">
+					<div class="row">
+						<h:form prependId="false" id="createRoleF" style="width:100%;">
+		                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+		                    	<h5><h:outputText value="Create Role" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+		                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+		                	<div class="shadow-box">
+			                  	<p:panel style="border:0px !important;" id="createRoleP">
+			                  		<div class="ui-fluid">
+			                  			 <p:messages id="createRoleM" showDetail="true" closable="true" showSummary="false" />
+										 <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank"  id="createRolePG" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-9" style="width:70%;">
+			                  				<p:outputLabel for="newRole" value="Role Name" styleClass="lebel" style="padding-bottom:10px !important;"/>
+											<p:inputText label="Role Name" id="newRole" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="34" value="#{bo.newRole.name}" 
+											required="true" requiredMessage="Please give the name of the role" style="width: 70% !important;"/>
+											
+											<p:outputLabel for="newRoleComments" value="Description" styleClass="lebel"  style="padding-bottom:10px !important;"/>
+											<p:inputText label="Role Name" id="newRoleComments" autocomplete="off" styleClass="form-control inputTextMedium" maxlength="34" value="#{bo.newRole.description}" 
+											required="true" requiredMessage="Please provide description of the role" style="width: 70% !important;"/>
+				                  			
+				                  			<p:outputLabel value="Privilege" styleClass="lebel" for="nPrivi"  style="padding-bottom:10px !important;"/>
+					                       	<p:selectCheckboxMenu id="nPrivi" value="#{bo.availablePrivNamesNr}" label="Privilege" filter="true" filterMatchMode="startsWith" panelStyle="width:400px; background: white !important; font-size:12px !important;" style="font-size:12px !important;font-family: Poppins-Regular !important;width:70%;">
+									            <f:selectItems value="#{bo.allPrivNames.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}" />
+									        </p:selectCheckboxMenu>
+				                  		</p:panelGrid>
+			                       </div>
+			                       <div class="ui-fluid" style="padding-top:10px !important;">
+			                       		<h:panelGrid columns="1" cellpadding="0" style="text-align:left;vertical-align:middle;width:40%;" border="0" columnClasses="ui-g-12 ui-md-12">
+				                    		<p:commandButton value="Save" action="#{bo.createNewRole}" styleClass="green-button" update="role,createRoleP,createRoleM" 
+				                    		disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('CREATE_ROLE')}"/>
+				                   		</h:panelGrid>
+			                       </div>
+			                  	</p:panel>
+			                  	</div>
+                  			</div>
+                  		</h:form>
+                  	</div>
+		        	<div class="row">
+		        		<h:form prependId="false" id="manageRoleF" style="width:100%;">
+	                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5><h:outputText value="Manage Role" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+	                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+		                	<div class="shadow-box">
+			                  	<p:panel style="border:0px !important;" id="manageRoleP">
+			                  		<div class="ui-fluid">
+			                  			<p:messages id="manageRoleM" showDetail="true" closable="true" showSummary="false" />
+					                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank"  id="showRoleP" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-9" style="width:70%;">
+				                  			<p:outputLabel for="role" value="Roles" styleClass="lebel"  style="padding-bottom:10px !important;"/>
+								            <p:selectOneMenu id="role" value="#{bo.selectedRoleName}" panelStyle="width:250px; background: white !important; font-size:12px !important;" style="font-size:12px !important;font-family: Poppins-Regular !important;height: 28px !important;width:70%;">
+								                <p:ajax listener="#{bo.onRoleChange}" update="priv" />
+								                <f:selectItem itemLabel="Select Role" itemValue="#{null}" noSelectionOption="true" />
+								                <f:selectItems value="#{bo.allRoleNames.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}" />
+								            </p:selectOneMenu>
+				                  			
+				                  			<p:outputLabel value="Privilege" styleClass="lebel" for="priv" style="padding-bottom:10px !important;"/>
+					                       	<p:selectCheckboxMenu id="priv" value="#{bo.availablePrivNames}" label="Privilege" filter="true" filterMatchMode="startsWith" panelStyle="width:400px; background: white !important; font-size:12px !important;" style="font-size:12px !important;font-family: Poppins-Regular !important;width:70%;">
+									            <f:selectItems value="#{bo.allPrivNames.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}" />
+									        </p:selectCheckboxMenu>
+					                  	</p:panelGrid>
+			                       </div>
+			                       <div class="ui-fluid" style="padding-top:10px !important;">
+			                       		<h:panelGrid columns="1" cellpadding="0" style="text-align:left;vertical-align:middle;width:40%;" border="0" columnClasses="ui-g-12 ui-md-12">
+				                    		<p:commandButton value="Update" action="#{bo.updateRole}" styleClass="green-button" update="manageRoleM" 
+				                    		disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('UPDATE_ROLE')}"/>
+				                   		</h:panelGrid>
+			                       </div>
+			                  	</p:panel>
+			                  	</div>
+                  			</div>
+                  		</h:form>
+                  	</div>
+                  	<div class="row">
+                  		<h:form prependId="false" id="createPrivF" style="width:100%;">
+	                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5><h:outputText value="Create Privilege" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+	                    </p:outputPanel>
+	                	<div class="col-12 mb-3">
+		                	<div class="shadow-box">
+			                  	<p:panel style="border:0px !important;" id="createPrivP">
+			                  		<div class="ui-fluid">
+			                  			<p:messages id="createPrivM" showDetail="true" closable="true" showSummary="false" />
+					                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank"  id="createPrivPg" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-9" style="width:70%;">
+					                    	<p:outputLabel value="Privilege" styleClass="lebel" for="nPriv"  style="padding-bottom:10px !important;"/>
+				                  			<p:inputText label="Privilege" styleClass="form-control inputTextMedium"  maxlength="20" value="#{bo.newPriv}" id="nPriv" 
+				                  			required="true" requiredMessage="Missing Privilege Name"/>
+				                  			
+				                  			<p:outputLabel value="Comments" styleClass="lebel" for="comments"  style="padding-bottom:10px !important;"/>
+				                  			<p:inputText label="Comments" styleClass="form-control inputTextMedium" 
+				                  			maxlength="100" value="#{bo.newPrivDesc}" id="comments" required="true" requiredMessage="Missing Privilege Description"/>
+				                  		</p:panelGrid>
+			                       	</div>
+			                       	<div class="ui-fluid" style="padding-top:10px !important;">
+			                       		<h:panelGrid columns="1" cellpadding="0" style="text-align:left;vertical-align:middle;width:40%;" border="0" columnClasses="ui-g-12 ui-md-12">
+				                    		<p:commandButton value="Save" action="#{bo.createNewPriv}" styleClass="green-button" update = "nPriv,comments,createPrivM,:manageRoleF:priv,nPrivi"
+				                    		disabled="#{!sessionScope.S_CREDENTIAL.hasPrivilege('CREATE_PRIVILEGE')}"/>
+				                   		</h:panelGrid>
+			                       </div>
+			                  	</p:panel>
+			                  </div>
+                  			</div>
+                  		</h:form>
+                  	</div>
+		        </div>
+		    </div>
+	</ui:define>
+</ui:composition>

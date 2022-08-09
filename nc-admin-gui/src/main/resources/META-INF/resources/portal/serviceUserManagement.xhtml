@@ -1,0 +1,258 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui" 
+	template="/index.xhtml">
+	
+	<ui:define name="title">#{msg.title_serviceUserManagement}</ui:define>
+	
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="serviceUserForm" >
+		    <div class="container-fluid">
+		        <div class="container">
+		            <div class="row">
+		                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5><h:outputText value="Manage Service User" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+	                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+		                	<div class="shadow-box">
+			                    <p:panel style="border:0px !important;">
+			                    	<p class="text-center">
+										<p:messages id="msg" showDetail="true" showSummary="false" closable="true">
+											<p:autoUpdate />
+										</p:messages>
+									</p>
+				                    <div class="ui-fluid">
+					                    <h:panelGrid columns="2" cellpadding="1" style="margin-top:2%;width:75% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-8 ui-md-3,ui-g-8 ui-md-5">
+			                				<p:outputLabel value="Service Username" for="username" styleClass="lebel"/>
+				                        	<p:inputText label="User Name" id="username" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="20" value="#{sum.username}"/>
+				                        </h:panelGrid>
+			                        </div>
+			                        <div class="ui-fluid" style="padding-top:10px !important;">
+			                        	<h:panelGrid columns="3" cellpadding="0" style="width:75% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-9 ui-md-3,ui-g-9 ui-md-3,ui-g-9 ui-md-3">
+			                       			<p:selectBooleanCheckbox value="#{sum.includeInvalid}" itemLabel="#{msg.includeDisabled}" styleClass="lebel"/>
+			                       			<p:commandButton value="Search" ajax="true" update="dataPanel" action="#{sum.searchUser}" styleClass="green-button" 
+			                       			rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('SEARCH_SERVICE_USER')}"/>
+			                       			<p:commandButton value="Add User" ajax="true" oncomplete="PF('createUserD').show();" update="createUserP" styleClass="green-button" 
+			                       			rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('CREATE_SERVICE_USER')}" />
+			                       		</h:panelGrid>
+			                        </div>
+			                    </p:panel>
+			                    
+			                    <div class="ui-fluid">
+			                        <p:panelGrid id="dataPanel" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:100%;">
+										<p:dataTable value="#{sum.userList}"  style="font:11px;margin-top:10px;"
+												id="userDatatable" 
+												var="rows" 
+												rows="5" 
+												paginator="true"
+												paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15"
+												filterDelay="100"
+												paginatorPosition="bottom" 
+												emptyMessage="No Details Found with applied filter" 
+												paginatorAlwaysVisible="false" 
+												editable="true"
+												rendered="#{not empty sum.userList}"
+												selection="#{sum.selectedUser}" 
+												rowKey="#{rows.id}" 
+												selectionMode="single"
+												reflow="true">
+												
+												<p:ajax event="rowSelect" listener="#{sum.onRowSelect}" update="showUserDetails" process="@this" partialSubmit="true"/>
+												<p:ajax event="rowUnselect" listener="#{sum.onRowUnselect}" update="showUserDetails" process="@this" partialSubmit="true" />
+												<p:ajax event="rowEdit" listener="#{sum.onRowEdit}" update="msg" />
+												
+												<f:facet name="header">
+										            <div align="center">
+										                <h:outputText value="User Details"  style="font-size:12px;font-weight:bold"/>
+										            </div>
+										        </f:facet>
+										        
+										        <p:column headerText="Username" style="text-align: center;font-weight:bold;font-size:12px;width:12%;">
+						    						<h:outputText value="#{rows.uName}" style="font-size:12px;font-weight:normal;font-family:Poppins-Regular !important;"/>
+												</p:column>
+												
+												<p:column headerText="Status" style="text-align: center;font-weight:bold;font-size:12px;width:8%;">
+													<p:cellEditor>
+	                									<f:facet name="output">
+															<p:graphicImage url="/images/green.png" height="10" width="10" rendered="#{rows.isEnabled == 'true'}"/>
+							        						<p:graphicImage url="/images/red.png" height="10" width="10" rendered="#{rows.isEnabled == 'false'}"/>
+							        					</f:facet>
+							        					<f:facet name="input">
+						    								<p:selectBooleanCheckbox value="#{rows.isEnabled}"/>
+						    							</f:facet>
+							        				</p:cellEditor>
+												</p:column>
+												<p:column style="text-align: center;font-weight:bold;font-size:12px;width:5%;">
+										            <p:rowEditor style="text-align:center;"/>
+										        </p:column>
+												
+												<f:facet name="footer">
+													<p:row>
+										                <p:column colspan="3">
+										                	<p:commandButton id="showUserDetails" value="Show Details" ajax="true" disabled="#{sum.disabled}" 
+										                	styleClass="green-button mx-auto"  oncomplete="PF('showUserD').show();" update=":showUserF:showUserP,showDetailsRoleData" 
+										                	rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('SHOW_SUSER_DETAIL')}"/>
+										                </p:column>
+										            </p:row>
+										        </f:facet>
+									     </p:dataTable>
+									</p:panelGrid>	
+								</div>							
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+	    </h:form>
+
+		<p:dialog widgetVar="showUserD" width="850"  height="550" modal="true" appendTo="@(body)" closeOnEscape="true" resizable="false" closable="false" style="background:white !important;"  responsive="true" >
+		     <div class="container-fluid">
+		        <div class="container">
+		            <div class="row">
+		                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5><h:outputText value="Service User Details" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+	                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+						    <h:form id="showUserF" prependId="false">
+				             	<div class="shadow-box-dialogue">
+				             		<div class="ui-fluid">
+				                  		<h:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank"  id="showUserP" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4" style="width:100% !important;margin:auto !important;vertical-align:middle;">
+				               				<p:outputLabel value="Username" for="uNV" styleClass="lebel"/>
+				               				<h:outputText id="uNV" value="#{sum.selectedUser.uName}" styleClass="text"/>
+				                        	
+				                        	<p:outputLabel value="Status" styleClass="lebel"/>
+				                        	<h:outputText id="accStatusY"  value="Active"  styleClass="text" rendered="#{sum.selectedUser.isEnabled == 'true'}"/>
+				                        	<h:outputText id="accStatusN"  value="Deactive"  styleClass="text" rendered="#{sum.selectedUser.isEnabled == 'false'}"/>
+				                        	
+				                        	<p:outputLabel value="Description" styleClass="lebel" for="comment"/>
+				                        	<h:outputText id="comment"  value="#{sum.selectedUser.comments}"  styleClass="text"/>
+				                        	
+				                        	<p:outputLabel value="LDAP Auth" styleClass="lebel"/>
+				                        	<h:outputText id="ldapYV"  value="Yes"  styleClass="text" rendered="#{sum.selectedUser.ldapauthentication == 'true'}"/>
+				                        	<h:outputText id="ldapNV"  value="No"  styleClass="text" rendered="#{sum.selectedUser.ldapauthentication == 'false'}"/>
+				                        	
+				                        	<p:outputLabel value="Created By" for="cByV" styleClass="lebel"/>
+				                        	<h:outputText id="cByV"  value="#{sum.selectedUser.createdby}"  styleClass="text"/>
+				                        	
+				                        	<p:outputLabel value="Created On" for="cOnV" styleClass="lebel"/>
+				                        	<h:outputText id="cOnV"  value="#{sum.selectedUser.createddate}"  styleClass="text">
+				                        		<f:convertDateTime pattern="dd/MM/yyyy" />
+				                        	</h:outputText>
+				                        	
+				                        	<p:outputLabel value="Last Mod By" for="lMByV" styleClass="lebel"/>
+				                        	<h:outputText id="lMByV"  value="#{sum.selectedUser.modifiedby}"  styleClass="text"/>
+				                        	
+				                        	<p:outputLabel value="Last Mod On" for="lMOnV" styleClass="lebel"/>
+				                        	<h:outputText id="lMOnV"  value="#{sum.selectedUser.modifieddate}"  styleClass="text">
+				                        		<f:convertDateTime pattern="dd/MM/yyyy" />
+				                        	</h:outputText>
+				                       	</h:panelGrid>
+				                       </div>
+				                       
+				                       <div class="ui-fluid">
+				                       	 <h:panelGrid id="showDetailsRoleData" >
+				                       		<p:dataTable value="#{sum.selectedUser.roles}"  
+				                       			style="font:10.5px;padding-top:15px !important;"
+												id="roleDetailsTable" 
+												var="rows" 
+												rows="5" 
+												paginator="true"
+												paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15"
+												filterDelay="100"
+												paginatorPosition="bottom" 
+												emptyMessage="No Roles Assigned" 
+												paginatorAlwaysVisible="false" 
+												styleClass="fixed-size"
+												editable="false"
+												rendered="#{not empty sum.selectedUser.roles}"
+												rowKey="#{rows.id}" 
+												reflow="true">
+												
+												<f:facet name="header">
+										            <div align="center">
+										                <h:outputText value="Assigned Roles"  style="font-size:12px;font-weight:bold;font-family: Poppins-Regular !important;"/>
+										            </div>
+										        </f:facet>
+												
+												<p:column headerText="Details" style="text-align: center;font-weight:bold;font-size:12px;width:auto;font-family: Poppins-Regular !important;">
+						    						<h:outputText value="#{rows.description}" style="font-size: 12px;font-weight: normal;font-family: Poppins-Regular !important;"/>
+												</p:column>
+											</p:dataTable>
+											</h:panelGrid>
+				                       </div>
+				                       
+				                       <div class="ui-fluid" style="padding-top:5px !important;">
+				                       		<h:panelGrid columns="1" cellpadding="0" style="margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-4">
+				                      			<p:commandButton value="Close" oncomplete="PF('showUserD').hide();" styleClass="green-button" />
+				                      		</h:panelGrid>
+				                       </div>
+				                  </div>
+						    </h:form>
+		    			</div>
+		    		</div>
+		    	</div>
+		    </div>
+		</p:dialog>
+		<p:dialog widgetVar="createUserD" modal="true" height="350" width="800" appendTo="@(body)" closeOnEscape="true" resizable="false" closable="false" style="background:white !important;"  responsive="true">
+		     <div class="container-fluid">
+		        <div class="container">
+		            <div class="row">
+		                <p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5>
+	                    		<h:outputText value="Service User Details" style="color: white;vertical-align: middle;line-height: 0px !important;"/>
+	                    	</h5>
+	                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+						    <h:form id="createUserF" prependId="false">
+				             	<div class="shadow-box-dialogue">
+				                  	<p:panel style="border:0px !important;" id="createUserP">
+				                  		<p:messages id="createUserM" showDetail="true" closable="true" showSummary="false">
+											<p:autoUpdate />
+										</p:messages>
+				                  		<div class="ui-fluid">
+						                    <h:panelGrid columns="4" cellpadding="0" cellspacing="0" style="width:100% !important;margin:auto !important;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4">
+					               				
+					               				<p:outputLabel value="Username" for="usernameC" styleClass="lebel"/>
+					                        	<p:inputText label="Username" id="usernameC" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="10" value="#{sum.newServiceUser.uName}" 
+					                        	required="true" requiredMessage="Missing Mandatory Parameter - Username" />
+					                        	
+												<p:outputLabel value="Description" for="remarkC" styleClass="lebel"/>
+					                        	<p:inputText label="Remark" id="remarkC" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{sum.newServiceUser.comments}" 
+					                        	required="true" requiredMessage="Missing Mandatory Parameter - Description"/>
+												
+												<p:outputLabel value="Password" for="pwdC" styleClass="lebel"/>
+					                        	<p:password label="Password" id="pwdC" autocomplete="off" styleClass="form-control inputTextMedium"  maxlength="40" value="#{sum.newServiceUser.uPwd}" 
+					                        	required="true" requiredMessage="Missing Mandatory Parameter - Password" feedback="true"/>
+												
+						                       	<p:outputLabel value="Roles" styleClass="lebel" for="rolesC"/>
+						                       	<p:selectOneMenu id="rolesC" value="#{sum.newUserRole}" label="Roles" panelStyle="width:250px; background: white !important; font-size:11.5px !important;" 
+													style="font-size:11.5px !important;font-family: 'Poppins-Regular !important;">
+										            <f:selectItems value="#{sum.allValidRoleList.entrySet()}" var="a" itemLabel="#{a.key}" itemValue="#{a.value}"/>
+										        </p:selectOneMenu>
+					                        </h:panelGrid>
+				                       </div>
+				                       <div class="ui-fluid" style="padding-top:10px !important;">
+				                       		<h:panelGrid columns="2" cellpadding="0" style="width:60% !important;margin:auto;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+				                      			<p:commandButton value="Save" ajax="true" action="#{sum.addNewServiceUser}" styleClass="green-button" />
+				                      			<p:commandButton value="Close" action="#{sum.close}" oncomplete="PF('createUserD').hide();" styleClass="green-button" process="@this"/>
+				                      		</h:panelGrid>
+				                       </div>
+				                  	</p:panel>
+				                </div>
+						    </h:form>
+		    			</div>
+		    		</div>
+		    	</div>
+		    </div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

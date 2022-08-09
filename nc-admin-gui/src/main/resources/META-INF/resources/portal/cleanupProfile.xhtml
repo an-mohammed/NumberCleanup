@@ -1,0 +1,215 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Profile Cleanup</ui:define>
+	 
+	<ui:define name="pageContent">
+		<h:form prependId="false" id="createUserForm">
+			<div class="container-fluid">
+		        <div class="container">
+		        	<div class="row">
+	                	<p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+	                    	<h5><h:outputText value="Cleanup Subscriber Profile" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+	                    </p:outputPanel>
+		                <div class="col-12 mb-3">
+		                	<div class="shadow-box">
+			                  	<p:panel style="border:0px !important;" id="numberCleanupP">
+			                  		<p:messages id="numberCleanupM" showDetail="true" closable="true" showSummary="false">
+										<p:autoUpdate />
+									</p:messages>
+			                  		<div class="ui-fluid">
+			                  			<h:panelGrid columns="2" cellpadding="0" cellspacing="0" style="width:30% !important;vertical-align:middle;" border="0"  columnClasses="ui-g-12 ui-md-5, ui-g-12 ui-md-4" >
+					                    	<p:outputLabel value="Cleanup Mode" for="bulkFlag" styleClass="lebel" id="bulkFlagLabel"/>
+			                  				<p:selectOneMenu id="bulkFlag" value="#{pc.mode}" style="width:150px">
+								                <p:ajax listener="#{pc.manageBulkFlag}" update="sLine,bLine" />
+								                <f:selectItems value="#{pc.modes}" />
+								            </p:selectOneMenu>
+								        </h:panelGrid>
+								        <p:separator />
+								        <p:panel id="sLine" visible="#{!pc.bulkFlag}" style="padding-top:15px !important;">
+						                    <h:panelGrid columns="4" cellpadding="0" cellspacing="0" 
+						                    	style="width:70% !important;vertical-align:middle;" border="0" 
+						                    	columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4" id="singleCleanup">
+					               				<p:outputLabel value="MSISDN *" for="msisdn" styleClass="lebel"/>
+					               				<h:panelGroup layout="block" styleClass="ui-g ui-fluid">
+					               					<div class="ui-inputgroup">
+						                        		<p:inputText label="MSISDN" id="msisdn" autocomplete="off" maxlength="11" value="#{pc.profileDetails.msisdn}" styleClass="form-control inputTextMedium" />
+						                        		<p:commandButton value="Search" styleClass="blue-button" actionListener="#{pc.searchNumber}" update="msisdn,simno,imsi,nmsPool,erpLoc" style="padding: 1px 2px !important;font-size:8px !important;"/>
+						                        	</div>
+					                        	</h:panelGroup>
+					                        	
+					               				<p:outputLabel value="SIM No *" for="simno" styleClass="lebel"/>
+					                        	<p:inputText label="SIM" id="simno" autocomplete="off" maxlength="20" value="#{pc.profileDetails.simNo}" styleClass="form-control inputTextMedium" />
+					                        	
+					                        	<p:outputLabel value="IMSI *" for="imsi" styleClass="lebel"/>
+					                        	<p:inputText label="IMSI" id="imsi" autocomplete="off" maxlength="20" value="#{pc.profileDetails.imsi}" styleClass="form-control inputTextMedium" />
+						                        
+						                        <p:outputLabel value="Subs. Type *" styleClass="lebel" for="subsType"/>
+						                       	<p:selectOneMenu id="subsType" value="#{pc.profileDetails.subscriberType}" label="Subscriber Type" filter="false"
+													panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+													style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;">
+										            <f:selectItems value="#{pc.subscriberTypes.entrySet()}" var="a" itemLabel="#{a.key}" itemValue="#{a.value}"/>
+										        </p:selectOneMenu>
+						                        
+						                        <p:outputLabel value="NMS Price" for="price" styleClass="lebel"/>	
+						                        <p:inputText id="price" value="#{pc.profileDetails.price}" styleClass="form-control inputTextMedium" />  
+												
+						                       	<p:outputLabel value="NMS Pool" styleClass="lebel" for="nmsPool"/>
+						                       	<p:selectOneMenu id="nmsPool" value="#{pc.profileDetails.selecedNmsPool}" label="NMS Pool" filter="true" filterMatchMode="startsWith" 
+													panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+													style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;">
+													<f:selectItem itemLabel="Select Pool" itemValue="#{null}" noSelectionOption="true" />
+										            <f:selectItems value="#{pc.allNmsPools.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+										        </p:selectOneMenu>
+										        
+										        <p:outputLabel value="NMS Dealer" styleClass="lebel" for="dealer"/>
+										        <p:selectOneMenu id="dealer" value="#{pc.profileDetails.selectedDealer}" label="Dealer" filter="true" filterMatchMode="startsWith" 
+													panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+													style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;">
+										            <f:selectItem itemLabel="--Select--" itemValue="#{null}" noSelectionOption="true" />
+										            <f:selectItems value="#{pc.allDealer}" />
+										        </p:selectOneMenu>
+										        
+										        <p:outputLabel value="ERP Location *" styleClass="lebel" for="erpLoc"/>
+						                       	<p:selectOneMenu id="erpLoc" value="#{pc.profileDetails.selectedErpLocation}" label="ERP Location" filter="true" filterMatchMode="startsWith" 
+													panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+													style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;">
+										            <f:selectItem itemLabel="Select Location" itemValue="#{null}" noSelectionOption="true" />
+										            <f:selectItems value="#{pc.allErpLocations}" />
+										        </p:selectOneMenu>
+					                        </h:panelGrid>
+				                        </p:panel>
+				                        <p:panel id="bLine" visible="#{pc.bulkFlag}" style="padding-top:15px !important;">
+					                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0" 
+						                    	style="width:70% !important;vertical-align:middle;" border="0" 
+						                    	columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-7" id="bulkCleanup">
+						                    		<h:outputLabel value="Upload File" for="handleFileUpload" styleClass="lebel"/>
+													<p:fileUpload id="handleFileUpload" skinSimple="true" 	mode="advanced" sizeLimit="10000" fileUploadListener="#{pc.handleFileUpload}" accept="csv" 
+														allowTypes="/(\.|\/)(txt|csv)$/" multiple="false" styleClass="inputText" update="clnReqP"/>
+														
+													<p:commandLink ajax="false" actionListener="#{pc.getFile()}">
+												        <p:fileDownload value="#{pc.templateFile}" />
+												        <h:outputText value="Bulk Cleanup Template" styleClass="commandLinkStyle"/>
+												    </p:commandLink>
+						                    </h:panelGrid>
+						                    
+						                    <div class="ui-g ui-fluid">
+											    <div class="ui-g-12 ui-md-4" style="margin:auto;width:100%;">
+											    	<p:panelGrid id="clnReqP" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1">
+														<p:dataTable value="#{pc.cleanReq.profiles}"  style="font:11px;margin-top:10px;"
+															id="clnupDatatable" 
+															var="e" 
+															rows="5" 
+															paginator="true"
+															paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15"
+															filterDelay="100"
+															paginatorPosition="bottom" 
+															emptyMessage="No data Found with applied filter" 
+															paginatorAlwaysVisible="false" 
+															editable="false"
+															rendered="#{not empty pc.cleanReq.profiles}"
+															rowKey="#{rows.id}" 
+															reflow="true"
+															scrollable="true" 
+															scrollHeight="120" 
+															scrollWidth="90%">
+															
+															<f:facet name="header">
+													            <div align="center">
+													                <h:outputText value="Bulk Cleanup Request"  style="font-size:12px;font-weight:bold"/>
+													            </div>
+													        </f:facet>
+													        
+													        <p:column headerText="MSISDN" styleClass="columnHeader" width="60">
+									    						<h:outputText value="#{e.msisdn}" styleClass="columnData"/>
+															</p:column>
+									    					
+									    					<p:column headerText="SIM No" styleClass="columnHeader" width="100">
+									    						<h:outputText value="#{e.simNo}" styleClass="columnData"/>
+															</p:column>
+															
+															<p:column headerText="IMSI" styleClass="columnHeader" width="80">
+									    						<h:outputText value="#{e.imsi}" styleClass="columnData"/>
+															</p:column>
+															
+															<p:column headerText="NMS Pool" styleClass="columnHeader" width="80">
+									    						<h:outputText value="#{e.selecedNmsPool}" styleClass="columnData"/>
+															</p:column>
+															
+															<p:column headerText="Location" styleClass="columnHeader" width="80">
+									    						<h:outputText value="#{e.selectedErpLocation}" styleClass="columnData"/>
+															</p:column>
+															
+															<p:column headerText="NMS Price" styleClass="columnHeader" width="40">
+									    						<h:outputText value="#{e.price}" styleClass="columnData"/>
+															</p:column>
+															
+															<p:column headerText="Type" styleClass="columnHeader" width="20">
+									    						<h:outputText value="#{e.subscriberType}" styleClass="columnData"/>
+															</p:column>
+														</p:dataTable>
+													</p:panelGrid>
+												</div>
+											</div>
+					                    </p:panel>
+			                       </div>
+			                       <p:separator />
+			                       <div class="ui-g ui-fluid" style="padding-top:10px !important;">
+									    <div class="ui-g-12 ui-md-4" >
+									        <div class="ui-inputgroup">
+									        	<p:commandButton value="Reset" ajax="true" actionListener="#{pc.reset}" 
+									            styleClass="green-button" update="cleanupResult,sLine,bLine" 
+									            rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('CLEANUP_PROFILE')}"/>
+									        	<p:selectCheckboxMenu id="node" value="#{pc.cleanReq.nodes}" label="Systems" filter="true" filterMatchMode="startsWith" 
+												panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+												style="font-size:12px !important;font-family: Poppins-Regular !important;" required="true">
+										            <f:selectItems value="#{pc.allNodes.entrySet()}" var="a" itemLabel="#{a.value}" itemValue="#{a.key}"/>
+										        </p:selectCheckboxMenu>
+									            <p:commandButton value="Cleanup" ajax="true" actionListener="#{pc.cleanupProfile}" 
+									            styleClass="green-button" update="cleanupResult" 
+									            rendered="#{sessionScope.S_CREDENTIAL.hasPrivilege('CLEANUP_PROFILE')}"/>
+									        </div>
+									    </div>
+								    </div>
+				                  	<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" style="width:100% !important;vertical-align:middle;padding-top:15ox !important;" 
+				                  		columnClasses="ui-g-12 ui-md-12" id="cleanupResult">
+					                    	<p:accordionPanel value="#{pc.cleanRes.cleanupDetails.keySet().toArray()}" var="key" styleClass="#{pc.cleanRes.cleanupDetails[key].styleClass}">
+				                    			<p:tab title="MSISDN : #{key}" id="detTab" titleStyleClass="#{pc.cleanRes.cleanupDetails[key].styleClass}">
+				                    				<p:dataTable var="e" value="#{pc.cleanRes.cleanupDetails[key].cleanupDetails}">
+													    <p:column headerText="System" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+													        <h:outputText value="#{e.node}" styleClass="text" style="font-weight:normal !important;"/>
+													    </p:column>
+													    <p:column headerText="Execution" style="text-align: center;font-weight:bold;font-size:12px;width:15%;">
+													        <h:outputText value="#{e.execEnd}"  styleClass="text" style="font-weight:normal !important;">
+													        	<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+													        </h:outputText>
+													    </p:column>
+													    <p:column headerText="Status" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+															<h:outputText value="#{e.status}" styleClass="text" style="font-weight:normal !important;"/>
+													    </p:column>
+													     <p:column headerText="Details" style="text-align: center;font-weight:bold;font-size:12px;width:65%;">
+															<h:outputText value="#{e.response}" styleClass="text" style="font-weight:normal !important;"/>
+													    </p:column>
+												   </p:dataTable>
+				                    		</p:tab>
+					                   	</p:accordionPanel>
+							        </h:panelGrid>
+			                  	</p:panel>
+			               	</div>
+			             </div>
+                  	</div>
+		        </div>
+		    </div>
+		</h:form>
+	</ui:define>
+</ui:composition>

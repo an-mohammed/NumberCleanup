@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions name="delSubscriber" targetNamespace="http://www.ooredoo.com.kw/delSubscriber/" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="http://www.ooredoo.com.kw/delSubscriber/" xmlns:WL5G3N2="http://schemas.xmlsoap.org/wsdl/soap/">
+  <WL5G3N0:types>
+    <xsd:schema xmlns:gbd="http://www.ooredoo.com.kw/delSubscriber/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.ooredoo.com.kw/delSubscriber/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:import namespace="http://www.ooredoo.com.kw/delSubscriber/" schemaLocation="DeleteSubscriberXsd.xsd"/>
+    </xsd:schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="delSubscriberRequest">
+    <WL5G3N0:part element="WL5G3N1:delSubscriberRequest" name="delSubscriberRequest"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="delSubscriberResponse">
+    <WL5G3N0:part element="WL5G3N1:delSubscriberResponse" name="delSubscriberResponse"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="delSubscriber">
+    <WL5G3N0:operation name="delSubscriber">
+      <WL5G3N0:input message="WL5G3N1:delSubscriberRequest"/>
+      <WL5G3N0:output message="WL5G3N1:delSubscriberResponse"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="delSubscriberSOAP" type="WL5G3N1:delSubscriber">
+    <WL5G3N2:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="delSubscriber">
+      <WL5G3N2:operation soapAction="http://www.ooredoo.com.kw/delSubscriber"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="delSubscriber">
+    <WL5G3N0:port binding="WL5G3N1:delSubscriberSOAP" name="delSubscriberSOAP">
+      <WL5G3N2:address location="http://10.192.224.57:31001/PCRFServices_SB/PROXY_SERVICES/DeleteSubscriberPCRFReqSrvc"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

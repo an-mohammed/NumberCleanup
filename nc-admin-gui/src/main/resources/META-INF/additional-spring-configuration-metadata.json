@@ -1,0 +1,67 @@
+{"properties": [
+  {
+    "name": "application.external.image.location",
+    "type": "java.lang.String",
+    "description": "A description for 'application.external.image.location'"
+  },
+  {
+    "name": "appliction.user.default.password",
+    "type": "java.lang.String",
+    "description": "A description for 'appliction.user.default.password'"
+  },
+  {
+    "name": "application.external.image.location",
+    "type": "java.lang.String",
+    "description": "A description for 'application.external.image.location'"
+  },
+  {
+    "name": "service.alm.search",
+    "type": "java.lang.String",
+    "description": "A description for 'service.alm.search'"
+  },
+  {
+    "name": "service.user.validateUser",
+    "type": "java.lang.String",
+    "description": "A description for 'service.user.validateUser'"
+  },
+  {
+    "name": "service.user.searchUser",
+    "type": "java.lang.String",
+    "description": "A description for 'service.user.searchUser'"
+  },
+  {
+    "name": "service.user.updateUser",
+    "type": "java.lang.String",
+    "description": "A description for 'service.user.updateUser'"
+  },
+  {
+    "name": "service.role.findRole",
+    "type": "java.lang.String",
+    "description": "A description for 'service.role.findRole'"
+  },
+  {
+    "name": "service.role.findAllRole",
+    "type": "java.lang.String",
+    "description": "A description for 'service.role.findAllRole'"
+  },
+  {
+    "name": "service.user.createUser",
+    "type": "java.lang.String",
+    "description": "A description for 'service.user.createUser'"
+  },
+  {
+    "name": "service.user.resetPassword",
+    "type": "java.lang.String",
+    "description": "A description for 'service.user.resetPassword'"
+  },
+  {
+    "name": "service.alm.create",
+    "type": "java.lang.String",
+    "description": "A description for 'service.alm.create'"
+  },
+  {
+    "name": "consumer.service.url.user.authenticate",
+    "type": "java.lang.String",
+    "description": "A description for 'consumer.service.url.user.authenticate'"
+  }
+]}

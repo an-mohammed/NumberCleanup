@@ -1,0 +1,305 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/index.xhtml">
+	
+	<ui:define name="title">Profile Cleanup</ui:define>
+	 
+	<ui:define name="pageContent">
+			<div class="container-fluid">
+		        <div class="container">
+		        	<div class="row">
+			        <p:outputPanel styleClass="col-12 mt-4" style="background-color: rgba(54,84,99,0.7);border-radius: 3px;font-family: Poppins-Regular !important;padding-top: 2px;padding-bottom:5px">
+                    	<h5><h:outputText value="Subscriber Onboarding" style="color: white;vertical-align: middle;line-height: 0px !important;"/></h5>
+                    </p:outputPanel>
+		            <div class="col-12 mb-3">
+		                <div class="shadow-box">
+		                	 <div class="card">
+						        <p:tabView dynamic="true" cache="false" id="nc" onTabChange="#{cn.onTabChange()}">
+							            <p:tab title="B2C Prepaid Subscriber" titleStyle="font-size:12px; font-family:ooredoo !important;" id="b2cPr">
+							            	<h:form prependId="false" id="b2cPrForm">
+							            		<p:panel style="border:0px !important;padding-top:3% !important;" id="b2cPrP">
+							                  		<p:messages id="b2cPrM" showDetail="true" closable="true" showSummary="false" />
+							                  		<div class="ui-g ui-fluid">
+							                  			<h:panelGrid columns="4" cellpadding="0" cellspacing="0" style="width:80% !important;vertical-align:middle;" border="0" 
+									                    	columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4" id="b2cPrG">
+								               				<p:outputLabel value="MSISDN *" for="msisdnB2CPr" styleClass="lebel"/>
+									                        <p:inputText label="MSISDN" id="msisdnB2CPr" autocomplete="off" maxlength="8" value="#{cn.msisdn}" styleClass="form-control inputTextMedium" />
+								                        	
+								               				<p:outputLabel value="Civil Id" for="civilIdB2CPr" styleClass="lebel"/>
+								                        	<p:inputText label="Civil Id" id="civilIdB2CPr" autocomplete="off" maxlength="20" value="#{cn.civilId}" styleClass="form-control inputTextMedium" />
+								                        	
+								                        	<p:outputLabel value="Rateplan *" styleClass="lebel" for="subsTypeB2CPr"/>
+									                       	<p:selectOneMenu id="subsTypeB2CPr" value="#{cn.selectedPromo}" label="Subscriber Type" filter="false"
+																panelStyle="width:250px; background: white !important; font-size:12px !important;" 
+																style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;">
+																 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+													            <f:selectItems value="#{cn.prepaidPromoList}"/>
+													        </p:selectOneMenu>
+								                        </h:panelGrid>
+												    </div>
+												    <div class="ui-fluid" style="padding-top:10px !important;">
+							                       		<h:panelGrid columns="1" cellpadding="0" style="width:30% !important;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+							                      			<p:commandButton value="Create Profile" ajax="true" actionListener="#{cn.createPrepaidProfile}" styleClass="green-button" update="b2cPrP,b2cPrM"/>
+							                      		</h:panelGrid>
+							                       </div>
+							                  	</p:panel>
+							            	</h:form>
+										</p:tab>
+										<p:tab title="B2C Postpaid Subscriber" titleStyle="font-size:12px; font-family:ooredoo !important;" id="b2cPo">
+											<h:form prependId="false" id="b2cPoForm">
+												<p:panel style="border:0px !important;padding-top:3% !important;" id="b2cPoP">
+							                  		<p:messages id="b2cPoM" showDetail="true" closable="true" showSummary="false">
+													</p:messages>
+							                  		<div class="ui-g ui-fluid">
+							                  			<h:panelGrid columns="4" cellpadding="0" cellspacing="0" style="width:80% !important;vertical-align:middle;" border="0" 
+									                    	columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4" id="b2cPoG">
+								               				<p:outputLabel value="MSISDN *" for="msisdnB2CPo" styleClass="lebel"/>
+									                        <p:inputText label="MSISDN" id="msisdnB2CPo" autocomplete="off" maxlength="8" value="#{cn.msisdn}" styleClass="form-control inputTextMedium" />
+								                        	
+								               				<p:outputLabel value="Civil Id" for="civilIdB2CPo" styleClass="lebel"/>
+								                        	<p:inputText label="Civil Id" id="civilIdB2CPo" autocomplete="off" maxlength="20" value="#{cn.civilId}" styleClass="form-control inputTextMedium" />
+								                        	
+								                        	<p:outputLabel value="Rateplan *" styleClass="lebel" for="subsTypeB2CPo"/>
+									                       	<p:selectOneMenu id="subsTypeB2CPo" value="#{cn.selectedPromo}" label="Subscriber Type" filter="false"
+																panelStyle="width:280px; background: white !important; font-size:12px !important;" 
+																style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;">
+																 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+													            <f:selectItems value="#{cn.postpaidPromoList}"/>
+													        </p:selectOneMenu>
+								                        </h:panelGrid>
+												    </div>
+												    <div class="ui-fluid" style="padding-top:10px !important;">
+							                       		<h:panelGrid columns="1" cellpadding="0" style="width:30% !important;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+							                      			<p:commandButton value="Create Profile" ajax="true" actionListener="#{cn.createPostpaidProfile}" styleClass="green-button" update="b2cPoP,b2cPoM"/>
+							                      		</h:panelGrid>
+							                       </div>
+							                  	</p:panel>
+							            	</h:form>
+										</p:tab>
+										  
+										<p:tab title="B2B CPR Subscriber" titleStyle="font-size:12px; font-family:ooredoo !important;" id="b2bCpr">
+											<h:form prependId="false" id="b2bCprForm">
+												<p:panel style="border:0px !important;padding-top:3% !important;padding-bottom:3% !important;" id="b2bCprP">
+													<p:messages id="b2bCprM" showDetail="true" closable="true" showSummary="false">
+													</p:messages>
+							                  		<div class="ui-g ui-fluid">
+							                  			<h:panelGrid columns="4" cellpadding="0" cellspacing="0" style="width:80% !important;vertical-align:middle;" border="0" 
+									                    	columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4" id="b2bCprG">
+								               				<p:outputLabel value="MSISDN *" for="msisdnb2bCpr" styleClass="lebel"/>
+									                        <p:inputText label="MSISDN" id="msisdnb2bCpr" autocomplete="off" maxlength="8" value="#{cn.msisdn}" styleClass="form-control inputTextMedium" />
+								                        	<!--
+								               					<p:outputLabel value="Civil Id" for="civilIdb2bCpr" styleClass="lebel"/>
+								                        		<p:inputText label="Civil Id" id="civilIdb2bCpr" autocomplete="off" maxlength="20" value="#{cn.civilId}" styleClass="form-control inputTextMedium" />
+								                        	 -->
+								                        	<p:outputLabel value="Cust Code *" for="custCodeb2bCpr" styleClass="lebel"/>
+								                        	<p:inputText label="Cust Code" id="custCodeb2bCpr" autocomplete="off" maxlength="20" value="#{cn.custCode}" styleClass="form-control inputTextMedium" />
+								                        									                        	
+								                        	<p:outputLabel value="Rateplan *" styleClass="lebel" for="subsTypeb2bCpr"/>
+									                       	<p:selectOneMenu id="subsTypeb2bCpr" value="#{cn.selectedPromo}" label="Subscriber Type" filter="false"
+																panelStyle="width:280px; background: white !important; font-size:12px !important;" 
+																style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;">
+																 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+													            <f:selectItems value="#{cn.b2bCprPromoList}"/>
+													        </p:selectOneMenu>
+													        
+													        
+								                        </h:panelGrid>
+												    </div>
+												    <div class="ui-fluid" style="padding-top:10px !important;">
+							                       		<h:panelGrid columns="1" cellpadding="0" style="width:30% !important;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+							                      			<p:commandButton value="Create Profile" ajax="true" actionListener="#{cn.createB2BProfile}" styleClass="green-button" update="b2bCprP,b2bCprM"/>
+							                      		</h:panelGrid>
+							                       </div>
+												</p:panel>
+							            	</h:form>
+										</p:tab>
+										 
+										<p:tab title="B2B EPR Subscriber" titleStyle="font-size:12px; font-family:ooredoo !important;" id="b2bEpr">
+											<h:form prependId="false" id="b2bEprForm">
+												<p:panel style="border:0px !important;padding-top:3% !important;padding-bottom:3% !important;" id="b2bEprP">
+													<p:messages id="b2bEprM" showDetail="true" closable="true" showSummary="false">
+													</p:messages>
+							                  		<div class="ui-g ui-fluid">
+							                  			<h:panelGrid columns="4" cellpadding="0" cellspacing="0" style="width:80% !important;vertical-align:middle;" border="0" 
+									                    	columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4" id="b2bEprG">
+								               				<p:outputLabel value="MSISDN *" for="msisdnb2bEpr" styleClass="lebel"/>
+									                        <p:inputText label="MSISDN" id="msisdnb2bEpr" autocomplete="off" maxlength="8" value="#{cn.msisdn}" styleClass="form-control inputTextMedium" />
+								                        
+								                        	<p:outputLabel value="Cust Code *" for="custCodeb2bEpr" styleClass="lebel"/>
+								                        	<p:inputText label="Cust Code" id="custCodeb2bEpr" autocomplete="off" maxlength="20" value="#{cn.custCode}" styleClass="form-control inputTextMedium" />
+								                        	
+								                        	<p:outputLabel value="Rateplan *" styleClass="lebel" for="subsTypeb2bEpr"/>
+									                       	<p:selectOneMenu id="subsTypeb2bEpr" value="#{cn.selectedPromo}" label="Subscriber Type" filter="false"
+																panelStyle="width:280px; background: white !important; font-size:12px !important;" 
+																style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;">
+																 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+													            <f:selectItems value="#{cn.b2bEprPromoList}"/>
+													        </p:selectOneMenu>
+								                        </h:panelGrid>
+												    </div>
+												    <div class="ui-fluid" style="padding-top:10px !important;">
+							                       		<h:panelGrid columns="1" cellpadding="0" style="width:30% !important;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+							                      			<p:commandButton value="Create Profile" ajax="true" actionListener="#{cn.createB2BEprProfile}" styleClass="green-button" update="b2bEprP,b2bEprM"/>
+							                      		</h:panelGrid>
+							                       </div>
+												</p:panel>
+							            	</h:form>
+										</p:tab>
+									
+										<p:tab title="ANA Subscriber" titleStyle="font-size:12px; font-family:ooredoo !important;" id="ana">
+											<h:form prependId="false" id="anaForm">
+												<p:panel style="border:0px !important;padding-top:3% !important;padding-bottom:3% !important;" id="anaP">
+													<p:messages id="anaM" showDetail="true" closable="true" showSummary="false">
+													</p:messages>
+							                  		<div class="ui-g ui-fluid">
+							                  			<h:panelGrid columns="4" cellpadding="0" cellspacing="0" style="width:80% !important;vertical-align:middle;" border="0" 
+									                    	columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4" id="anaG">
+								               				<p:outputLabel value="MSISDN *" for="msisdnAna" styleClass="lebel"/>
+									                        <p:inputText label="MSISDN" id="msisdnAna" autocomplete="off" maxlength="8" value="#{cn.msisdn}" styleClass="form-control inputTextMedium" />
+								                        	
+								               				<p:outputLabel value="Civil Id" for="civilIdAna" styleClass="lebel"/>
+								                        	<p:inputText label="Civil Id" id="civilIdAna" autocomplete="off" maxlength="20" value="#{cn.civilId}" styleClass="form-control inputTextMedium" />
+								                        	
+								                        	<p:outputLabel value="Rateplan *" styleClass="lebel" for="subsTypeAna"/>
+									                       	<p:selectOneMenu id="subsTypeAna" value="#{cn.selectedDigitalPromo}" label="Promotion" filter="false"
+																panelStyle="width:280px; background: white !important; font-size:12px !important;" 
+																style="font-size:12px !important;font-family: Poppins-Regular !important;width:70% !important;">
+																 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+													            <f:selectItems value="#{cn.digitalPromo.entrySet()}" var="a" itemLabel="#{a.key}" itemValue="#{a.value}"/>
+													        </p:selectOneMenu>
+								                        </h:panelGrid>
+												    </div>
+												    <div class="ui-fluid" style="padding-top:10px !important;">
+							                       		<h:panelGrid columns="1" cellpadding="0" style="width:30% !important;text-align:center;vertical-align:middle;" border="0" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6">
+							                      			<p:commandButton value="Create Profile" ajax="true" actionListener="#{cn.createAnaProfile}" styleClass="green-button" update="anaP,anaM,dataPanelDigital"/>
+							                      		</h:panelGrid>
+							                      		
+							                      		<p:poll interval="60" listener="#{cn.getDigitalActivationDetails}" update="dataPanelDigital"/>
+							                      		
+														<p:panelGrid id="dataPanelDigital" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:100%;">
+															<p:dataTable value="#{cn.digitalActivationList}"  style="font-size:11px;margin-top:10px;font-family:Poppins-Regular !important;"
+																id="digitalActivationDetails" 
+																var="rows" 
+																rows="25" 
+																paginator="true"
+																paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+																rowsPerPageTemplate="25,50,100,250,500"
+																filterDelay="100"
+																paginatorPosition="bottom" 
+																emptyMessage="No Activation Details Found" 
+																paginatorAlwaysVisible="false" 
+																editable="false"
+																rowKey="#{rows.id}" 
+																reflow="true">
+																
+																<f:facet name="header">
+														            <div align="center">
+														                <h:outputText value="Digital Activation Details"  style="font-size:12px;font-weight:bold;font-family: Poppins-Regular !important;"/>
+														            </div>
+														        </f:facet>
+														        <p:column headerText="MSISDN" filterBy="#{rows.msisdn}" filterMatchMode="contains" style="text-align: center;font-weight:bold;font-size:12px;width:9%;">
+										    						<h:outputText value="#{rows.msisdn}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+																<p:column headerText="Transaction Id" style="text-align: center;font-weight:bold;font-size:12px;width:14%;">
+										    						<h:outputText value="#{rows.trxId}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+																<p:column headerText="Onboarding Status" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+										    						<h:outputText value="#{rows.onboardingStatus}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+																<p:column headerText="Onboarding Details" style="text-align: center;font-weight:bold;font-size:12px;width:47%;">
+										    						<h:outputText value="#{rows.trxDetails}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+															</p:dataTable>
+														</p:panelGrid>
+							                       </div>
+												</p:panel>
+							            	</h:form>
+										</p:tab>
+										<p:tab title="Bulk Activation" titleStyle="font-size:12px; font-family:ooredoo !important;" id="bulkActivation">
+											<h:form prependId="false" id="bulkActForm">
+												<p:panel style="border:0px !important;padding-top:3% !important;padding-bottom:3% !important;" id="bulkActivationP">
+													<p:messages id="bulkActivationM" showDetail="true" closable="true" showSummary="false">
+													</p:messages>
+													<div class="ui-g ui-fluid">
+														<h:panelGrid columns="2" cellpadding="0" cellspacing="0" 
+									                    	style="width:70% !important;vertical-align:middle;" border="0" 
+									                    	columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-7" id="bulkCleanup">
+									                    		<h:outputLabel value="Upload File" for="handleFileUpload" styleClass="lebel"/>
+																<p:fileUpload id="handleFileUpload" skinSimple="true" 	mode="advanced" sizeLimit="10000" fileUploadListener="#{cn.handleFileUpload}" accept="csv" 
+																	allowTypes="/(\.|\/)(txt|csv)$/" multiple="false" styleClass="inputText" update="bulkActivationM,dataPanel"/>
+																	
+																<p:commandLink ajax="false" actionListener="#{cn.getFile()}">
+															        <p:fileDownload value="#{cn.templateFile}" />
+															        <h:outputText value="Bulk Activation Template" styleClass="commandLinkStyle"/>
+															    </p:commandLink>
+									                    </h:panelGrid>
+														
+														<p:poll interval="60" listener="#{cn.getBulkAssignmentDetails}" update="dataPanel"/>
+														<p:panelGrid id="dataPanel" layout="grid" columnClasses="ui-g-12 ui-md-12" columns="1"  style="width:100%;">
+															<p:dataTable value="#{cn.bulkActivationDetailsList}"  style="font-size:11px;margin-top:10px;font-family:Poppins-Regular !important;"
+																id="activationDetails" 
+																var="rows" 
+																rows="25" 
+																paginator="true"
+																paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+																rowsPerPageTemplate="25,50,100,250,500"
+																filterDelay="100"
+																paginatorPosition="bottom" 
+																emptyMessage="No Activation Details Found" 
+																paginatorAlwaysVisible="false" 
+																editable="false"
+																rowKey="#{rows.id}" 
+																reflow="true">
+																
+																<f:facet name="header">
+														            <div align="center">
+														                <h:outputText value="Bulk Activation Details"  style="font-size:12px;font-weight:bold;font-family: Poppins-Regular !important;"/>
+														            </div>
+														        </f:facet>
+														        <p:column headerText="Batch" filterBy="#{rows.batchId}" filterMatchMode="contains" style="text-align: center;font-weight:bold;font-size:12px;width:6%;">
+										    						<h:outputText value="#{rows.batchId}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+														        <p:column headerText="MSISDN" filterBy="#{rows.msisdn}" filterMatchMode="contains" style="text-align: center;font-weight:bold;font-size:12px;width:9%;">
+										    						<h:outputText value="#{rows.msisdn}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+																<p:column headerText="SIM No" style="text-align: center;font-weight:bold;font-size:12px;width:14%;">
+										    						<h:outputText value="#{rows.simNo}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+																<p:column headerText="Promo Name" style="text-align: center;font-weight:bold;font-size:12px;width:16%;">
+										    						<h:outputText value="#{rows.promoName}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+																<p:column headerText="Subs. Type" style="text-align: center;font-weight:bold;font-size:12px;width:6%;">
+										    						<h:outputText value="#{rows.subsType}/#{rows.coType}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+																<p:column headerText="Siebel Order" style="text-align: center;font-weight:bold;font-size:12px;width:10%;">
+										    						<h:outputText value="#{rows.spcType}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+																<p:column headerText="Status" filterBy="#{rows.status}" filterMatchMode="contains" style="text-align: center;font-weight:bold;font-size:12px;width:7%;">
+										    						<h:outputText value="#{rows.status}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+																<p:column headerText="Details" style="text-align: center;font-weight:bold;font-size:12px;width:30%;">
+										    						<h:outputText value="#{rows.errorDetails}" style="font-size:11.5px;font-weight:normal;font-family: Poppins-Regular !important;"/>
+																</p:column>
+															</p:dataTable>
+														</p:panelGrid>
+													</div>
+												</p:panel>
+							            	</h:form>
+										</p:tab>
+									</p:tabView>
+								</div>
+							</div>
+						</div>
+                  	</div>
+		        </div>
+		    </div>
+	</ui:define>
+</ui:composition>
